@@ -2,12 +2,36 @@ import React from "react";
 
 export default function Nav() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-8 py-8 md:px-12 flex justify-between items-center mix-blend-difference">
-      <a href="#" className="flex items-center gap-2.5 no-underline" style={{ color: "var(--cream)" }}>
-        <div className="w-7 h-3.5 rounded-full" style={{ background: "var(--cream)" }} />
-        <span className="font-normal text-lg tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-          drvrs
-        </span>
+    <nav
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        padding: "2rem 3rem",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mixBlendMode: "difference",
+      }}
+    >
+      <a
+        href="#"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.6rem",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "1.2rem",
+          fontWeight: 400,
+          letterSpacing: "0.05em",
+          color: "var(--cream)",
+          textDecoration: "none",
+        }}
+      >
+        <div style={{ width: 28, height: 14, background: "var(--cream)", borderRadius: 7 }} />
+        drvrs
       </a>
     </nav>
   );

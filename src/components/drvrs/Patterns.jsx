@@ -12,44 +12,60 @@ const patterns = [
 export default function Patterns() {
   return (
     <section
-      className="min-h-screen flex flex-col justify-center py-[12vh] px-[8vw]"
-      style={{ background: "var(--warm)", color: "var(--dark)" }}
+      style={{
+        background: "var(--warm)",
+        color: "var(--dark)",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "12vh 8vw",
+      }}
     >
       <RevealOnScroll>
         <div
-          className="mb-12 text-xs uppercase tracking-[0.2em]"
-          style={{ color: "var(--accent)" }}
+          style={{
+            fontSize: "0.75rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "var(--accent)",
+            marginBottom: "3rem",
+          }}
         >
           The patterns nobody talks about
         </div>
       </RevealOnScroll>
 
-      <div className="flex flex-col">
+      <div>
         {patterns.map((text, i) => (
           <RevealOnScroll key={i} delay={i * 0.08}>
             <div
-              className="py-10 flex flex-col md:flex-row gap-3 md:gap-12 items-baseline"
               style={{
+                padding: "2.5rem 0",
                 borderBottom: "1px solid rgba(10, 26, 20, 0.1)",
                 ...(i === 0 ? { borderTop: "1px solid rgba(10, 26, 20, 0.1)" } : {}),
+                display: "flex",
+                gap: "3rem",
+                alignItems: "baseline",
               }}
             >
               <div
-                className="shrink-0 md:w-8"
                 style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: "1rem",
                   color: "var(--accent)",
+                  flexShrink: 0,
+                  width: "2rem",
                 }}
               >
                 {String(i + 1).padStart(2, "0")}
               </div>
               <div
-                className="leading-[1.4]"
                 style={{
                   fontFamily: "'DM Serif Display', serif",
-                  fontWeight: 400,
                   fontSize: "clamp(1.3rem, 2.5vw, 1.8rem)",
+                  fontWeight: 400,
+                  lineHeight: 1.4,
                   color: "var(--dark)",
                 }}
               >

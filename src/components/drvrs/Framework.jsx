@@ -12,13 +12,21 @@ const items = [
 export default function Framework() {
   return (
     <section
-      className="py-[15vh] px-[8vw]"
-      style={{ background: "var(--cream)", color: "var(--dark)" }}
+      style={{
+        background: "var(--cream)",
+        color: "var(--dark)",
+        padding: "15vh 8vw",
+      }}
     >
       <RevealOnScroll>
         <div
-          className="mb-16 text-xs uppercase tracking-[0.2em]"
-          style={{ color: "var(--accent)" }}
+          style={{
+            fontSize: "0.75rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "var(--accent)",
+            marginBottom: "4rem",
+          }}
         >
           The diagnostic layer
         </div>
@@ -26,51 +34,58 @@ export default function Framework() {
 
       <RevealOnScroll delay={0.1}>
         <div
-          className="grid grid-cols-1 md:grid-cols-5 gap-px mb-16"
-          style={{ background: "rgba(10, 26, 20, 0.1)" }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(5, 1fr)",
+            gap: "1px",
+            background: "rgba(10, 26, 20, 0.1)",
+            marginBottom: "4rem",
+          }}
+          className="framework-grid"
         >
           {items.map((item, i) => (
             <div
               key={i}
-              className="text-center p-8 md:p-10"
-              style={{ background: "var(--cream)" }}
+              style={{
+                background: "var(--cream)",
+                padding: "2.5rem 2rem",
+                textAlign: "center",
+              }}
             >
               <div
-                className="mb-3"
                 style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: "2.5rem",
                   color: "var(--dark)",
+                  marginBottom: "0.75rem",
                 }}
               >
                 {item.letter}
               </div>
               <div
-                className="mb-4 text-[0.7rem] uppercase tracking-[0.2em]"
-                style={{ color: "var(--muted)" }}
+                style={{
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "var(--muted)",
+                  marginBottom: "1rem",
+                }}
               >
                 {item.word}
               </div>
               <div
-                className="text-sm leading-relaxed font-light"
-                style={{ color: "var(--dark)" }}
+                style={{
+                  fontSize: "0.85rem",
+                  lineHeight: 1.6,
+                  color: "var(--dark)",
+                  fontWeight: 300,
+                }}
               >
                 {item.desc}
               </div>
             </div>
           ))}
         </div>
-      </RevealOnScroll>
-
-      <RevealOnScroll delay={0.2}>
-        <p
-          className="max-w-[600px] leading-[1.8]"
-          style={{
-            fontSize: "clamp(1.05rem, 1.3vw, 1.15rem)",
-            color: "var(--dark)",
-          }}
-        >
-        </p>
       </RevealOnScroll>
     </section>
   );
