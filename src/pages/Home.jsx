@@ -563,15 +563,6 @@ export default function Home() {
           </RevealElement>
         </section>
 
-        {/* QUOTE */}
-        <section className="drvrs-quote-section">
-          <RevealElement>
-            <blockquote>
-              Sellers are change managers who have no idea what they're managing.
-            </blockquote>
-          </RevealElement>
-        </section>
-
         {/* CTA */}
         <section className="drvrs-cta-section">
           <RevealElement>
