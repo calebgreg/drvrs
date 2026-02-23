@@ -575,9 +575,12 @@ export default function Home() {
         {/* CTA */}
         <section className="drvrs-cta-section">
           <RevealElement>
+            <h2 style={{fontFamily: "'DM Serif Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400, lineHeight: 1.2, marginBottom: "1.5rem", maxWidth: "500px"}}>Welcome to drvrs.</h2>
+          </RevealElement>
+          <RevealElement>
             <p>
-              drvrs is a framework, a community, and a new way of thinking about
-              selling.
+              Tools, frameworks, and community. A new way of thinking about
+              selling &amp; supporting those who love to do it right.
             </p>
           </RevealElement>
           <RevealElement>
