@@ -581,7 +581,7 @@ export default function Home() {
             </p>
           </RevealElement>
           <RevealElement>
-            <a className="drvrs-cta-btn">
+            <a className="drvrs-cta-btn" href="https://tally.so/r/VLPjKa" target="_blank" rel="noopener noreferrer">
               Be a drvr
               <svg
                 xmlns="http://www.w3.org/2000/svg"
