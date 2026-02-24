@@ -518,6 +518,7 @@ const framework = [
 ];
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       <style>{styles}</style>
