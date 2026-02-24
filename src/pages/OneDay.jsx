@@ -234,9 +234,9 @@ export default function OneDay() {
         <nav className="od-nav">
           <a className="od-logo" href="/"><div className="od-logo-pill" /> drvrs</a>
           <div className="od-nav-links">
-            <a href="/one-day" className="od-active">One Day</a>
-            <a href="/one-initiative">One Initiative</a>
-            <a href="/one-team">One Team</a>
+            <a href="/OneDay" className="od-active">One Day</a>
+            <a href="/OneInitiative">One Initiative</a>
+            <a href="/OneTeam">One Team</a>
           </div>
         </nav>
 
