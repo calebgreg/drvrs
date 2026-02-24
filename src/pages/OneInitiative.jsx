@@ -291,9 +291,11 @@ export default function OneInitiative() {
             <a href="/OneInitiative" className="oi-active">One Initiative</a>
             <a href="/OneTeam">One Team</a>
           </div>
-          <button className="oi-hamburger" onClick={() => setMenuOpen(true)}>
-            <span /><span /><span />
-          </button>
+          {!menuOpen && (
+            <button className="oi-hamburger" onClick={() => setMenuOpen(true)}>
+              <span /><span /><span />
+            </button>
+          )}
         </nav>
         <div className={`oi-mobile-menu ${menuOpen ? "open" : ""}`}>
           <button className="oi-mobile-close" onClick={() => setMenuOpen(false)}>✕</button>
