@@ -272,9 +272,11 @@ export default function OneDay() {
             <a href="/OneInitiative">One Initiative</a>
             <a href="/OneTeam">One Team</a>
           </div>
-          <button className="od-hamburger" onClick={() => setMenuOpen(true)}>
-            <span /><span /><span />
-          </button>
+          {!menuOpen && (
+            <button className="od-hamburger" onClick={() => setMenuOpen(true)}>
+              <span /><span /><span />
+            </button>
+          )}
         </nav>
         <div className={`od-mobile-menu ${menuOpen ? "open" : ""}`}>
           <button className="od-mobile-close" onClick={() => setMenuOpen(false)}>✕</button>
