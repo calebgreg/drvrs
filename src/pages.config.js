@@ -49,12 +49,14 @@
  */
 import Home from './pages/Home';
 import OneDay from './pages/OneDay';
+import OneInitiative from './pages/OneInitiative';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Home": Home,
     "OneDay": OneDay,
+    "OneInitiative": OneInitiative,
 }
 
 export const pagesConfig = {
