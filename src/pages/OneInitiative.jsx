@@ -242,8 +242,8 @@ const styles = `
 
   @media (max-width: 768px) {
     .oi-nav { padding: 1.5rem 2rem; }
-    .oi-nav-links { gap: 1.5rem; }
-    .oi-nav-links a { font-size: 0.7rem; }
+    .oi-nav-links { display: none; }
+    .oi-hamburger { display: flex; }
     .oi-cascade-item { grid-template-columns: 1fr; }
     .oi-cascade-content { border-left: none; border-top: 1px solid rgba(10, 26, 20, 0.1); }
     .oi-cascade-lens { padding: 2rem 0 0.5rem 0; }
