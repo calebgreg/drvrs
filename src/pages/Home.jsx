@@ -478,6 +478,11 @@ export default function Home() {
             <div className="drvrs-logo-pill" />
             drvrs
           </a>
+          <div className="drvrs-nav-links">
+            <a href="/one-day">One Day</a>
+            <a href="/one-initiative">One Initiative</a>
+            <a href="/one-team">One Team</a>
+          </div>
         </nav>
 
         {/* HERO */}
