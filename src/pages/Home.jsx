@@ -534,7 +534,18 @@ export default function Home() {
             <a href="/OneInitiative">One Initiative</a>
             <a href="/OneTeam">One Team</a>
           </div>
+          <button className="drvrs-hamburger" onClick={() => setMenuOpen(true)}>
+            <span /><span /><span />
+          </button>
         </nav>
+
+        {/* MOBILE MENU */}
+        <div className={`drvrs-mobile-menu ${menuOpen ? "open" : ""}`}>
+          <button className="drvrs-mobile-close" onClick={() => setMenuOpen(false)}>✕</button>
+          <a href="/OneDay" onClick={() => setMenuOpen(false)}>One Day</a>
+          <a href="/OneInitiative" onClick={() => setMenuOpen(false)}>One Initiative</a>
+          <a href="/OneTeam" onClick={() => setMenuOpen(false)}>One Team</a>
+        </div>
 
         {/* HERO */}
         <section className="drvrs-hero">
