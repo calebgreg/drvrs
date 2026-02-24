@@ -234,8 +234,8 @@ const styles = `
 
   @media (max-width: 768px) {
     .od-nav { padding: 1.5rem 2rem; }
-    .od-nav-links { gap: 1.5rem; }
-    .od-nav-links a { font-size: 0.7rem; }
+    .od-nav-links { display: none; }
+    .od-hamburger { display: flex; }
     .od-before-after { grid-template-columns: 1fr; }
     .od-timeline-grid { grid-template-columns: 1fr 1fr; }
   }
