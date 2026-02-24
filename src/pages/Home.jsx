@@ -391,8 +391,30 @@ const styles = `
     transform: translateY(0);
   }
 
+  .drvrs-nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .drvrs-nav-links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #f5f0e8;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+  }
+
+  .drvrs-nav-links a:hover { opacity: 0.6; }
+
   @media (max-width: 768px) {
     .drvrs-nav { padding: 1.5rem 2rem; }
+    .drvrs-nav-links { gap: 1.5rem; }
+    .drvrs-nav-links a { font-size: 0.7rem; }
     .drvrs-hero { padding: 0 6vw; }
     .drvrs-section { padding: 10vh 6vw; }
     .drvrs-scroll-hint { left: 6vw; }
