@@ -316,9 +316,11 @@ export default function OneTeam() {
             <a href="/OneInitiative">One Initiative</a>
             <a href="/OneTeam" className="ot-active">One Team</a>
           </div>
-          <button className="ot-hamburger" onClick={() => setMenuOpen(true)}>
-            <span /><span /><span />
-          </button>
+          {!menuOpen && (
+            <button className="ot-hamburger" onClick={() => setMenuOpen(true)}>
+              <span /><span /><span />
+            </button>
+          )}
         </nav>
         <div className={`ot-mobile-menu ${menuOpen ? "open" : ""}`}>
           <button className="ot-mobile-close" onClick={() => setMenuOpen(false)}>✕</button>
