@@ -59,7 +59,7 @@ const styles = `
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     background: #0a1a14;
-    z-index: 99;
+    z-index: 101;
     flex-direction: column;
     align-items: center;
     justify-content: center;
