@@ -52,7 +52,7 @@ const styles = `
   .ot-mobile-menu {
     display: none; position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: #0a1a14; z-index: 99;
+    background: #0a1a14; z-index: 200;
     flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
   }
   .ot-mobile-menu.open { display: flex; }
