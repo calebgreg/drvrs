@@ -260,6 +260,7 @@ function Reveal({ children, className = "" }) {
 }
 
 export default function OneDay() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       <style>{styles}</style>
