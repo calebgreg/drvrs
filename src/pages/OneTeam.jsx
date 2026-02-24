@@ -238,8 +238,8 @@ const styles = `
 
   @media (max-width: 768px) {
     .ot-nav { padding: 1.5rem 2rem; }
-    .ot-nav-links { gap: 1.5rem; }
-    .ot-nav-links a { font-size: 0.7rem; }
+    .ot-nav-links { display: none; }
+    .ot-hamburger { display: flex; }
     .ot-evo-phase { grid-template-columns: 1fr; min-height: auto; }
     .ot-evo-left { border-right: none; border-bottom: 1px solid rgba(10, 26, 20, 0.08); padding: 4vh 6vw 2vh; }
     .ot-evo-right { padding: 2vh 6vw 6vh; }
