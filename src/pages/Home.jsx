@@ -479,9 +479,9 @@ export default function Home() {
             drvrs
           </a>
           <div className="drvrs-nav-links">
-            <a href="/one-day">One Day</a>
-            <a href="/one-initiative">One Initiative</a>
-            <a href="/one-team">One Team</a>
+            <a href="/OneDay">One Day</a>
+            <a href="/OneInitiative">One Initiative</a>
+            <a href="/OneTeam">One Team</a>
           </div>
         </nav>
 
