@@ -304,6 +304,7 @@ function Reveal({ children, className = "" }) {
 }
 
 export default function OneTeam() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       <style>{styles}</style>
