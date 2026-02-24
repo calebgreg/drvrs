@@ -661,13 +661,12 @@ export default function Home() {
           </RevealElement>
           <RevealElement>
             <p>
-              Tools, frameworks, and community. A new way of thinking about
-              selling &amp; supporting those who love to do it right.
+              A new way of seeing what's actually affecting the organizations you're trying to change
             </p>
           </RevealElement>
           <RevealElement>
             <a className="drvrs-cta-btn" href="https://tally.so/r/VLPjKa" target="_blank" rel="noopener noreferrer">
-              Be a drvr
+              Let's talk
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
