@@ -411,10 +411,60 @@ const styles = `
 
   .drvrs-nav-links a:hover { opacity: 0.6; }
 
+  .drvrs-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+
+  .drvrs-hamburger span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: #f5f0e8;
+    transition: all 0.3s ease;
+  }
+
+  .drvrs-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #0a1a14;
+    z-index: 99;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  .drvrs-mobile-menu.open { display: flex; }
+
+  .drvrs-mobile-menu a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #f5f0e8;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .drvrs-mobile-close {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    background: none; border: none;
+    color: #f5f0e8; font-size: 2rem;
+    cursor: pointer; line-height: 1;
+  }
+
   @media (max-width: 768px) {
     .drvrs-nav { padding: 1.5rem 2rem; }
-    .drvrs-nav-links { gap: 1.5rem; }
-    .drvrs-nav-links a { font-size: 0.7rem; }
+    .drvrs-nav-links { display: none; }
+    .drvrs-hamburger { display: flex; }
     .drvrs-hero { padding: 0 6vw; }
     .drvrs-section { padding: 10vh 6vw; }
     .drvrs-scroll-hint { left: 6vw; }
