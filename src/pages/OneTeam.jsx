@@ -43,6 +43,29 @@ const styles = `
   .ot-nav-links a:hover { opacity: 0.6; }
   .ot-nav-links a.ot-active { opacity: 0.5; }
 
+  .ot-hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .ot-hamburger span { display: block; width: 22px; height: 1.5px; background: #f5f0e8; }
+
+  .ot-mobile-menu {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #0a1a14; z-index: 99;
+    flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+  }
+  .ot-mobile-menu.open { display: flex; }
+  .ot-mobile-menu a {
+    font-family: 'DM Sans', sans-serif; font-size: 1.5rem;
+    font-weight: 400; letter-spacing: 0.08em;
+    color: #f5f0e8; text-decoration: none; text-transform: uppercase;
+  }
+  .ot-mobile-close {
+    position: absolute; top: 2rem; right: 2rem;
+    background: none; border: none; color: #f5f0e8; font-size: 2rem; cursor: pointer;
+  }
+
   .ot-hero {
     min-height: 100vh;
     display: flex; flex-direction: column;
