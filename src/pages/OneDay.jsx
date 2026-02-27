@@ -338,7 +338,7 @@ export default function OneDay() {
                 <div className="od-three-desc">We map the organizational forces your buyers are actually navigating — the goals, constraints, and pressures that make your solution matter or not. Your value prop stops being generic and starts being specific to the world your buyers live in.</div>
               </div>
               <div className="od-three-item">
-                <div className="od-three-title">Your prospects.</div>
+                <div className="od-three-title">Your accounts.</div>
                 <div className="od-three-desc">We run your live deals through the diagnostic. What's really happening inside each account. What's blocking movement. What your team needs to find out and how to find it. The deals that matter most get a map, not a guess.</div>
               </div>
               <div className="od-three-item">
