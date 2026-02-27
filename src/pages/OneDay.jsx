@@ -273,6 +273,7 @@ const styles = `
     .od-nav { padding: 1.5rem 2rem; }
     .od-nav-links { display: none; }
     .od-hamburger { display: flex; }
+    .od-three-grid { grid-template-columns: 1fr; }
     .od-before-after { grid-template-columns: 1fr; }
     .od-timeline-grid { grid-template-columns: 1fr 1fr; }
   }
