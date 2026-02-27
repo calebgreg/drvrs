@@ -275,7 +275,7 @@ const styles = `
     .od-hamburger { display: flex; }
     .od-three-grid { grid-template-columns: 1fr; }
     .od-before-after { grid-template-columns: 1fr; }
-    .od-timeline-grid { grid-template-columns: 1fr 1fr; }
+    .od-timeline-grid { grid-template-columns: 1fr; }
   }
 `;
 
