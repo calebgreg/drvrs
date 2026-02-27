@@ -366,7 +366,7 @@ export default function OneDay() {
               <div className="od-timeline-item">
                 <div className="od-timeline-time">3pm</div>
                 <div className="od-timeline-period">Late afternoon</div>
-                <div className="od-timeline-desc">Action plans. The deals that matter get a diagnostic map. The team knows what to do Monday morning.</div>
+                <div className="od-timeline-desc">Action plans. Real deals, run through the diagnostic live. The team leaves knowing how to do this themselves — not just what to do next.</div>
               </div>
               <div className="od-timeline-item">
                 <div className="od-timeline-time">&infin;</div>
