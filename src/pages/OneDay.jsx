@@ -339,7 +339,7 @@ export default function OneDay() {
               </div>
               <div className="od-three-item">
                 <div className="od-three-title">Your prospects.</div>
-                <div className="od-three-desc">We run your live deals through the diagnostic. What's really happening inside each account. What's blocking movement. What your team needs to find out and how to find it. Every deal gets a map, not a guess.</div>
+                <div className="od-three-desc">We run your live deals through the diagnostic. What's really happening inside each account. What's blocking movement. What your team needs to find out and how to find it. The deals that matter most get a map, not a guess.</div>
               </div>
               <div className="od-three-item">
                 <div className="od-three-title">Your stakeholders.</div>
