@@ -377,6 +377,27 @@ export default function OneDay() {
           </section>
         </Reveal>
 
+        <Reveal>
+          <div className="od-before-after">
+            <div className="od-ba-panel od-ba-before">
+              <div className="od-ba-label od-ba-label-before">How deals look now</div>
+              <div className="od-ba-item">"They loved the demo."</div>
+              <div className="od-ba-item">"The champion is excited."</div>
+              <div className="od-ba-item">"We just need to get past procurement."</div>
+              <div className="od-ba-item">"They said they'll have budget next quarter."</div>
+              <div className="od-ba-item">"It's looking good."</div>
+            </div>
+            <div className="od-ba-panel od-ba-after">
+              <div className="od-ba-label od-ba-label-after">How deals look after</div>
+              <div className="od-ba-item">Their ops team is drowning. This solves a problem their VP committed to fixing by Q3.</div>
+              <div className="od-ba-item">The champion owns the initiative this ties to. If it fails, that's on them.</div>
+              <div className="od-ba-item">We solve the problem their CEO put on the board deck. Procurement isn't going to hold that up.</div>
+              <div className="od-ba-item">They're trying to go upmarket by Q4. If they don't, their deal size can't sustain the business. The money will find us.</div>
+              <div className="od-ba-item">The problem we solve is blocking an initiative the CEO owns. They can't move forward without fixing it.</div>
+            </div>
+          </div>
+        </Reveal>
+
         <section className="od-cta">
           <Reveal><h2>One day changes everything.</h2></Reveal>
           <Reveal>
