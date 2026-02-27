@@ -103,7 +103,7 @@ const styles = `
   .od-hero p {
     font-size: clamp(1.05rem, 1.5vw, 1.25rem);
     line-height: 1.7; color: #7a8a82;
-    max-width: 480px;
+    max-width: 560px;
     opacity: 0; animation: od-fadeUp 1s ease-out 0.7s forwards;
   }
 
