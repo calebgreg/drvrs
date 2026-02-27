@@ -330,24 +330,23 @@ export default function OneDay() {
         </section>
 
         <Reveal>
-          <div className="od-before-after">
-            <div className="od-ba-panel od-ba-before">
-              <div className="od-ba-label od-ba-label-before">How deals look now</div>
-              <div className="od-ba-item">"They loved the demo."</div>
-              <div className="od-ba-item">"The champion is excited."</div>
-              <div className="od-ba-item">"We just need to get past procurement."</div>
-              <div className="od-ba-item">"They said they'll have budget next quarter."</div>
-              <div className="od-ba-item">"It's looking good."</div>
+          <section className="od-three">
+            <div className="od-three-label">What we dial in</div>
+            <div className="od-three-grid">
+              <div className="od-three-item">
+                <div className="od-three-title">Your market.</div>
+                <div className="od-three-desc">We map the organizational forces your buyers are actually navigating — the goals, constraints, and pressures that make your solution matter or not. Your value prop stops being generic and starts being specific to the world your buyers live in.</div>
+              </div>
+              <div className="od-three-item">
+                <div className="od-three-title">Your prospects.</div>
+                <div className="od-three-desc">We run your live deals through the diagnostic. What's really happening inside each account. What's blocking movement. What your team needs to find out and how to find it. Every deal gets a map, not a guess.</div>
+              </div>
+              <div className="od-three-item">
+                <div className="od-three-title">Your stakeholders.</div>
+                <div className="od-three-desc">B2B is person to person to more people. We identify who actually holds influence, who's threatened, who's a passenger, and who can move this. Your team learns to sell to the room, not just the champion.</div>
+              </div>
             </div>
-            <div className="od-ba-panel od-ba-after">
-              <div className="od-ba-label od-ba-label-after">How deals look after</div>
-              <div className="od-ba-item">Their ops team is drowning. This solves a problem their VP committed to fixing by Q3.</div>
-              <div className="od-ba-item">The champion owns the initiative this ties to. If it fails, that's on them.</div>
-              <div className="od-ba-item">We solve the problem their CEO put on the board deck. Procurement isn't going to hold that up.</div>
-              <div className="od-ba-item">They're trying to go upmarket by Q4. If they don't, their deal size can't sustain the business. The money will find us.</div>
-              <div className="od-ba-item">The problem we solve is blocking an initiative the CEO owns. They can't move forward without fixing it.</div>
-            </div>
-          </div>
+          </section>
         </Reveal>
 
         <Reveal>
