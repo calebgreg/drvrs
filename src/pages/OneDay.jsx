@@ -192,7 +192,7 @@ const styles = `
 
   .od-timeline-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: rgba(10, 26, 20, 0.1);
   }
@@ -360,13 +360,8 @@ export default function OneDay() {
               </div>
               <div className="od-timeline-item">
                 <div className="od-timeline-time">PM</div>
-                <div className="od-timeline-period">Afternoon</div>
-                <div className="od-timeline-desc">Your pipeline. Pick real deals. Run them through the diagnostic. The team learns the framework by using it, not watching it.</div>
-              </div>
-              <div className="od-timeline-item">
-                <div className="od-timeline-time">3pm</div>
-                <div className="od-timeline-period">Late afternoon</div>
-                <div className="od-timeline-desc">Action plans. What to do next on each deal, and why. The team leaves with moves — not just a new way of thinking.</div>
+                <div className="od-timeline-period">Afternoon & Beyond</div>
+                <div className="od-timeline-desc">Your pipeline. Pick real deals. Run them through the diagnostic. Get action plans. The team leaves knowing how to do this themselves.</div>
               </div>
               <div className="od-timeline-item">
                 <div className="od-timeline-time">&infin;</div>
