@@ -343,7 +343,7 @@ export default function OneDay() {
               </div>
               <div className="od-three-item">
                 <div className="od-three-title">Your stakeholders.</div>
-                <div className="od-three-desc">B2B is person to person to more people. We identify who actually holds influence, who's threatened, who's a passenger, and who can move this. Your team learns to sell to the room, not just the champion.</div>
+                <div className="od-three-desc">Whether you're B2B, B2C, or B2B2C, you're serving a person. That person has a boss, a budget, competing priorities, and a problem they need to solve. Your team needs to understand all of it, not just the person who showed up to the demo</div>
               </div>
             </div>
           </section>
