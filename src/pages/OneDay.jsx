@@ -360,7 +360,7 @@ export default function OneDay() {
               </div>
               <div className="od-timeline-item">
                 <div className="od-timeline-time">PM</div>
-                <div className="od-timeline-period">Afternoon & Beyond</div>
+                <div className="od-timeline-period">Afternoon Beyond</div>
                 <div className="od-timeline-desc">Your pipeline. Pick real deals. Run them through the diagnostic. Get action plans. The team leaves knowing how to do this themselves.</div>
               </div>
               <div className="od-timeline-item">
