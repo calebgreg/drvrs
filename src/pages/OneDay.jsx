@@ -361,12 +361,12 @@ export default function OneDay() {
               <div className="od-timeline-item">
                 <div className="od-timeline-time">PM</div>
                 <div className="od-timeline-period">Afternoon</div>
-                <div className="od-timeline-desc">Your pipeline. Pick real deals. Run them through the diagnostic. Find what's actually happening and what's missing.</div>
+                <div className="od-timeline-desc">Your pipeline. Pick real deals. Run them through the diagnostic. The team learns the framework by using it, not watching it.</div>
               </div>
               <div className="od-timeline-item">
                 <div className="od-timeline-time">3pm</div>
                 <div className="od-timeline-period">Late afternoon</div>
-                <div className="od-timeline-desc">Action plans. Real deals, run through the diagnostic live. The team leaves knowing how to do this themselves — not just what to do next.</div>
+                <div className="od-timeline-desc">Action plans. What to do next on each deal, and why. The team leaves with moves — not just a new way of thinking.</div>
               </div>
               <div className="od-timeline-item">
                 <div className="od-timeline-time">&infin;</div>
