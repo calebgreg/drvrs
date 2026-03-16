@@ -304,52 +304,114 @@ function InputsVis() {
 
 /* ── Problem right-side visual: initiative stuck ── */
 function StuckVisual() {
+  const blockers = [
+    { angle: -120, label: "COMPETING\nPRIORITIES" },
+    { angle: -60,  label: "UNCLEAR\nOWNERSHIP" },
+    { angle: 60,   label: "UNMET\nCONDITIONS" },
+    { angle: 120,  label: "HIDDEN\nDRIVERS" },
+  ];
+
+  const cx = 200, cy = 200, innerR = 52, outerR = 130;
+
   return (
-    <svg viewBox="0 0 320 280" fill="none" style={{ width: "100%", maxWidth: 340 }}>
+    <svg viewBox="0 0 400 400" fill="none" style={{ width: "100%", maxWidth: 420 }}>
       <defs>
-        <radialGradient id="stuck-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#2d8a6e" stopOpacity="0.2" />
+        <radialGradient id="sv-core" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#2d8a6e" stopOpacity="0.25" />
           <stop offset="100%" stopColor="#2d8a6e" stopOpacity="0" />
         </radialGradient>
+        <radialGradient id="sv-bg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#1a3a2a" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#1a3a2a" stopOpacity="0" />
+        </radialGradient>
+        <filter id="sv-blur">
+          <feGaussianBlur stdDeviation="8" />
+        </filter>
+        <filter id="sv-soft">
+          <feGaussianBlur stdDeviation="2.5" />
+        </filter>
       </defs>
-      {/* Central goal circle */}
-      <circle cx="160" cy="90" r="40" fill="url(#stuck-glow)" stroke="rgba(45,138,110,0.4)" strokeWidth="1.5" />
-      <text x="160" y="86" textAnchor="middle" fill="rgba(245,240,232,0.5)" fontSize="9" fontFamily="DM Sans" letterSpacing="0.1em">GOAL</text>
-      <text x="160" y="100" textAnchor="middle" fill="rgba(245,240,232,0.3)" fontSize="7" fontFamily="DM Sans">set</text>
 
-      {/* Spokes with blockers */}
-      {[
-        { angle: -130, label: "priorities", blocked: true },
-        { angle: -50, label: "ownership", blocked: true },
-        { angle: 50, label: "conditions", blocked: true },
-        { angle: 130, label: "drivers", blocked: false },
-      ].map(({ angle, label, blocked }, i) => {
+      {/* Ambient glow behind center */}
+      <circle cx={cx} cy={cy} r="120" fill="url(#sv-bg)" />
+      <circle cx={cx} cy={cy} r="80" fill="rgba(45,138,110,0.07)" filter="url(#sv-blur)" />
+
+      {/* Orbit rings */}
+      <circle cx={cx} cy={cy} r={outerR} stroke="rgba(245,240,232,0.04)" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={outerR * 0.72} stroke="rgba(245,240,232,0.05)" strokeWidth="1" strokeDasharray="3 6" />
+      <circle cx={cx} cy={cy} r={outerR * 0.45} stroke="rgba(45,138,110,0.12)" strokeWidth="1" strokeDasharray="2 4" />
+
+      {/* Blocker arms */}
+      {blockers.map(({ angle }, i) => {
         const rad = (angle * Math.PI) / 180;
-        const x1 = 160 + Math.cos(rad) * 44;
-        const y1 = 90 + Math.sin(rad) * 44;
-        const x2 = 160 + Math.cos(rad) * 90;
-        const y2 = 90 + Math.sin(rad) * 90;
-        const lx = 160 + Math.cos(rad) * 108;
-        const ly = 90 + Math.sin(rad) * 108;
+        const x1 = cx + Math.cos(rad) * (innerR + 4);
+        const y1 = cy + Math.sin(rad) * (innerR + 4);
+        const x2 = cx + Math.cos(rad) * (outerR - 18);
+        const y2 = cy + Math.sin(rad) * (outerR - 18);
+        return (
+          <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
+            stroke="rgba(200,80,80,0.18)" strokeWidth="1.5" strokeDasharray="4 5" />
+        );
+      })}
+
+      {/* Blocker nodes */}
+      {blockers.map(({ angle, label }, i) => {
+        const rad = (angle * Math.PI) / 180;
+        const nx = cx + Math.cos(rad) * (outerR - 18);
+        const ny = cy + Math.sin(rad) * (outerR - 18);
+        const lx = cx + Math.cos(rad) * (outerR + 14);
+        const ly = cy + Math.sin(rad) * (outerR + 14);
+        const lines = label.split("\n");
         return (
           <g key={i}>
-            <line x1={x1} y1={y1} x2={x2} y2={y2}
-              stroke={blocked ? "rgba(200,80,80,0.3)" : "rgba(45,138,110,0.4)"}
-              strokeWidth="1" strokeDasharray={blocked ? "3 3" : "none"} />
-            {blocked && (
-              <>
-                <line x1={x2-5} y1={y2-5} x2={x2+5} y2={y2+5} stroke="rgba(200,80,80,0.5)" strokeWidth="1.5" />
-                <line x1={x2+5} y1={y2-5} x2={x2-5} y2={y2+5} stroke="rgba(200,80,80,0.5)" strokeWidth="1.5" />
-              </>
-            )}
-            {!blocked && <circle cx={x2} cy={y2} r="4" fill="rgba(45,138,110,0.6)" />}
-            <text x={lx} y={ly + 4} textAnchor="middle" fill="rgba(245,240,232,0.2)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.1em">{label.toUpperCase()}</text>
+            {/* Blocker halo */}
+            <circle cx={nx} cy={ny} r="16" fill="rgba(200,80,80,0.06)" stroke="rgba(200,80,80,0.18)" strokeWidth="1" />
+            {/* X mark */}
+            <line x1={nx-5} y1={ny-5} x2={nx+5} y2={ny+5} stroke="rgba(200,80,80,0.55)" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1={nx+5} y1={ny-5} x2={nx-5} y2={ny+5} stroke="rgba(200,80,80,0.55)" strokeWidth="1.5" strokeLinecap="round" />
+            {/* Label */}
+            {lines.map((ln, li) => (
+              <text key={li} x={lx} y={ly - 4 + li * 10}
+                textAnchor="middle"
+                fill="rgba(245,240,232,0.22)"
+                fontSize="7.5" fontFamily="DM Sans" letterSpacing="0.12em">{ln}</text>
+            ))}
           </g>
         );
       })}
 
-      {/* Bottom label */}
-      <text x="160" y="220" textAnchor="middle" fill="rgba(245,240,232,0.12)" fontSize="22" fontFamily="DM Serif Display, serif" letterSpacing="-0.02em">STUCK</text>
+      {/* Central goal — layered circles */}
+      <circle cx={cx} cy={cy} r={innerR + 16} fill="rgba(45,138,110,0.06)" filter="url(#sv-soft)" />
+      <circle cx={cx} cy={cy} r={innerR} fill="url(#sv-core)" stroke="rgba(45,138,110,0.35)" strokeWidth="1.5" />
+      <circle cx={cx} cy={cy} r={innerR - 10} fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="1" strokeDasharray="3 5" />
+
+      <text x={cx} y={cy - 7} textAnchor="middle" fill="rgba(245,240,232,0.7)" fontSize="10" fontFamily="DM Sans" letterSpacing="0.18em" fontWeight="400">GOAL</text>
+      <text x={cx} y={cy + 9} textAnchor="middle" fill="rgba(45,138,110,0.6)" fontSize="7.5" fontFamily="DM Sans" letterSpacing="0.12em">SET, NOT MOVING</text>
+
+      {/* Tension arrows pointing inward (pressure on goal) */}
+      {blockers.map(({ angle }, i) => {
+        const rad = (angle * Math.PI) / 180;
+        const ax = cx + Math.cos(rad) * (innerR + 28);
+        const ay = cy + Math.sin(rad) * (innerR + 28);
+        const tipX = cx + Math.cos(rad) * (innerR + 10);
+        const tipY = cy + Math.sin(rad) * (innerR + 10);
+        return (
+          <line key={i} x1={ax} y1={ay} x2={tipX} y2={tipY}
+            stroke="rgba(200,80,80,0.22)" strokeWidth="1"
+            markerEnd="url(#arrowRed)" />
+        );
+      })}
+
+      <defs>
+        <marker id="arrowRed" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
+          <path d="M0,0 L0,5 L5,2.5 Z" fill="rgba(200,80,80,0.4)" />
+        </marker>
+      </defs>
+
+      {/* STUCK watermark */}
+      <text x={cx} y={cy + 170} textAnchor="middle"
+        fill="rgba(245,240,232,0.04)" fontSize="52"
+        fontFamily="DM Serif Display, serif" letterSpacing="-0.03em" fontStyle="italic">stuck.</text>
     </svg>
   );
 }
