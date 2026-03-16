@@ -481,8 +481,10 @@ function DiagnosticCascade() {
       const total = outer.offsetHeight - window.innerHeight;
       const scrolled = -rect.top;
       const p = Math.max(0, Math.min(1, scrolled / total));
-      const maxShift = (cards.length - 1) * window.innerWidth;
-      track.style.transform = `translateX(${-(p * maxShift)}px)`;
+      const rawIndex = p * (cards.length - 1);
+      const snapIndex = Math.round(rawIndex);
+      track.style.transition = "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)";
+      track.style.transform = `translateX(${-(snapIndex * window.innerWidth)}px)`;
     };
     window.addEventListener("scroll", h, { passive: true });
     h();
