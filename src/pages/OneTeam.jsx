@@ -439,9 +439,14 @@ export default function OneTeam() {
         </div>
 
         <section className="ot-hero">
-          <div className="ot-hero-label">Fractional Leadership</div>
-          <h1>One Team.</h1>
-          <p>Not a workshop. Not a consultant on the sideline. A diagnostic brain embedded in how your team operates.</p>
+          <div className="ot-hero-text">
+            <div className="ot-hero-label">Fractional Leadership</div>
+            <h1>One Team.</h1>
+            <p>Not a workshop. Not a consultant on the sideline. A diagnostic brain embedded in how your team operates.</p>
+          </div>
+          <div className="ot-hero-visual">
+            <EmbedVisual />
+          </div>
         </section>
 
         <section className="ot-evolution">
