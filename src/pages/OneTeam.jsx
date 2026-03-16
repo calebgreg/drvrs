@@ -297,6 +297,103 @@ const phases = [
   },
 ];
 
+/* Hero visual — a "brain" being embedded into an org structure */
+function EmbedVisual() {
+  return (
+    <svg viewBox="0 0 300 320" fill="none" style={{ width: "100%", maxWidth: 340 }}>
+      <defs>
+        <radialGradient id="ev-glow" cx="50%" cy="45%" r="50%">
+          <stop offset="0%" stopColor="#2d8a6e" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#2d8a6e" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx="150" cy="140" r="110" fill="url(#ev-glow)" />
+
+      {/* Org chart — three layers of boxes */}
+      {/* Top (CEO) */}
+      <rect x="110" y="20" width="80" height="32" rx="3" fill="none" stroke="rgba(245,240,232,0.12)" strokeWidth="1" />
+      <line x1="150" y1="52" x2="150" y2="70" stroke="rgba(245,240,232,0.1)" strokeWidth="1" />
+
+      {/* Mid row */}
+      {[60, 150, 240].map((x, i) => (
+        <g key={i}>
+          <rect x={x - 30} y="70" width="60" height="28" rx="3"
+            fill={i === 1 ? "rgba(45,138,110,0.12)" : "none"}
+            stroke={i === 1 ? "rgba(45,138,110,0.4)" : "rgba(245,240,232,0.1)"}
+            strokeWidth="1" />
+          {i !== 1 && <line x1={x} y1="98" x2={x} y2="116" stroke="rgba(245,240,232,0.08)" strokeWidth="1" />}
+        </g>
+      ))}
+      {/* Connector lines from top to mid */}
+      <line x1="90" y1="70" x2="150" y2="52" stroke="rgba(245,240,232,0.08)" strokeWidth="1" />
+      <line x1="270" y1="70" x2="150" y2="52" stroke="rgba(245,240,232,0.08)" strokeWidth="1" />
+
+      {/* drvrs center node */}
+      <circle cx="150" cy="84" r="10" fill="rgba(45,138,110,0.3)" stroke="rgba(45,138,110,0.6)" strokeWidth="1" />
+      <text x="150" y="88" textAnchor="middle" fill="rgba(45,138,110,0.9)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.05em">d</text>
+
+      {/* Pulsing rings */}
+      <circle cx="150" cy="84" r="18" fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="1" strokeDasharray="3 4" />
+      <circle cx="150" cy="84" r="28" fill="none" stroke="rgba(45,138,110,0.07)" strokeWidth="1" strokeDasharray="2 6" />
+
+      {/* Deal flow — horizontal lanes */}
+      <text x="24" y="148" fill="rgba(245,240,232,0.18)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.12em">DEAL FLOW</text>
+      {[160, 178, 196, 214].map((y, i) => {
+        const barWidth = [140, 100, 180, 70][i];
+        const opacity = [0.18, 0.12, 0.22, 0.1][i];
+        const accent = i === 2;
+        return (
+          <g key={i}>
+            <rect x="24" y={y} width={barWidth} height="10" rx="2"
+              fill={accent ? "rgba(45,138,110,0.18)" : `rgba(245,240,232,${opacity})`}
+              stroke={accent ? "rgba(45,138,110,0.3)" : "none"} />
+            {accent && (
+              <circle cx={24 + barWidth + 8} cy={y + 5} r="4"
+                fill="none" stroke="rgba(45,138,110,0.5)" strokeWidth="1" />
+            )}
+          </g>
+        );
+      })}
+
+      {/* Diagnostic tag on accent row */}
+      <rect x="212" y="192" width="60" height="16" rx="8"
+        fill="none" stroke="rgba(45,138,110,0.3)" strokeWidth="1" />
+      <text x="242" y="204" textAnchor="middle" fill="rgba(45,138,110,0.6)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.1em">FLAGGED</text>
+
+      {/* Signal lines from drvrs node down to deal rows */}
+      <line x1="150" y1="112" x2="150" y2="158" stroke="rgba(45,138,110,0.15)" strokeWidth="1" strokeDasharray="3 4" />
+      <line x1="150" y1="158" x2="114" y2="164" stroke="rgba(45,138,110,0.1)" strokeWidth="1" />
+      <line x1="150" y1="158" x2="114" y2="201" stroke="rgba(45,138,110,0.1)" strokeWidth="1" />
+
+      {/* Bottom label */}
+      <text x="150" y="280" textAnchor="middle" fill="rgba(245,240,232,0.04)" fontSize="42"
+        fontFamily="DM Serif Display, serif" fontStyle="italic" letterSpacing="-0.03em">embedded.</text>
+    </svg>
+  );
+}
+
+/* Per-phase embed depth bar */
+function EmbedDepth({ level, label }) {
+  // level 1–4
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+        {[4, 3, 2, 1].map(l => (
+          <div key={l} style={{
+            width: "28px", height: "6px", borderRadius: "2px",
+            background: l <= level ? "rgba(45,138,110,0.7)" : "rgba(245,240,232,0.08)",
+            transition: "background 0.3s"
+          }} />
+        ))}
+      </div>
+      <div style={{
+        fontSize: "0.6rem", letterSpacing: "0.12em", textTransform: "uppercase",
+        color: "rgba(45,138,110,0.5)", textAlign: "center"
+      }}>{label}</div>
+    </div>
+  );
+}
+
 function Reveal({ children, className = "" }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
