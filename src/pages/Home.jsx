@@ -657,7 +657,7 @@ export default function Home() {
         </section>
 
         {/* 4. DECOMP */}
-        <section className="sec sec--green" style={{ flexDirection: "column", gap: "4rem", isolation: "isolate", zIndex: 1 }}>
+        <section className="sec sec--green" style={{ flexDirection: "column", gap: "4rem", isolation: "isolate", zIndex: 1, overflow: "visible" }}>
           <div className="glow-c" />
           <F>
             <div className="d-eyebrow" style={{ textAlign: "center" }}>The framework</div>
