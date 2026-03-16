@@ -130,7 +130,8 @@ const styles = `
     .oi-problem { grid-template-columns: 1fr; }
     .oi-problem-right { padding: 4vh 8vw; min-height: unset; }
     .oi-problem-right svg { max-width: 100%; width: 100%; }
-    .oi-cascade-row { grid-template-columns: 80px 1fr; }
+    .oi-cascade-row { grid-template-columns: 80px 1fr; grid-template-rows: auto auto; }
+    .oi-cascade-vis { grid-column: 2; }
     .oi-cascade-vis { border-left: none; border-top: 1px solid rgba(10,26,20,0.08); padding: 1.5rem 0; justify-content: flex-start; }
     .oi-cascade-vis svg { width: 90px; }
     .oi-outcomes-grid { grid-template-columns: 1fr; }
