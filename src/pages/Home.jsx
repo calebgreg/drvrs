@@ -338,8 +338,8 @@ function Decomp() {
   const nodeDelay = { 0: 0, 1: 0.25, 2: 0.5 };
 
   return (
-    <div ref={ref} style={{ width: "100%", maxWidth: "960px", margin: "0 auto", padding: "0 20px" }}>
-      <svg viewBox={`0 0 ${W} 380`} style={{ width: "100%", height: "auto" }}>
+    <div ref={ref} style={{ width: "100%", maxWidth: "960px", margin: "0 auto", padding: "0 20px", overflowX: "auto" }}>
+      <svg viewBox={`0 0 ${W} 380`} style={{ width: "100%", height: "auto", minWidth: "600px" }}>
         <defs>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           <filter id="glow-sm" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
