@@ -462,14 +462,19 @@ export default function OneTeam() {
                   <div className="ot-evo-period">{phase.period}</div>
                 </div>
                 <div className="ot-evo-right">
-                  <div className="ot-evo-headline">{phase.headline}</div>
-                  <div className="ot-evo-details">
-                    {phase.details.map((d, j) => (
-                      <div className="ot-evo-detail" key={j}>
-                        <div className="ot-evo-dot" />
-                        <div className="ot-evo-detail-text">{d}</div>
-                      </div>
-                    ))}
+                  <div className="ot-evo-right-text">
+                    <div className="ot-evo-headline">{phase.headline}</div>
+                    <div className="ot-evo-details">
+                      {phase.details.map((d, j) => (
+                        <div className="ot-evo-detail" key={j}>
+                          <div className="ot-evo-dot" />
+                          <div className="ot-evo-detail-text">{d}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="ot-evo-embed">
+                    <EmbedDepth level={phase.embedLevel} label={phase.embedLabel} />
                   </div>
                 </div>
               </div>
