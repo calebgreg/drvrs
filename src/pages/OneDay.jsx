@@ -106,46 +106,38 @@ const styles = `
     padding: 14vh 8vw;
   }
   .od-transform .od-section-label { color: #2d8a6e; }
-  .od-transform-grid {
-    display: grid; grid-template-columns: 1fr 80px 1fr; align-items: start; gap: 0;
-    margin-top: 4rem;
+  .od-transform-header {
+    display: grid; grid-template-columns: 1fr 60px 1fr;
+    margin-bottom: 0;
   }
   .od-transform-col-label {
     font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-    margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.6rem;
+    padding-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    border-bottom: 1px solid rgba(10,26,20,0.08);
   }
   .od-transform-col-label span { width: 20px; height: 1px; display: inline-block; }
-  .od-col-before .od-transform-col-label { color: #b0b8b2; }
-  .od-col-before .od-transform-col-label span { background: #b0b8b2; }
-  .od-col-after .od-transform-col-label { color: #2d8a6e; }
-  .od-col-after .od-transform-col-label span { background: #2d8a6e; }
+  .od-col-before-label { color: #b0b8b2; }
+  .od-col-before-label span { background: #b0b8b2; }
+  .od-col-after-label { color: #2d8a6e; }
+  .od-col-after-label span { background: #2d8a6e; }
+  .od-transform-row {
+    display: grid; grid-template-columns: 1fr 60px 1fr;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(10,26,20,0.08);
+  }
   .od-transform-item {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(0.95rem, 1.3vw, 1.15rem);
     line-height: 1.5;
     padding: 1.4rem 0;
-    border-bottom: 1px solid rgba(10,26,20,0.08);
   }
   .od-col-before .od-transform-item { color: #b0b8b2; font-style: italic; }
   .od-col-after .od-transform-item { color: #0a1a14; }
-  .od-transform-arrow-col {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-start;
-    padding-top: 3.5rem; gap: 0;
+  .od-transform-arrow-cell {
+    display: flex; align-items: center; justify-content: center;
   }
-  .od-transform-arrow {
-    width: 1px; background: rgba(45,138,110,0.3);
-    flex: 1; min-height: 40px;
-    position: relative;
-  }
-  .od-arrow-head {
-    position: absolute; bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 6px solid rgba(45,138,110,0.5);
-  }
+  .od-arrow-icon { color: rgba(45,138,110,0.5); font-size: 1rem; }
 
   /* TIMELINE */
   .od-timeline { padding: 14vh 8vw; background: #0a1a14; }
