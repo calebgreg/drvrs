@@ -306,117 +306,91 @@ function InputsVis() {
   );
 }
 
-/* ── Problem right-side visual: initiative stuck ── */
+/* ── Problem right-side visual: pipeline blocked ── */
 function StuckVisual() {
   const blockers = [
-    { angle: -120, label: "COMPETING\nPRIORITIES" },
-    { angle: -60,  label: "UNCLEAR\nOWNERSHIP" },
-    { angle: 60,   label: "UNMET\nCONDITIONS" },
-    { angle: 120,  label: "HIDDEN\nDRIVERS" },
+    "Competing priorities",
+    "Unclear ownership",
+    "Unmet conditions",
+    "Hidden drivers",
   ];
 
-  const cx = 200, cy = 200, innerR = 52, outerR = 130;
-
   return (
-    <svg viewBox="0 0 400 400" fill="none" style={{ width: "100%", maxWidth: 420 }}>
-      <defs>
-        <radialGradient id="sv-core" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#2d8a6e" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#2d8a6e" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="sv-bg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#1a3a2a" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#1a3a2a" stopOpacity="0" />
-        </radialGradient>
-        <filter id="sv-blur">
-          <feGaussianBlur stdDeviation="8" />
-        </filter>
-        <filter id="sv-soft">
-          <feGaussianBlur stdDeviation="2.5" />
-        </filter>
-      </defs>
+    <div style={{ width: "100%", maxWidth: 340, fontFamily: "'DM Sans', sans-serif" }}>
+      {/* Goal — trying to move right */}
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}>
+        <div style={{
+          border: "1px solid rgba(45,138,110,0.5)",
+          borderRadius: "4px",
+          padding: "0.6rem 1.2rem",
+          fontSize: "0.7rem", letterSpacing: "0.18em",
+          color: "rgba(45,138,110,0.9)",
+          whiteSpace: "nowrap",
+          background: "rgba(45,138,110,0.06)"
+        }}>
+          THE GOAL
+        </div>
+        {/* Arrow line */}
+        <div style={{ flex: 1, height: "1px", background: "rgba(45,138,110,0.25)", position: "relative" }}>
+          <div style={{
+            position: "absolute", right: -1, top: "50%", transform: "translateY(-50%)",
+            width: 0, height: 0,
+            borderTop: "4px solid transparent", borderBottom: "4px solid transparent",
+            borderLeft: "6px solid rgba(45,138,110,0.35)"
+          }} />
+        </div>
+        {/* Wall */}
+        <div style={{
+          width: "3px", height: "48px",
+          background: "linear-gradient(to bottom, rgba(200,80,80,0.15), rgba(200,80,80,0.4), rgba(200,80,80,0.15))",
+          borderRadius: "2px", flexShrink: 0
+        }} />
+      </div>
 
-      {/* Ambient glow behind center */}
-      <circle cx={cx} cy={cy} r="120" fill="url(#sv-bg)" />
-      <circle cx={cx} cy={cy} r="80" fill="rgba(45,138,110,0.07)" filter="url(#sv-blur)" />
+      {/* Blocker stack */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+        {blockers.map((label, i) => {
+          const opacity = 0.55 - i * 0.08;
+          const width = `${92 - i * 7}%`;
+          return (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", gap: "0.75rem",
+              opacity
+            }}>
+              <div style={{
+                width: "5px", height: "5px", borderRadius: "50%",
+                background: "rgba(200,80,80,0.6)", flexShrink: 0
+              }} />
+              <div style={{
+                height: "1px",
+                width,
+                background: `linear-gradient(to right, rgba(200,80,80,0.35), transparent)`
+              }} />
+              <div style={{
+                fontSize: "0.7rem", letterSpacing: "0.1em",
+                color: "rgba(245,240,232,0.35)", whiteSpace: "nowrap",
+                textTransform: "uppercase"
+              }}>
+                {label}
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
-      {/* Orbit rings */}
-      <circle cx={cx} cy={cy} r={outerR} stroke="rgba(245,240,232,0.04)" strokeWidth="1" />
-      <circle cx={cx} cy={cy} r={outerR * 0.72} stroke="rgba(245,240,232,0.05)" strokeWidth="1" strokeDasharray="3 6" />
-      <circle cx={cx} cy={cy} r={outerR * 0.45} stroke="rgba(45,138,110,0.12)" strokeWidth="1" strokeDasharray="2 4" />
-
-      {/* Blocker arms */}
-      {blockers.map(({ angle }, i) => {
-        const rad = (angle * Math.PI) / 180;
-        const x1 = cx + Math.cos(rad) * (innerR + 4);
-        const y1 = cy + Math.sin(rad) * (innerR + 4);
-        const x2 = cx + Math.cos(rad) * (outerR - 18);
-        const y2 = cy + Math.sin(rad) * (outerR - 18);
-        return (
-          <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
-            stroke="rgba(200,80,80,0.18)" strokeWidth="1.5" strokeDasharray="4 5" />
-        );
-      })}
-
-      {/* Blocker nodes */}
-      {blockers.map(({ angle, label }, i) => {
-        const rad = (angle * Math.PI) / 180;
-        const nx = cx + Math.cos(rad) * (outerR - 18);
-        const ny = cy + Math.sin(rad) * (outerR - 18);
-        const lx = cx + Math.cos(rad) * (outerR + 14);
-        const ly = cy + Math.sin(rad) * (outerR + 14);
-        const lines = label.split("\n");
-        return (
-          <g key={i}>
-            {/* Blocker halo */}
-            <circle cx={nx} cy={ny} r="16" fill="rgba(200,80,80,0.06)" stroke="rgba(200,80,80,0.18)" strokeWidth="1" />
-            {/* X mark */}
-            <line x1={nx-5} y1={ny-5} x2={nx+5} y2={ny+5} stroke="rgba(200,80,80,0.55)" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1={nx+5} y1={ny-5} x2={nx-5} y2={ny+5} stroke="rgba(200,80,80,0.55)" strokeWidth="1.5" strokeLinecap="round" />
-            {/* Label */}
-            {lines.map((ln, li) => (
-              <text key={li} x={lx} y={ly - 4 + li * 10}
-                textAnchor="middle"
-                fill="rgba(245,240,232,0.22)"
-                fontSize="7.5" fontFamily="DM Sans" letterSpacing="0.12em">{ln}</text>
-            ))}
-          </g>
-        );
-      })}
-
-      {/* Central goal — layered circles */}
-      <circle cx={cx} cy={cy} r={innerR + 16} fill="rgba(45,138,110,0.06)" filter="url(#sv-soft)" />
-      <circle cx={cx} cy={cy} r={innerR} fill="url(#sv-core)" stroke="rgba(45,138,110,0.35)" strokeWidth="1.5" />
-      <circle cx={cx} cy={cy} r={innerR - 10} fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="1" strokeDasharray="3 5" />
-
-      <text x={cx} y={cy - 7} textAnchor="middle" fill="rgba(245,240,232,0.7)" fontSize="10" fontFamily="DM Sans" letterSpacing="0.18em" fontWeight="400">GOAL</text>
-      <text x={cx} y={cy + 9} textAnchor="middle" fill="rgba(45,138,110,0.6)" fontSize="7.5" fontFamily="DM Sans" letterSpacing="0.12em">SET, NOT MOVING</text>
-
-      {/* Tension arrows pointing inward (pressure on goal) */}
-      {blockers.map(({ angle }, i) => {
-        const rad = (angle * Math.PI) / 180;
-        const ax = cx + Math.cos(rad) * (innerR + 28);
-        const ay = cy + Math.sin(rad) * (innerR + 28);
-        const tipX = cx + Math.cos(rad) * (innerR + 10);
-        const tipY = cy + Math.sin(rad) * (innerR + 10);
-        return (
-          <line key={i} x1={ax} y1={ay} x2={tipX} y2={tipY}
-            stroke="rgba(200,80,80,0.22)" strokeWidth="1"
-            markerEnd="url(#arrowRed)" />
-        );
-      })}
-
-      <defs>
-        <marker id="arrowRed" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
-          <path d="M0,0 L0,5 L5,2.5 Z" fill="rgba(200,80,80,0.4)" />
-        </marker>
-      </defs>
-
-      {/* STUCK watermark */}
-      <text x={cx} y={cy + 170} textAnchor="middle"
-        fill="rgba(245,240,232,0.04)" fontSize="52"
-        fontFamily="DM Serif Display, serif" letterSpacing="-0.03em" fontStyle="italic">stuck.</text>
-    </svg>
+      {/* Stuck label */}
+      <div style={{
+        marginTop: "2.5rem",
+        fontFamily: "'DM Serif Display', serif",
+        fontSize: "clamp(2.5rem, 5vw, 3.5rem)",
+        fontStyle: "italic",
+        letterSpacing: "-0.03em",
+        color: "rgba(245,240,232,0.06)",
+        lineHeight: 1
+      }}>
+        stuck.
+      </div>
+    </div>
   );
 }
 
