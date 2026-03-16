@@ -462,22 +462,21 @@ export default function OneDay() {
         <Reveal>
           <section className="od-transform">
             <div className="od-section-label">The shift</div>
-            <div className="od-transform-grid">
-              <div className="od-col-before">
-                <div className="od-transform-col-label"><span />How deals look now</div>
-                {beforeItems.map((t, i) => <div key={i} className="od-transform-item">{t}</div>)}
+            <div style={{ marginTop: "4rem" }}>
+              <div className="od-transform-header">
+                <div className="od-col-before-label od-transform-col-label"><span />How deals look now</div>
+                <div />
+                <div className="od-col-after-label od-transform-col-label"><span />How deals look after</div>
               </div>
-              <div className="od-transform-arrow-col">
-                {beforeItems.map((_, i) => (
-                  <div key={i} className="od-transform-arrow" style={{ marginTop: i === 0 ? "5.5rem" : 0, height: "calc(1.5rem + 2.8rem)" }}>
-                    <div className="od-arrow-head" />
+              {beforeItems.map((before, i) => (
+                <div key={i} className="od-transform-row">
+                  <div className="od-col-before od-transform-item">{before}</div>
+                  <div className="od-transform-arrow-cell">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="rgba(45,138,110,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
-                ))}
-              </div>
-              <div className="od-col-after">
-                <div className="od-transform-col-label"><span />How deals look after</div>
-                {afterItems.map((t, i) => <div key={i} className="od-transform-item">{t}</div>)}
-              </div>
+                  <div className="od-col-after od-transform-item">{afterItems[i]}</div>
+                </div>
+              ))}
             </div>
           </section>
         </Reveal>
