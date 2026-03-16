@@ -310,18 +310,18 @@ function Decomp() {
     return () => window.removeEventListener("scroll", h);
   }, [fired]);
 
-  const W = 900;
+  const W = 520;
   const nodes = [
-    { id: "rev",  label: "Revenue",        x: W/2,  y: 48,  level: 0 },
-    { id: "vol",  label: "Volume",         x: 150,  y: 175, level: 1 },
-    { id: "con",  label: "Conversion",     x: W/2,  y: 175, level: 1 },
-    { id: "pri",  label: "Price",          x: 750,  y: 175, level: 1 },
-    { id: "reach", label: "Reach",         x: 90,   y: 310, level: 2 },
-    { id: "act",   label: "Relevance",     x: 210,  y: 310, level: 2 },
-    { id: "qual",  label: "Qualification", x: 390,  y: 310, level: 2 },
-    { id: "off",   label: "Offer",         x: 510,  y: 310, level: 2 },
-    { id: "diff",  label: "Differentiation", x: 690, y: 310, level: 2 },
-    { id: "nec",   label: "Necessity",     x: 810,  y: 310, level: 2 },
+    { id: "rev",  label: "Revenue",        x: 260,  y: 48,  level: 0 },
+    { id: "vol",  label: "Volume",         x: 90,   y: 175, level: 1 },
+    { id: "con",  label: "Conversion",     x: 260,  y: 175, level: 1 },
+    { id: "pri",  label: "Price",          x: 430,  y: 175, level: 1 },
+    { id: "reach", label: "Reach",         x: 42,   y: 310, level: 2 },
+    { id: "act",   label: "Relevance",     x: 138,  y: 310, level: 2 },
+    { id: "qual",  label: "Qualification", x: 214,  y: 310, level: 2 },
+    { id: "off",   label: "Offer",         x: 306,  y: 310, level: 2 },
+    { id: "diff",  label: "Differ­entiation", x: 384, y: 310, level: 2 },
+    { id: "nec",   label: "Necessity",     x: 478,  y: 310, level: 2 },
   ];
   const edges = [
     { from: "rev", to: "vol" }, { from: "rev", to: "con" }, { from: "rev", to: "pri" },
