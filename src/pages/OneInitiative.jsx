@@ -124,11 +124,15 @@ const styles = `
     .oi-nav { padding: 1.5rem 2rem; }
     .oi-nav-links { display: none; }
     .oi-hamburger { display: flex; }
-    .oi-hero { grid-template-columns: 1fr; padding-top: 10rem; gap: 2rem; }
-    .oi-hero-visual { display: none; }
+    .oi-hero { grid-template-columns: 1fr; padding-top: 8rem; padding-bottom: 4rem; gap: 3rem; }
+    .oi-hero-visual { justify-content: flex-start; }
+    .oi-hero-visual svg { max-width: 100%; }
     .oi-problem { grid-template-columns: 1fr; }
+    .oi-problem-right { padding: 4vh 8vw; min-height: unset; }
+    .oi-problem-right svg { max-width: 100%; width: 100%; }
     .oi-cascade-row { grid-template-columns: 80px 1fr; }
-    .oi-cascade-vis { display: none; }
+    .oi-cascade-vis { border-left: none; border-top: 1px solid rgba(10,26,20,0.08); padding: 1.5rem 0; justify-content: flex-start; }
+    .oi-cascade-vis svg { width: 90px; }
     .oi-outcomes-grid { grid-template-columns: 1fr; }
   }
 `;
