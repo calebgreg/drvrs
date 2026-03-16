@@ -357,8 +357,8 @@ function Decomp() {
           const isRoot = n.level === 0, isMid = n.level === 1, delay = nodeDelay[n.level];
           return (
             <g key={n.id} opacity={fired ? 1 : 0} transform={fired ? `translate(0,0)` : `translate(0,12)`} style={{ transition: `opacity 0.5s ease ${delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${delay}s` }}>
-              {isRoot && <><rect x={n.x - 72} y={n.y - 22} width={144} height={44} rx="4" fill="rgba(45,138,110,0.18)" stroke="#2d8a6e" strokeWidth="1.5" filter="url(#glow)" /><text x={n.x} y={n.y + 5} textAnchor="middle" fill="#f5f0e8" fontSize="16" fontFamily="DM Serif Display, serif">{n.label}</text></>}
-              {isMid && <><rect x={n.x - 68} y={n.y - 20} width={136} height={40} rx="3" fill="rgba(45,138,110,0.1)" stroke="rgba(45,138,110,0.5)" strokeWidth="1" /><text x={n.x} y={n.y + 4} textAnchor="middle" fill="rgba(245,240,232,0.85)" fontSize="13" fontFamily="DM Sans, sans-serif" fontWeight="300">{n.label}</text></>}
+              {isRoot && <><rect x={n.x - 60} y={n.y - 20} width={120} height={40} rx="4" fill="rgba(45,138,110,0.18)" stroke="#2d8a6e" strokeWidth="1.5" filter="url(#glow)" /><text x={n.x} y={n.y + 5} textAnchor="middle" fill="#f5f0e8" fontSize="14" fontFamily="DM Serif Display, serif">{n.label}</text></>}
+              {isMid && <><rect x={n.x - 55} y={n.y - 18} width={110} height={36} rx="3" fill="rgba(45,138,110,0.1)" stroke="rgba(45,138,110,0.5)" strokeWidth="1" /><text x={n.x} y={n.y + 4} textAnchor="middle" fill="rgba(245,240,232,0.85)" fontSize="11" fontFamily="DM Sans, sans-serif" fontWeight="300">{n.label}</text></>}
               {n.level === 2 && <><circle cx={n.x} cy={n.y - 8} r="4" fill="#2d8a6e" filter="url(#glow-sm)" /><circle cx={n.x} cy={n.y - 8} r="2" fill="#f5f0e8" opacity="0.8"/><text x={n.x} y={n.y + 10} textAnchor="middle" fill="rgba(45,138,110,0.9)" fontSize="11" fontFamily="DM Sans, sans-serif" letterSpacing="0.04em">{n.label}</text></>}
             </g>
           );
