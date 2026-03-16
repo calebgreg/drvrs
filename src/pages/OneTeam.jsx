@@ -138,10 +138,14 @@ const styles = `
 
   .ot-evo-right {
     padding: 8vh 5vw;
-    display: flex; flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 160px;
     gap: 2rem;
+    align-items: center;
   }
+
+  .ot-evo-right-text { display: flex; flex-direction: column; gap: 2rem; }
+  .ot-evo-embed { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
 
   .ot-evo-headline {
     font-family: 'DM Serif Display', serif;
