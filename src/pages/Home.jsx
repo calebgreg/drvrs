@@ -505,7 +505,7 @@ function DiagnosticCascade() {
           {cards.map((card, i) => (
             <div key={i} style={{ flex: "0 0 100vw", width: "100vw", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ width: "min(72vw, 760px)", height: "min(55vh, 480px)", background: "#f5f0e8", borderRadius: "10px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={{ flex: 1 }}>{card.svg}</div>
+                <div style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>{card.svg}</div>
                 <div style={{ padding: "1rem 1.75rem", fontSize: "0.6rem", letterSpacing: "0.25em", color: card.labelColor || "#2d8a6e", borderTop: "1px solid rgba(10,26,20,0.07)", fontFamily: "'DM Sans', sans-serif", textTransform: "uppercase", background: "#f5f0e8" }}>{card.label}</div>
               </div>
             </div>
