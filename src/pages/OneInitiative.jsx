@@ -148,83 +148,85 @@ function Reveal({ children, delay = 0 }) {
   );
 }
 
-/* ── Hero visual: tangled vs. aligned org flow ── */
+/* ── Hero visual: misaligned → aligned org flow ── */
 function HeroVisual() {
-  const [phase, setPhase] = useState(0); // 0=tangled, 1=aligned
+  const [aligned, setAligned] = useState(false);
+
   useEffect(() => {
-    const t = setTimeout(() => setPhase(1), 1600);
-    return () => clearTimeout(t);
+    const t1 = setTimeout(() => setAligned(true), 1200);
+    return () => clearTimeout(t1);
   }, []);
 
-  // Three lanes: Goal → people → outcome
-  // Tangled: arrows cross. Aligned: arrows straight.
-  const lanes = [
-    { y: 80,  col: "rgba(45,138,110,0.7)" },
-    { y: 160, col: "rgba(45,138,110,0.45)" },
-    { y: 240, col: "rgba(45,138,110,0.3)" },
+  // 3 source rows, tangled destinations, then snap to aligned
+  const rows = [
+    { srcY: 70,  tangleDest: 190, col: "rgba(45,138,110,0.75)" },
+    { srcY: 150, tangleDest: 150, col: "rgba(45,138,110,0.5)" },
+    { srcY: 230, tangleDest: 70,  col: "rgba(45,138,110,0.32)" },
   ];
-  const tangled = [[0,1],[1,2],[2,0]]; // which lane connects to which at midpoint
 
   return (
-    <svg viewBox="0 0 360 320" fill="none" style={{ width: "100%", maxWidth: 400 }}>
+    <svg viewBox="0 0 380 300" fill="none" style={{ width: "100%", maxWidth: 420 }}>
       <defs>
-        <filter id="oi-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="5" />
-        </filter>
+        <filter id="hv-glow"><feGaussianBlur stdDeviation="4" /></filter>
       </defs>
 
-      {/* Background grid lines */}
-      {[60, 160, 260].map((x, i) => (
-        <line key={i} x1={x} y1={20} x2={x} y2={300} stroke="rgba(245,240,232,0.04)" strokeWidth="1" />
-      ))}
-      {[80, 160, 240].map((y, i) => (
-        <line key={i} x1={20} y1={y} x2={340} y2={y} stroke="rgba(245,240,232,0.04)" strokeWidth="1" />
+      {/* Column guides */}
+      {[60, 190, 310].map((x, i) => (
+        <line key={i} x1={x} y1={18} x2={x} y2={270} stroke="rgba(245,240,232,0.04)" strokeWidth="1" />
       ))}
 
-      {/* Label: BEFORE state */}
-      <text x="75" y="310" textAnchor="middle" fill="rgba(245,240,232,0.15)" fontSize="8" fontFamily="DM Sans" letterSpacing="0.15em">GOAL</text>
-      <text x="180" y="310" textAnchor="middle" fill="rgba(245,240,232,0.15)" fontSize="8" fontFamily="DM Sans" letterSpacing="0.15em">TEAM</text>
-      <text x="285" y="310" textAnchor="middle" fill="rgba(245,240,232,0.15)" fontSize="8" fontFamily="DM Sans" letterSpacing="0.15em">OUTCOME</text>
+      {/* Column labels */}
+      {["GOAL","TEAM","OUTCOME"].map((lbl, i) => (
+        <text key={i} x={[60,190,310][i]} y={286} textAnchor="middle"
+          fill="rgba(245,240,232,0.18)" fontSize="7.5" fontFamily="DM Sans" letterSpacing="0.14em">{lbl}</text>
+      ))}
 
-      {lanes.map((lane, i) => {
-        const midTarget = phase === 0 ? lanes[tangled[i][0]].y : lane.y;
-        const endTarget = lane.y;
+      {rows.map((row, i) => {
+        const destY = aligned ? row.srcY : row.tangleDest;
+        // cubic bezier: from source straight, curve through midpoint to dest
+        const d = `M ${67} ${row.srcY} C ${128} ${row.srcY} ${128} ${destY} ${183} ${destY} C ${248} ${destY} ${248} ${row.srcY} ${303} ${row.srcY}`;
+        const isCrossed = !aligned && row.tangleDest !== row.srcY;
+
         return (
           <g key={i}>
+            {/* Glow behind source node */}
+            <circle cx={60} cy={row.srcY} r={16} fill={row.col} opacity={0.12} filter="url(#hv-glow)" />
             {/* Source node */}
-            <circle cx={75} cy={lane.y} r={7} fill={lane.col} />
-            <circle cx={75} cy={lane.y} r={14} fill={lane.col} opacity={0.15} filter="url(#oi-glow)" />
+            <circle cx={60} cy={row.srcY} r={7} fill={row.col} />
 
             {/* Path */}
-            <path
-              d={`M 82 ${lane.y} C 130 ${lane.y} 130 ${midTarget} 173 ${midTarget} C 216 ${midTarget} 216 ${endTarget} 270 ${endTarget}`}
-              stroke={lane.col}
-              strokeWidth={phase === 1 ? "1.5" : "1"}
-              opacity={phase === 1 ? 1 : 0.5}
-              strokeDasharray={phase === 0 ? "4 4" : "none"}
-              style={{ transition: "all 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+            <path d={d} stroke={row.col}
+              strokeWidth={aligned ? "1.8" : "1.2"}
+              opacity={aligned ? 1 : 0.55}
+              strokeDasharray={isCrossed ? "5 5" : "none"}
+              style={{ transition: "d 1s cubic-bezier(0.16,1,0.3,1), stroke-width 1s ease, opacity 1s ease" }}
             />
 
-            {/* Mid node */}
-            <circle
-              cx={180} cy={midTarget} r={5}
-              fill={phase === 1 ? lane.col : "rgba(245,240,232,0.15)"}
-              style={{ transition: "all 1.2s cubic-bezier(0.16,1,0.3,1)" }}
-            />
+            {/* Mid node — snaps into place */}
+            <circle cx={190} cy={destY} r={5} fill={aligned ? row.col : "rgba(245,240,232,0.12)"}
+              style={{ transition: "cy 1s cubic-bezier(0.16,1,0.3,1), fill 0.8s ease" }} />
 
             {/* End node */}
-            <circle cx={278} cy={endTarget} r={7} fill={lane.col} opacity={phase === 1 ? 1 : 0.3} style={{ transition: "all 1.2s cubic-bezier(0.16,1,0.3,1)" }} />
+            <circle cx={310} cy={row.srcY} r={7} fill={row.col}
+              opacity={aligned ? 1 : 0.25}
+              style={{ transition: "opacity 1s ease" }} />
+
+            {/* Block X on crossed paths */}
+            {isCrossed && (
+              <g style={{ transition: "opacity 0.4s ease" }}>
+                <line x1={183} y1={destY - 6} x2={197} y2={destY + 6} stroke="rgba(200,80,80,0.45)" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1={197} y1={destY - 6} x2={183} y2={destY + 6} stroke="rgba(200,80,80,0.45)" strokeWidth="1.5" strokeLinecap="round" />
+              </g>
+            )}
           </g>
         );
       })}
 
-      {/* Block markers in tangled state */}
-      {phase === 0 && [0,1,2].map(i => (
-        <g key={i}>
-          <line x1={170} y1={lanes[tangled[i][0]].y - 8} x2={190} y2={lanes[tangled[i][0]].y + 8} stroke="rgba(200,80,80,0.4)" strokeWidth="1.5" />
-          <line x1={190} y1={lanes[tangled[i][0]].y - 8} x2={170} y2={lanes[tangled[i][0]].y + 8} stroke="rgba(200,80,80,0.4)" strokeWidth="1.5" />
-        </g>
-      ))}
+      {/* Aligned indicator */}
+      {aligned && (
+        <text x={190} y={260} textAnchor="middle"
+          fill="rgba(45,138,110,0.35)" fontSize="8" fontFamily="DM Sans" letterSpacing="0.2em">ALIGNED</text>
+      )}
     </svg>
   );
 }
