@@ -266,7 +266,8 @@ const phases = [
       "Which deals are attached to real organizational forces?",
       "Which ones are floating on hope?",
       "Where are the gaps in what the team actually knows?",
-    ]
+    ],
+    embedLevel: 1, embedLabel: "Observing"
   },
   {
     time: "Month 1", period: "The shift",
@@ -275,7 +276,8 @@ const phases = [
       "Reps start asking different questions on calls.",
       "Pipeline starts reflecting reality instead of optimism.",
       "The team develops a shared language for what's actually happening.",
-    ]
+    ],
+    embedLevel: 2, embedLabel: "Shaping"
   },
   {
     time: "Month 3", period: "The muscle",
@@ -284,7 +286,8 @@ const phases = [
       "Forecasts get honest.",
       "Surprises drop.",
       "Reps know when to walk away and when to push.",
-    ]
+    ],
+    embedLevel: 3, embedLabel: "Embedded"
   },
   {
     time: "Month 6", period: "The handoff",
@@ -293,7 +296,8 @@ const phases = [
       "New hires learn the diagnostic language from day one.",
       "Deal reviews run themselves.",
       "The framework is embedded. You don't need us anymore.",
-    ]
+    ],
+    embedLevel: 4, embedLabel: "Autonomous"
   },
 ];
 
