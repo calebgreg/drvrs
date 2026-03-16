@@ -345,7 +345,7 @@ function Decomp() {
           <filter id="glow-sm" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
         {edges.map((e, i) => {
-          const from = getNode(e.from), to = getNode(e.to), d = curvePath(from, to), len = 300, delay = edgeDelay[e.to];
+          const from = getNode(e.from), to = getNode(e.to), d = curvePath(from, to), len = 600, delay = edgeDelay[e.to];
           return (
             <g key={i}>
               <path d={d} fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="6" strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s` }} />
