@@ -249,9 +249,12 @@ const styles = `
     .ot-nav { padding: 1.5rem 2rem; }
     .ot-nav-links { display: none; }
     .ot-hamburger { display: flex; }
+    .ot-hero { grid-template-columns: 1fr; padding-top: 8rem; padding-bottom: 4rem; }
+    .ot-hero-visual { justify-content: flex-start; }
     .ot-evo-phase { grid-template-columns: 1fr; min-height: auto; }
     .ot-evo-left { border-right: none; border-bottom: 1px solid rgba(10, 26, 20, 0.08); padding: 4vh 6vw 2vh; }
-    .ot-evo-right { padding: 2vh 6vw 6vh; }
+    .ot-evo-right { grid-template-columns: 1fr; padding: 2vh 6vw 6vh; }
+    .ot-evo-embed { align-items: flex-start; flex-direction: row; gap: 1rem; }
   }
 `;
 
