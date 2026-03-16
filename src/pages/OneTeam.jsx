@@ -68,10 +68,15 @@ const styles = `
 
   .ot-hero {
     min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
     padding: 0 8vw;
+    gap: 6vw;
   }
+
+  .ot-hero-text { display: flex; flex-direction: column; }
+  .ot-hero-visual { display: flex; align-items: center; justify-content: center; }
 
   .ot-hero-label {
     font-size: 0.75rem; letter-spacing: 0.2em;
