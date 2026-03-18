@@ -510,7 +510,7 @@ export default function OneDay() {
           <Reveal><h2>One day changes<br /><em>everything.</em></h2></Reveal>
           <Reveal delay={100}><p className="od-cta-sub">Six to eight hours. Your team, your deals, your market.</p></Reveal>
           <Reveal delay={200}>
-            <a className="od-cta-btn" href="https://tally.so/r/VLPjKa" target="_blank" rel="noopener noreferrer">
+            <a className="od-cta-btn" href="/OneDayCTA">
               Book a workshop
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>
