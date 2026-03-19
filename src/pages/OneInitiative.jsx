@@ -550,7 +550,7 @@ export default function OneInitiative() {
           <Reveal><h2>Pick the initiative.<br /><em>We'll find the blockers.</em></h2></Reveal>
           <Reveal delay={100}><p className="oi-cta-sub">One conversation is all it takes to start.</p></Reveal>
           <Reveal delay={200}>
-            <a className="oi-cta-btn" href="https://tally.so/r/VLPjKa" target="_blank" rel="noopener noreferrer">
+            <a className="oi-cta-btn" href="/OneInitiativeCTA">
               Start a conversation
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>
