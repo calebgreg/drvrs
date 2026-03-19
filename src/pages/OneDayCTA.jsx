@@ -275,6 +275,15 @@ export default function OneDayCTA() {
         input[type=number]::-webkit-outer-spin-button,
         input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
+        .formula-pills { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+        .breakdown-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin-bottom: 1.5rem; }
+        .quarterly-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+        @media (max-width: 600px) {
+          .formula-pills { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+          .formula-pills .formula-x { display: none; }
+          .breakdown-grid { grid-template-columns: 1fr; }
+          .quarterly-grid { grid-template-columns: 1fr; }
+        }
       `}</style>
       <div style={{ width: "100%", maxWidth: "760px" }}>
         <div style={{ display: "flex", gap: "4px", marginBottom: "3rem" }}>
