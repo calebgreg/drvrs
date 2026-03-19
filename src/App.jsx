@@ -63,6 +63,7 @@ const AuthenticatedApp = () => {
       ))}
       <Route path="/OneDayCTA" element={<OneDayCTA />} />
       <Route path="/OneInitiativeCTA" element={<OneInitiativeCTA />} />
+      <Route path="/OneTeamCTA" element={<OneTeamCTA />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
