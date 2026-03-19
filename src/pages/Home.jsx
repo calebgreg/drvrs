@@ -211,7 +211,9 @@ const navStyles = `
     .drvrs-hamburger { display: flex; }
     .sec { padding: 10vh 6vw; }
     .hero-bg-num { display: none; }
-    .svc-door-inner { gap: 1.5rem; }
+    .svc-door-inner { gap: 1.5rem; flex-direction: column; align-items: flex-start; }
+    .svc-title { margin-top: 0.5rem; }
+    .svc-arrow { display: none; }
   }
 `;
 
