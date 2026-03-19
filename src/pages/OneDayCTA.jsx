@@ -287,7 +287,7 @@ export default function OneDayCTA() {
       `}</style>
       <div style={{ width: "100%", maxWidth: "760px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2rem" }}>
-          <a href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "rgba(45,138,110,0.6)", textDecoration: "none", fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+          <a onClick={() => window.history.back()} style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "rgba(45,138,110,0.6)", textDecoration: "none", fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>
             ← Back
           </a>
           <a href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "1.1rem", fontWeight: 400, letterSpacing: "0.05em", color: "#f5f0e8", textDecoration: "none" }}>
