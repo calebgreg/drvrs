@@ -177,7 +177,7 @@ function Decomp({ best, avg, deals, reps }) {
           <div style={{ fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(245,240,232,0.2)", marginBottom: "0.75rem" }}>
             Your best deal closed bigger because something different happened inside that account
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "2px", marginBottom: "1.5rem" }}>
+          <div className="breakdown-grid">
             {[
               { label: "Volume", components: "Reach × Relevance", sub: "Relevance can't be manufactured. It can be found. Reps who know how to look for what an account already cares about close more of what they touch.", color: "rgba(45,138,110,0.6)" },
               { label: "Conversion", components: "Qualification × Offer", sub: "Most reps can qualify a contact. Few can qualify a moment — whether this org, right now, actually needs to move. That's the difference between a deal and a conversation.", color: "rgba(45,138,110,0.75)" },
@@ -195,7 +195,7 @@ function Decomp({ best, avg, deals, reps }) {
 
       {phase >= 3 && (
         <div style={{ animation: "fadeUp 0.6s ease", marginBottom: "1.5rem" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
+          <div className="quarterly-grid">
             <div style={{ padding: "1.5rem", borderTop: "1px solid rgba(245,240,232,0.08)", background: "rgba(245,240,232,0.02)" }}>
               <div style={{ fontSize: "0.55rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(245,240,232,0.2)", marginBottom: "0.5rem" }}>This quarter</div>
               <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", color: "#2d8a6e", lineHeight: 1 }}>{fmt(animGap)}</div>
