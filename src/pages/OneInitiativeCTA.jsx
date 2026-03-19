@@ -324,6 +324,11 @@ export default function OneInitiativeCTA() {
         * { box-sizing: border-box; }
       `}</style>
 
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: '1.25rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 30, pointerEvents: 'none' }}>
+        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(45,138,110,0.6)', textDecoration: 'none', fontFamily: "'DM Sans', sans-serif", fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', pointerEvents: 'all' }}>← Back</a>
+        <a href="/" style={{ fontFamily: "'DM Serif Display', serif", fontSize: '1.1rem', color: '#f5f0e8', textDecoration: 'none', letterSpacing: '0.04em', pointerEvents: 'all' }}>drvrs</a>
+      </div>
+
       {step === 0 && <Step0 onNext={v => { setBet(v); setStep(1); }} />}
       {step === 1 && <Step1 bet={bet} onNext={v => { setStake(v); setStep(2); }} />}
       {step === 2 && <Step2 bet={bet} stake={stake} onNext={v => { setWhy(v); setStep(3); }} />}

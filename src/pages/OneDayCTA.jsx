@@ -286,6 +286,12 @@ export default function OneDayCTA() {
         }
       `}</style>
       <div style={{ width: "100%", maxWidth: "760px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2rem" }}>
+          <a href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "rgba(45,138,110,0.6)", textDecoration: "none", fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+            ← Back
+          </a>
+          <a href="/" style={{ fontFamily: "'DM Serif Display', serif", fontSize: "1.1rem", color: "#f5f0e8", textDecoration: "none", letterSpacing: "0.04em" }}>drvrs</a>
+        </div>
         <div style={{ display: "flex", gap: "4px", marginBottom: "3rem" }}>
           {[0,1,2,3,4].map(i => (
             <div key={i} style={{ flex: 1, height: "2px", background: i <= step ? "#2d8a6e" : "rgba(45,138,110,0.1)", transition: "background 0.5s ease" }} />
