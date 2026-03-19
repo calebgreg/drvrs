@@ -149,6 +149,8 @@ function Decomp({ best, avg, deals, reps }) {
           {[
             { label: "Volume", val: deals + " deals / quarter" },
             { label: "×" },
+            { label: "Conversion", val: fmt(Math.round(teamAvg / reps)) + " / rep" },
+            { label: "×" },
             { label: "Price", val: fmt(avg) + " avg deal size" },
           ].map((item, i) => item.label === "×" ? (
             <span key={i} style={{ color: "rgba(45,138,110,0.4)", fontFamily: "'DM Serif Display', serif", fontSize: "1.2rem" }}>×</span>
