@@ -145,7 +145,7 @@ function Decomp({ best, avg, deals, reps }) {
         <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(3rem, 7vw, 5.5rem)", color: "#f5f0e8", lineHeight: 1, letterSpacing: "-0.03em", marginBottom: "0.75rem" }}>
           {fmt(animRevenue)}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+        <div className="formula-pills">
           {[
             { label: "Volume", val: deals + " deals / quarter" },
             { label: "×" },
@@ -153,7 +153,7 @@ function Decomp({ best, avg, deals, reps }) {
             { label: "×" },
             { label: "Price", val: fmt(avg) + " avg deal size" },
           ].map((item, i) => item.label === "×" ? (
-            <span key={i} style={{ color: "rgba(45,138,110,0.4)", fontFamily: "'DM Serif Display', serif", fontSize: "1.2rem" }}>×</span>
+            <span key={i} className="formula-x" style={{ color: "rgba(45,138,110,0.4)", fontFamily: "'DM Serif Display', serif", fontSize: "1.2rem" }}>×</span>
           ) : (
             <div key={i} style={{ padding: "4px 10px", border: "1px solid rgba(45,138,110,0.15)", background: "rgba(45,138,110,0.04)" }}>
               <div style={{ fontSize: "0.52rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(45,138,110,0.5)", marginBottom: "2px" }}>{item.label}</div>
