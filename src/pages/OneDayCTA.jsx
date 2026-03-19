@@ -290,7 +290,10 @@ export default function OneDayCTA() {
           <a href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "rgba(45,138,110,0.6)", textDecoration: "none", fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase" }}>
             ← Back
           </a>
-          <a href="/" style={{ fontFamily: "'DM Serif Display', serif", fontSize: "1.1rem", color: "#f5f0e8", textDecoration: "none", letterSpacing: "0.04em" }}>drvrs</a>
+          <a href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "1.1rem", fontWeight: 400, letterSpacing: "0.05em", color: "#f5f0e8", textDecoration: "none" }}>
+            <div style={{ width: 24, height: 12, background: "#f5f0e8", borderRadius: 6 }} />
+            drvrs
+          </a>
         </div>
         <div style={{ display: "flex", gap: "4px", marginBottom: "3rem" }}>
           {[0,1,2,3,4].map(i => (

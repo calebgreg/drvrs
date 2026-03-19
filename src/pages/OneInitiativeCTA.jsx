@@ -326,7 +326,10 @@ export default function OneInitiativeCTA() {
 
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: '1.25rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 30, pointerEvents: 'none' }}>
         <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(45,138,110,0.6)', textDecoration: 'none', fontFamily: "'DM Sans', sans-serif", fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', pointerEvents: 'all' }}>← Back</a>
-        <a href="/" style={{ fontFamily: "'DM Serif Display', serif", fontSize: '1.1rem', color: '#f5f0e8', textDecoration: 'none', letterSpacing: '0.04em', pointerEvents: 'all' }}>drvrs</a>
+        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: "'DM Sans', sans-serif", fontSize: '1.1rem', fontWeight: 400, letterSpacing: '0.05em', color: '#f5f0e8', textDecoration: 'none', pointerEvents: 'all' }}>
+          <div style={{ width: 24, height: 12, background: '#f5f0e8', borderRadius: 6 }} />
+          drvrs
+        </a>
       </div>
 
       {step === 0 && <Step0 onNext={v => { setBet(v); setStep(1); }} />}
