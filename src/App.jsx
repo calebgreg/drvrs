@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import OneDayCTA from './pages/OneDayCTA';
 import OneInitiativeCTA from './pages/OneInitiativeCTA';
+import OneTeamCTA from './pages/OneTeamCTA';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
