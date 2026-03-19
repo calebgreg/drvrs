@@ -494,7 +494,7 @@ export default function OneTeam() {
         <section className="ot-cta">
           <Reveal><h2>Ready to change how your team sees deals?</h2></Reveal>
           <Reveal>
-            <a className="ot-cta-btn" href="https://tally.so/r/VLPjKa" target="_blank" rel="noopener noreferrer">
+            <a className="ot-cta-btn" href="/OneTeamCTA">
               Let's talk
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>
