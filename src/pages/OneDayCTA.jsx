@@ -285,16 +285,16 @@ export default function OneDayCTA() {
           .quarterly-grid { grid-template-columns: 1fr; }
         }
       `}</style>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "1.25rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 30 }}>
+        <a onClick={() => window.history.back()} style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "rgba(45,138,110,0.6)", textDecoration: "none", fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>
+          ← Back
+        </a>
+        <a href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "1.1rem", fontWeight: 400, letterSpacing: "0.05em", color: "#f5f0e8", textDecoration: "none" }}>
+          <div style={{ width: 24, height: 12, background: "#f5f0e8", borderRadius: 6 }} />
+          drvrs
+        </a>
+      </div>
       <div style={{ width: "100%", maxWidth: "760px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2rem" }}>
-          <a onClick={() => window.history.back()} style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "rgba(45,138,110,0.6)", textDecoration: "none", fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>
-            ← Back
-          </a>
-          <a href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "1.1rem", fontWeight: 400, letterSpacing: "0.05em", color: "#f5f0e8", textDecoration: "none" }}>
-            <div style={{ width: 24, height: 12, background: "#f5f0e8", borderRadius: 6 }} />
-            drvrs
-          </a>
-        </div>
         <div style={{ display: "flex", gap: "4px", marginBottom: "3rem" }}>
           {[0,1,2,3,4].map(i => (
             <div key={i} style={{ flex: 1, height: "2px", background: i <= step ? "#2d8a6e" : "rgba(45,138,110,0.1)", transition: "background 0.5s ease" }} />
