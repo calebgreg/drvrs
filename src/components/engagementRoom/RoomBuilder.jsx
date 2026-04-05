@@ -419,6 +419,13 @@ Generate exactly 2 proposal options tailored to this company and context. One sh
 
       {/* Save */}
       <div style={{ marginTop: 40, paddingTop: 24, borderTop: `1px solid ${COLORS.border}`, display: "flex", gap: 12 }}>
+        {data.slug && (
+          <button onClick={() => window.open(`/room/${data.slug}?preview=1`, "_blank")} style={{
+            background: "transparent", border: `1px solid ${COLORS.border}`,
+            borderRadius: 6, padding: "10px 24px", cursor: "pointer",
+            fontFamily: fonts.mono, fontSize: 11, color: COLORS.accent, letterSpacing: 1,
+          }}>PREVIEW ↗</button>
+        )}
         <button onClick={handleSave} disabled={saving} style={{
           background: COLORS.accentDim, border: `1px solid ${COLORS.accent}55`,
           borderRadius: 6, padding: "10px 32px", cursor: "pointer",

@@ -111,7 +111,13 @@ export default function RoomsList({ rooms, loading, onEdit, onRefresh }) {
                 )}
               </div>
 
-              <div style={{ display: "flex", gap: 8 }}>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <button onClick={() => window.open(`/room/${room.slug}?preview=1`, "_blank")} style={{
+                  background: "transparent", border: `1px solid ${COLORS.border}`,
+                  borderRadius: 6, padding: "7px 14px", cursor: "pointer",
+                  fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1,
+                }}>PREVIEW</button>
+
                 <button onClick={() => onEdit(room)} style={{
                   background: "transparent", border: `1px solid ${COLORS.border}`,
                   borderRadius: 6, padding: "7px 14px", cursor: "pointer",

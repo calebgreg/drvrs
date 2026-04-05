@@ -22,6 +22,7 @@ export default function RoomAccess() {
   const urlParams = new URLSearchParams(window.location.search);
   const slug = window.location.pathname.split("/room/")[1]?.split("?")[0];
   const keyParam = urlParams.get("key");
+  const isPreview = urlParams.get("preview") === "1";
 
   const [state, setState] = useState("checking"); // checking | gate | room | error
   const [email, setEmail] = useState("");
@@ -30,6 +31,19 @@ export default function RoomAccess() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (isPreview) {
+      // Admin preview: load room directly without access check
+      base44.entities.EngagementRoom.filter({ slug }).then(rooms => {
+        if (rooms?.[0]) {
+          setRoomData(rooms[0]);
+          setState("room");
+        } else {
+          setState("gate");
+        }
+      });
+      return;
+    }
+
     const storedKey = localStorage.getItem(`room_key_${slug}`);
     const keyToUse = keyParam || storedKey;
 
