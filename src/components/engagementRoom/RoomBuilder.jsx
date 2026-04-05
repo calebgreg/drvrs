@@ -53,6 +53,25 @@ const DEFAULT_ROOM = {
   engagementOneInitiativeTitle: "Phases 1 through 3",
   engagementOneInitiativeDescription: "Full 60-day engagement from positioning through the first 10 and the referral infrastructure to reach 40. Milestone-based.",
   engagementFooter: "Happy to do a 30-minute call to figure out which fits.",
+  proposalOptions: [
+    {
+      name: "One Day",
+      price: "",
+      timeline: "Half-day session",
+      deliverables: ["Positioning statement", "Demo talk track", "Outbound sequence"],
+      agreementUrl: "",
+      highlighted: false,
+    },
+    {
+      name: "One Initiative",
+      price: "",
+      timeline: "60-day engagement",
+      deliverables: ["Full positioning reframe", "ICP definition", "Outbound build", "Referral infrastructure"],
+      agreementUrl: "",
+      highlighted: true,
+    },
+  ],
+  proposalNote: "Both options include a 30-day check-in. No retainer. No ongoing obligation.",
 };
 
 function Field({ label, value, onChange, multiline = false, mono = false }) {
@@ -148,6 +167,7 @@ export default function RoomBuilder({ room, onSaved }) {
     { id: "work", label: "WORK" },
     { id: "playbook", label: "PLAYBOOK" },
     { id: "engagement", label: "CLOSE" },
+    { id: "proposal", label: "PROPOSAL" },
   ];
 
   return (
@@ -290,6 +310,45 @@ export default function RoomBuilder({ room, onSaved }) {
           <Field label="Description" value={data.engagementOneInitiativeDescription} onChange={v => set("engagementOneInitiativeDescription", v)} multiline />
           <SectionHeader label="Footer" />
           <Field label="Footer Message" value={data.engagementFooter} onChange={v => set("engagementFooter", v)} />
+        </div>
+      )}
+
+      {/* Proposal */}
+      {activeTab === "proposal" && (
+        <div>
+          <SectionHeader label="Proposal Options" />
+          {(data.proposalOptions || []).map((opt, i) => (
+            <div key={i} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 20, marginBottom: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1 }}>OPTION {i + 1}</span>
+                <button onClick={() => removeArrayItem("proposalOptions", i)} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: fonts.mono, fontSize: 9, color: "rgba(239,68,68,0.6)", letterSpacing: 1 }}>REMOVE</button>
+              </div>
+              <Field label="Option Name" value={opt.name} onChange={v => setArrayItem("proposalOptions", i, "name", v)} />
+              <Field label="Price (e.g. $4,500)" value={opt.price} onChange={v => setArrayItem("proposalOptions", i, "price", v)} mono />
+              <Field label="Timeline (e.g. Half-day session)" value={opt.timeline} onChange={v => setArrayItem("proposalOptions", i, "timeline", v)} />
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textMuted, letterSpacing: 1.5, textTransform: "uppercase", display: "block", marginBottom: 6 }}>Deliverables (one per line)</label>
+                <textarea
+                  value={(opt.deliverables || []).join("\n")}
+                  onChange={e => setArrayItem("proposalOptions", i, "deliverables", e.target.value.split("\n"))}
+                  style={{ width: "100%", background: COLORS.surfaceDeep, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "10px 14px", color: COLORS.text, fontFamily: fonts.body, fontSize: 13, outline: "none", resize: "vertical", minHeight: 80, boxSizing: "border-box" }}
+                />
+              </div>
+              <Field label="Agreement / E-sign URL" value={opt.agreementUrl} onChange={v => setArrayItem("proposalOptions", i, "agreementUrl", v)} mono />
+              <div style={{ marginBottom: 8 }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                  <input type="checkbox" checked={!!opt.highlighted} onChange={e => setArrayItem("proposalOptions", i, "highlighted", e.target.checked)} />
+                  <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textMuted, letterSpacing: 1 }}>HIGHLIGHT AS RECOMMENDED</span>
+                </label>
+              </div>
+            </div>
+          ))}
+          <button onClick={() => addArrayItem("proposalOptions", { name: "", price: "", timeline: "", deliverables: [], agreementUrl: "", highlighted: false })} style={{
+            background: COLORS.accentDim, border: `1px solid ${COLORS.accent}44`, borderRadius: 6,
+            padding: "8px 16px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1,
+          }}>+ ADD OPTION</button>
+          <SectionHeader label="Closing Note" />
+          <Field label="Note below options" value={data.proposalNote} onChange={v => set("proposalNote", v)} multiline />
         </div>
       )}
 

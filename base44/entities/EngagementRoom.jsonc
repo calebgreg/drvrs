@@ -26,7 +26,8 @@
       "enum": [
         "draft",
         "invited",
-        "viewed"
+        "viewed",
+        "signed"
       ],
       "default": "draft",
       "description": "Status of the engagement room"
@@ -147,6 +148,46 @@
     "engagementFooter": {
       "type": "string",
       "description": "Footer message in the engagement section"
+    },
+    "proposalOptions": {
+      "type": "array",
+      "description": "Pricing/proposal options shown on the final proposal stage",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Option name, e.g. 'One Day'"
+          },
+          "price": {
+            "type": "string",
+            "description": "Price string, e.g. '$4,500'"
+          },
+          "timeline": {
+            "type": "string",
+            "description": "e.g. 'Half-day session'"
+          },
+          "deliverables": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of deliverables"
+          },
+          "agreementUrl": {
+            "type": "string",
+            "description": "URL to the executable agreement / e-sign link"
+          },
+          "highlighted": {
+            "type": "boolean",
+            "description": "Whether to visually highlight this option as recommended"
+          }
+        }
+      }
+    },
+    "proposalNote": {
+      "type": "string",
+      "description": "Optional closing note on the proposal page"
     }
   },
   "required": [

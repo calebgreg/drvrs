@@ -33,6 +33,7 @@ const stages = [
   { id: "work", label: "Work" },
   { id: "playbook", label: "Plays" },
   { id: "engage", label: "Next" },
+  { id: "proposal", label: "Proposal" },
 ];
 
 function Fade({ show, delay = 0, children, style = {} }) {
@@ -317,6 +318,92 @@ export default function DrvrsEngagement({ room }) {
             <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 12 }}>06 — THE PLAYBOOK</div></Fade>
             <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>This is yours whether we work together or not.</div></Fade>
             <PlaybookSection items={room?.playbookSection || []} />
+          </div>
+        )}
+
+        {/* PROPOSAL */}
+        {currentId === "proposal" && (
+          <div>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 8 }}>08 — THE PROPOSAL</div>
+            </Fade>
+            <Fade show delay={200}>
+              <div style={{ fontFamily: fonts.display, fontSize: 36, fontWeight: 300, color: COLORS.text, marginBottom: 8, lineHeight: 1.2 }}>
+                What working together looks like.
+              </div>
+            </Fade>
+            <Fade show delay={350}>
+              <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
+                Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.
+              </div>
+            </Fade>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
+              {(room?.proposalOptions || []).map((opt, i) => (
+                <Fade key={i} show delay={400 + i * 200}>
+                  <div style={{
+                    background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
+                    border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
+                    borderRadius: 10, padding: "28px 32px",
+                    position: "relative",
+                  }}>
+                    {opt.highlighted && (
+                      <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
+                        RECOMMENDED
+                      </div>
+                    )}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
+                      <div>
+                        <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
+                        <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
+                      </div>
+                      <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>{opt.price}</div>
+                    </div>
+
+                    {(opt.deliverables || []).length > 0 && (
+                      <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
+                        {opt.deliverables.filter(d => d.trim()).map((d, j) => (
+                          <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                            <span style={{ color: COLORS.accent, fontSize: 12, marginTop: 2, flexShrink: 0 }}>—</span>
+                            <span style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.5 }}>{d}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {opt.agreementUrl ? (
+                      <a
+                        href={opt.agreementUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: "inline-block",
+                          background: opt.highlighted ? COLORS.accentDim : "transparent",
+                          border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
+                          borderRadius: 6, padding: "10px 24px",
+                          fontFamily: fonts.mono, fontSize: 11,
+                          color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
+                          letterSpacing: 1, textDecoration: "none",
+                          transition: "all 0.2s ease",
+                        }}
+                      >
+                        ACCEPT &amp; SIGN →
+                      </a>
+                    ) : (
+                      <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 1 }}>AGREEMENT LINK COMING</div>
+                    )}
+                  </div>
+                </Fade>
+              ))}
+            </div>
+
+            {room?.proposalNote && (
+              <Fade show delay={800}>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto" }}>
+                  {room.proposalNote}
+                </div>
+              </Fade>
+            )}
           </div>
         )}
 
