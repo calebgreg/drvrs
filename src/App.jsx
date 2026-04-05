@@ -10,6 +10,8 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import OneDayCTA from './pages/OneDayCTA';
 import OneInitiativeCTA from './pages/OneInitiativeCTA';
 import OneTeamCTA from './pages/OneTeamCTA';
+import AdminRooms from './pages/AdminRooms';
+import RoomAccess from './pages/RoomAccess';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -64,6 +66,8 @@ const AuthenticatedApp = () => {
       <Route path="/OneDayCTA" element={<OneDayCTA />} />
       <Route path="/OneInitiativeCTA" element={<OneInitiativeCTA />} />
       <Route path="/OneTeamCTA" element={<OneTeamCTA />} />
+      <Route path="/admin/rooms" element={<AdminRooms />} />
+      <Route path="/room/:slug" element={<RoomAccess />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

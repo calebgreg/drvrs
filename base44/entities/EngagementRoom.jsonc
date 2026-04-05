@@ -1,0 +1,158 @@
+{
+  "type": "object",
+  "properties": {
+    "prospectEmail": {
+      "type": "string",
+      "description": "The email of the prospect"
+    },
+    "prospectName": {
+      "type": "string",
+      "description": "The name of the prospect"
+    },
+    "companyName": {
+      "type": "string",
+      "description": "The company name displayed in the room"
+    },
+    "slug": {
+      "type": "string",
+      "description": "Unique URL-friendly identifier (e.g. 'insurvoice-q2')"
+    },
+    "accessKey": {
+      "type": "string",
+      "description": "Unique access key for the prospect"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "invited",
+        "viewed"
+      ],
+      "default": "draft",
+      "description": "Status of the engagement room"
+    },
+    "invitedAt": {
+      "type": "string",
+      "description": "ISO timestamp of when the invite was sent"
+    },
+    "lastViewedAt": {
+      "type": "string",
+      "description": "ISO timestamp of when the prospect last viewed the room"
+    },
+    "goalTitle": {
+      "type": "string",
+      "description": "The main goal headline"
+    },
+    "goalDescription": {
+      "type": "string",
+      "description": "Goal section body text"
+    },
+    "goalCallout": {
+      "type": "string",
+      "description": "The highlighted callout box text in the goal section"
+    },
+    "goalFooter": {
+      "type": "string",
+      "description": "Footer text in the goal section"
+    },
+    "decompositionDescription": {
+      "type": "string",
+      "description": "Intro text for the decomposition section"
+    },
+    "constraintTitle": {
+      "type": "string",
+      "description": "Constraint identified label"
+    },
+    "constraintDescription": {
+      "type": "string",
+      "description": "Main constraint body text"
+    },
+    "constraintFooter": {
+      "type": "string",
+      "description": "Footer paragraph after constraint box"
+    },
+    "shiftsSection": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "before": {
+            "type": "string"
+          },
+          "after": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Array of shift cards"
+    },
+    "workSection": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Array of work phase cards"
+    },
+    "playbookSection": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Array of playbook items"
+    },
+    "engagementOneDayTitle": {
+      "type": "string",
+      "description": "One Day engagement option title"
+    },
+    "engagementOneDayDescription": {
+      "type": "string",
+      "description": "One Day engagement option description"
+    },
+    "engagementOneInitiativeTitle": {
+      "type": "string",
+      "description": "One Initiative engagement option title"
+    },
+    "engagementOneInitiativeDescription": {
+      "type": "string",
+      "description": "One Initiative engagement option description"
+    },
+    "engagementFooter": {
+      "type": "string",
+      "description": "Footer message in the engagement section"
+    }
+  },
+  "required": [
+    "prospectEmail",
+    "companyName",
+    "slug"
+  ],
+  "name": "EngagementRoom"
+}
