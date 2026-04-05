@@ -93,10 +93,10 @@ export default function RoomAccess() {
           </div>
 
           <div style={{ fontFamily: fonts.display, fontSize: 28, fontWeight: 300, color: COLORS.text, marginBottom: 12 }}>
-            Your diagnostic is ready.
+            We built this for you.
           </div>
           <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 36 }}>
-            Enter the email address where you received your invitation to access your personalized engagement room.
+            Enter your email to access your private room.
           </div>
 
           {errorMsg && (
