@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 
 const COLORS = {
@@ -119,6 +119,7 @@ function SectionHeader({ label }) {
 export default function RoomBuilder({ room, onSaved }) {
   const [data, setData] = useState(room || { ...DEFAULT_ROOM });
   const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState("basics");
 
   const set = (key, value) => setData(d => ({ ...d, [key]: value }));
@@ -144,6 +145,53 @@ export default function RoomBuilder({ room, onSaved }) {
   };
 
   const autoSlug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  const handleGenerateProposal = async () => {
+    setGenerating(true);
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are writing a proposal for a consulting engagement room.
+
+Here is the context about this prospect:
+- Company: ${data.companyName}
+- Prospect: ${data.prospectName}
+- Goal: ${data.goalTitle}
+- Goal description: ${data.goalDescription}
+- Core constraint: ${data.constraintDescription}
+- Shifts planned: ${(data.shiftsSection || []).map(s => s.title + ": " + s.after).join("; ")}
+- Work phases: ${(data.workSection || []).map(w => w.title + " — " + w.description).join("; ")}
+
+Generate exactly 2 proposal options tailored to this company and context. One should be a focused, shorter engagement ("One Day") and one a fuller initiative engagement. Make pricing, timelines, and deliverables feel specific to their situation. Also write a short closing note (1-2 sentences, warm but direct).`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            proposalOptions: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  price: { type: "string" },
+                  timeline: { type: "string" },
+                  deliverables: { type: "array", items: { type: "string" } },
+                  agreementUrl: { type: "string" },
+                  highlighted: { type: "boolean" }
+                }
+              }
+            },
+            proposalNote: { type: "string" }
+          }
+        }
+      });
+      setData(d => ({
+        ...d,
+        proposalOptions: result.proposalOptions || d.proposalOptions,
+        proposalNote: result.proposalNote || d.proposalNote,
+      }));
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -316,6 +364,23 @@ export default function RoomBuilder({ room, onSaved }) {
       {/* Proposal */}
       {activeTab === "proposal" && (
         <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 2, textTransform: "uppercase" }}>Proposal Options</div>
+            <button
+              onClick={handleGenerateProposal}
+              disabled={generating}
+              style={{
+                background: generating ? COLORS.surfaceDeep : COLORS.accentDim,
+                border: `1px solid ${COLORS.accent}55`,
+                borderRadius: 6, padding: "8px 18px", cursor: generating ? "not-allowed" : "pointer",
+                fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1,
+                display: "flex", alignItems: "center", gap: 8, opacity: generating ? 0.7 : 1,
+              }}
+            >
+              <span style={{ fontSize: 12 }}>✦</span>
+              {generating ? "GENERATING..." : "GENERATE WITH AI"}
+            </button>
+          </div>
           <SectionHeader label="Proposal Options" />
           {(data.proposalOptions || []).map((opt, i) => (
             <div key={i} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 20, marginBottom: 12 }}>
