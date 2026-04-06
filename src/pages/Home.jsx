@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { base44 } from "@/api/base44Client";
 
 const navStyles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
@@ -594,6 +595,13 @@ function OneTeamVisual() {
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    base44.auth.isAuthenticated().then(authed => {
+      if (authed) base44.auth.me().then(u => setIsAdmin(u?.role === "admin"));
+    });
+  }, []);
 
   return (
     <>
@@ -610,6 +618,7 @@ export default function Home() {
             <a href="/OneDay">One Day</a>
             <a href="/OneInitiative">One Initiative</a>
             <a href="/OneTeam">One Team</a>
+            {isAdmin && <a href="/admin/rooms" style={{ opacity: 0.35 }}>Rooms</a>}
           </div>
           {!menuOpen && (
             <button className="drvrs-hamburger" onClick={() => setMenuOpen(true)}>
