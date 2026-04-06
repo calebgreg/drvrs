@@ -60,6 +60,70 @@
       "type": "string",
       "description": "Intro text for the decomposition section"
     },
+    "decompositionTree": {
+      "type": "object",
+      "description": "The tree diagram data for the decomposition section",
+      "properties": {
+        "root": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "sublabel": {
+              "type": "string"
+            }
+          }
+        },
+        "leftBranch": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "sublabel": {
+              "type": "string"
+            }
+          }
+        },
+        "rightBranch": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "sublabel": {
+              "type": "string"
+            }
+          }
+        },
+        "leftLeaf": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "sublabel": {
+              "type": "string"
+            }
+          }
+        },
+        "rightLeaf": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "sublabel": {
+              "type": "string"
+            }
+          }
+        },
+        "caption": {
+          "type": "string"
+        }
+      }
+    },
     "constraintTitle": {
       "type": "string",
       "description": "Constraint identified label"
@@ -71,6 +135,15 @@
     "constraintFooter": {
       "type": "string",
       "description": "Footer paragraph after constraint box"
+    },
+    "constraintBranch": {
+      "type": "string",
+      "enum": [
+        "left",
+        "right"
+      ],
+      "default": "left",
+      "description": "Which branch of the decomposition tree is the constraint"
     },
     "shiftsSection": {
       "type": "array",
@@ -130,64 +203,51 @@
       "description": "Array of playbook items"
     },
     "engagementOneDayTitle": {
-      "type": "string",
-      "description": "One Day engagement option title"
+      "type": "string"
     },
     "engagementOneDayDescription": {
-      "type": "string",
-      "description": "One Day engagement option description"
+      "type": "string"
     },
     "engagementOneInitiativeTitle": {
-      "type": "string",
-      "description": "One Initiative engagement option title"
+      "type": "string"
     },
     "engagementOneInitiativeDescription": {
-      "type": "string",
-      "description": "One Initiative engagement option description"
+      "type": "string"
     },
     "engagementFooter": {
-      "type": "string",
-      "description": "Footer message in the engagement section"
+      "type": "string"
     },
     "proposalOptions": {
       "type": "array",
-      "description": "Pricing/proposal options shown on the final proposal stage",
       "items": {
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "description": "Option name, e.g. 'One Day'"
+            "type": "string"
           },
           "price": {
-            "type": "string",
-            "description": "Price string, e.g. '$4,500'"
+            "type": "string"
           },
           "timeline": {
-            "type": "string",
-            "description": "e.g. 'Half-day session'"
+            "type": "string"
           },
           "deliverables": {
             "type": "array",
             "items": {
               "type": "string"
-            },
-            "description": "List of deliverables"
+            }
           },
           "agreementUrl": {
-            "type": "string",
-            "description": "URL to the executable agreement / e-sign link"
+            "type": "string"
           },
           "highlighted": {
-            "type": "boolean",
-            "description": "Whether to visually highlight this option as recommended"
+            "type": "boolean"
           }
         }
       }
     },
     "proposalNote": {
-      "type": "string",
-      "description": "Optional closing note on the proposal page"
+      "type": "string"
     }
   },
   "required": [

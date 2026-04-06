@@ -244,42 +244,59 @@ export default function DrvrsEngagement({ room }) {
         )}
 
         {/* DECOMP */}
-        {currentId === "decomp" && (
-          <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 24 }}>02 — THE DECOMPOSITION</div></Fade>
-            <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 560 }}>{room?.decompositionDescription}</div></Fade>
-            <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
-              <svg width="520" height="320" viewBox="0 0 520 320">
-                <TreeEdge x1={260} y1={60} x2={150} y2={190} show={treePhase >= 2} delay={0} />
-                <TreeEdge x1={260} y1={60} x2={370} y2={190} show={treePhase >= 2} delay={200} />
-                <TreeEdge x1={150} y1={190} x2={150} y2={280} show={treePhase >= 3} delay={0} />
-                <TreeEdge x1={370} y1={190} x2={370} y2={280} show={treePhase >= 3} delay={200} />
-                <TreeNode label="PMF" sublabel="50 customers" x={260} y={60} active show={treePhase >= 1} delay={0} />
-                <TreeNode label="10" sublabel="FANATICS" x={150} y={190} active show={treePhase >= 2} delay={0} />
-                <TreeNode label="40" sublabel="REFERRALS" x={370} y={190} show={treePhase >= 2} delay={200} />
-                <TreeNode label="ACTIVE" sublabel="OUTBOUND" x={150} y={280} active show={treePhase >= 3} delay={0} />
-                <TreeNode label="NETWORK" sublabel="LEVERAGE" x={370} y={280} show={treePhase >= 3} delay={200} />
-              </svg>
+        {currentId === "decomp" && (() => {
+          const tree = room?.decompositionTree || {};
+          const root = tree.root || { label: "PMF", sublabel: "50 customers" };
+          const left = tree.leftBranch || { label: "10", sublabel: "FANATICS" };
+          const right = tree.rightBranch || { label: "40", sublabel: "REFERRALS" };
+          const leftLeaf = tree.leftLeaf || { label: "ACTIVE", sublabel: "OUTBOUND" };
+          const rightLeaf = tree.rightLeaf || { label: "NETWORK", sublabel: "LEVERAGE" };
+          const caption = tree.caption || "50 = 10 who find 40. The 10 is the real target.";
+          return (
+            <div>
+              <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 24 }}>02 — THE DECOMPOSITION</div></Fade>
+              <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 560 }}>{room?.decompositionDescription}</div></Fade>
+              <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
+                <svg width="520" height="320" viewBox="0 0 520 320">
+                  <TreeEdge x1={260} y1={60} x2={150} y2={190} show={treePhase >= 2} delay={0} />
+                  <TreeEdge x1={260} y1={60} x2={370} y2={190} show={treePhase >= 2} delay={200} />
+                  <TreeEdge x1={150} y1={190} x2={150} y2={280} show={treePhase >= 3} delay={0} />
+                  <TreeEdge x1={370} y1={190} x2={370} y2={280} show={treePhase >= 3} delay={200} />
+                  <TreeNode label={root.label} sublabel={root.sublabel} x={260} y={60} active show={treePhase >= 1} delay={0} />
+                  <TreeNode label={left.label} sublabel={left.sublabel} x={150} y={190} active show={treePhase >= 2} delay={0} />
+                  <TreeNode label={right.label} sublabel={right.sublabel} x={370} y={190} show={treePhase >= 2} delay={200} />
+                  <TreeNode label={leftLeaf.label} sublabel={leftLeaf.sublabel} x={150} y={280} active show={treePhase >= 3} delay={0} />
+                  <TreeNode label={rightLeaf.label} sublabel={rightLeaf.sublabel} x={370} y={280} show={treePhase >= 3} delay={200} />
+                </svg>
+              </div>
+              <Fade show delay={1600}><div style={{ textAlign: "center", fontFamily: fonts.mono, fontSize: 12, color: COLORS.textMuted, letterSpacing: 0.5 }}>{caption}</div></Fade>
             </div>
-            <Fade show delay={1600}><div style={{ textAlign: "center", fontFamily: fonts.mono, fontSize: 12, color: COLORS.textMuted, letterSpacing: 0.5 }}>50 = 10 who find 40. The 10 is the real target.</div></Fade>
-          </div>
-        )}
+          );
+        })()}
 
         {/* CONSTRAINT */}
-        {currentId === "constraint" && (
+        {currentId === "constraint" && (() => {
+          const tree = room?.decompositionTree || {};
+          const root = tree.root || { label: "PMF", sublabel: "50 customers" };
+          const left = tree.leftBranch || { label: "10", sublabel: "FANATICS" };
+          const right = tree.rightBranch || { label: "40", sublabel: "REFERRALS" };
+          const leftLeaf = tree.leftLeaf || { label: "ACTIVE", sublabel: "OUTBOUND" };
+          const rightLeaf = tree.rightLeaf || { label: "NETWORK", sublabel: "LEVERAGE" };
+          const isLeftConstraint = (room?.constraintBranch || "left") === "left";
+          return (
           <div>
             <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.constraint, letterSpacing: 3, marginBottom: 24 }}>03 — THE CONSTRAINT</div></Fade>
             <div style={{ display: "flex", justifyContent: "center", margin: "0 0 24px 0" }}>
               <svg width="520" height="320" viewBox="0 0 520 320">
-                <TreeEdge x1={260} y1={60} x2={150} y2={190} show delay={0} isConstraintPath />
-                <TreeEdge x1={260} y1={60} x2={370} y2={190} show delay={0} />
-                <TreeEdge x1={150} y1={190} x2={150} y2={280} show delay={0} isConstraintPath />
-                <TreeEdge x1={370} y1={190} x2={370} y2={280} show delay={0} />
-                <TreeNode label="PMF" sublabel="50 customers" x={260} y={60} active show delay={0} />
-                <TreeNode label="10" sublabel="FANATICS" x={150} y={190} isConstraint show delay={0} />
-                <TreeNode label="40" sublabel="REFERRALS" x={370} y={190} show delay={0} />
-                <TreeNode label="ACTIVE" sublabel="OUTBOUND" x={150} y={280} isConstraint show delay={0} />
-                <TreeNode label="NETWORK" sublabel="LEVERAGE" x={370} y={280} show delay={0} />
+                <TreeEdge x1={260} y1={60} x2={150} y2={190} show delay={0} isConstraintPath={isLeftConstraint} />
+                <TreeEdge x1={260} y1={60} x2={370} y2={190} show delay={0} isConstraintPath={!isLeftConstraint} />
+                <TreeEdge x1={150} y1={190} x2={150} y2={280} show delay={0} isConstraintPath={isLeftConstraint} />
+                <TreeEdge x1={370} y1={190} x2={370} y2={280} show delay={0} isConstraintPath={!isLeftConstraint} />
+                <TreeNode label={root.label} sublabel={root.sublabel} x={260} y={60} active show delay={0} />
+                <TreeNode label={left.label} sublabel={left.sublabel} x={150} y={190} isConstraint={isLeftConstraint} show delay={0} />
+                <TreeNode label={right.label} sublabel={right.sublabel} x={370} y={190} isConstraint={!isLeftConstraint} show delay={0} />
+                <TreeNode label={leftLeaf.label} sublabel={leftLeaf.sublabel} x={150} y={280} isConstraint={isLeftConstraint} show delay={0} />
+                <TreeNode label={rightLeaf.label} sublabel={rightLeaf.sublabel} x={370} y={280} isConstraint={!isLeftConstraint} show delay={0} />
               </svg>
             </div>
             <Fade show delay={300}>
@@ -290,7 +307,8 @@ export default function DrvrsEngagement({ room }) {
             </Fade>
             <Fade show delay={600}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, maxWidth: 560 }}>{room?.constraintFooter}</div></Fade>
           </div>
-        )}
+          );
+        })()}
 
         {/* SHIFTS */}
         {currentId === "shifts" && (

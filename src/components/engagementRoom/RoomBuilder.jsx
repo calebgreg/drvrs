@@ -268,6 +268,24 @@ Generate exactly 2 proposal options tailored to this company and context. One sh
           <Field label="Footer Text" value={data.goalFooter} onChange={v => set("goalFooter", v)} multiline />
           <SectionHeader label="Decomposition Section" />
           <Field label="Intro Text" value={data.decompositionDescription} onChange={v => set("decompositionDescription", v)} multiline />
+          <SectionHeader label="Decomposition Tree" />
+          <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, marginBottom: 16, lineHeight: 1.6 }}>
+            The tree diagram shown in the room. Root → Left Branch + Right Branch → each has a Leaf below it.
+          </div>
+          {[
+            { key: "root", label: "Root Node (top)" },
+            { key: "leftBranch", label: "Left Branch" },
+            { key: "rightBranch", label: "Right Branch" },
+            { key: "leftLeaf", label: "Left Leaf (bottom-left)" },
+            { key: "rightLeaf", label: "Right Leaf (bottom-right)" },
+          ].map(({ key, label }) => (
+            <div key={key} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 16, marginBottom: 8 }}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1, marginBottom: 10 }}>{label.toUpperCase()}</div>
+              <Field label="Label (bold text)" value={data.decompositionTree?.[key]?.label || ""} onChange={v => setData(d => ({ ...d, decompositionTree: { ...(d.decompositionTree || {}), [key]: { ...(d.decompositionTree?.[key] || {}), label: v } } }))} mono />
+              <Field label="Sublabel (small text below)" value={data.decompositionTree?.[key]?.sublabel || ""} onChange={v => setData(d => ({ ...d, decompositionTree: { ...(d.decompositionTree || {}), [key]: { ...(d.decompositionTree?.[key] || {}), sublabel: v } } }))} />
+            </div>
+          ))}
+          <Field label="Caption (shown below diagram)" value={data.decompositionTree?.caption || ""} onChange={v => setData(d => ({ ...d, decompositionTree: { ...(d.decompositionTree || {}), caption: v } }))} />
         </div>
       )}
 
@@ -275,6 +293,21 @@ Generate exactly 2 proposal options tailored to this company and context. One sh
       {activeTab === "constraint" && (
         <div>
           <SectionHeader label="Constraint Section" />
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textMuted, letterSpacing: 1.5, textTransform: "uppercase", display: "block", marginBottom: 8 }}>Which branch is the constraint?</label>
+            <div style={{ display: "flex", gap: 8 }}>
+              {["left", "right"].map(side => (
+                <button key={side} onClick={() => set("constraintBranch", side)} style={{
+                  background: (data.constraintBranch || "left") === side ? "rgba(239,68,68,0.12)" : "transparent",
+                  border: `1px solid ${(data.constraintBranch || "left") === side ? "rgba(239,68,68,0.5)" : COLORS.border}`,
+                  borderRadius: 4, padding: "6px 16px", cursor: "pointer",
+                  fontFamily: fonts.mono, fontSize: 9,
+                  color: (data.constraintBranch || "left") === side ? "#EF4444" : COLORS.textMuted,
+                  letterSpacing: 1, textTransform: "uppercase",
+                }}>{side} branch</button>
+              ))}
+            </div>
+          </div>
           <Field label="Constraint Title" value={data.constraintTitle} onChange={v => set("constraintTitle", v)} />
           <Field label="Constraint Body" value={data.constraintDescription} onChange={v => set("constraintDescription", v)} multiline />
           <Field label="Footer Paragraph" value={data.constraintFooter} onChange={v => set("constraintFooter", v)} multiline />
