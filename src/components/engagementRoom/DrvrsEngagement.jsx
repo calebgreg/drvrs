@@ -231,7 +231,7 @@ export default function DrvrsEngagement({ room }) {
             <Fade show delay={200}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim, letterSpacing: 3, textTransform: "uppercase", marginBottom: 40 }}>Prepared for {room?.companyName}</div></Fade>
             <Fade show delay={500}><div style={{ fontFamily: fonts.display, fontSize: 56, fontWeight: 300, color: COLORS.text, letterSpacing: 1, lineHeight: 1.1, marginBottom: 16 }}>Find the constraint.</div></Fade>
             <Fade show delay={800}><div style={{ fontFamily: fonts.display, fontSize: 56, fontWeight: 300, color: COLORS.textDim, letterSpacing: 1, lineHeight: 1.1, marginBottom: 48 }}>Remove it.</div></Fade>
-            <Fade show delay={1200}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, maxWidth: 420, margin: "0 auto", lineHeight: 1.7 }}>This is a diagnostic. A look at the system that should be producing product-market fit for Insurvoice, and what is in the way.</div></Fade>
+            <Fade show delay={1200}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, maxWidth: 420, margin: "0 auto", lineHeight: 1.7 }}>We made this for you. A diagnostic — a look at the system that should be producing product-market fit for {room?.companyName}, and what is in the way.</div></Fade>
           </div>
         )}
 
