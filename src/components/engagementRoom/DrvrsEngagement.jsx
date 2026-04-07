@@ -701,7 +701,7 @@ export default function DrvrsEngagement({ room }) {
              </Fade>
              <Fade show delay={350}>
                <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
-                 Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.
+                 {selectedOption === 0 ? "Your One Day engagement credits $2,500 to the other options below." : "Three ways to engage. All are scoped, fixed-fee, and built around a single constraint."}
                </div>
              </Fade>
              <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
@@ -749,6 +749,7 @@ export default function DrvrsEngagement({ room }) {
                 }
               ].map((opt, i) => {
                 const isOneDay = i === 0;
+                const isSelected = selectedOption === i;
                 const oneDaySelected = selectedOption === 0;
                 const creditedPrice = oneDaySelected && !isOneDay ? opt.basePrice - 2500 : opt.basePrice;
                 const displayPrice = `$${creditedPrice.toLocaleString()}`;
@@ -756,19 +757,23 @@ export default function DrvrsEngagement({ room }) {
 
                 return (
                  <Fade key={i} show delay={400 + i * 200}>
-                   <div style={{
-                     background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
-                     border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
-                     borderRadius: 10, padding: "28px 32px", position: "relative",
-                   }}>
-                     {opt.highlighted && (
+                   <div
+                     onClick={() => setSelectedOption(isSelected ? null : i)}
+                     style={{
+                       background: isSelected ? COLORS.accentDim : (opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface),
+                       border: `1px solid ${isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accent + "55" : COLORS.border)}`,
+                       borderRadius: 10, padding: "28px 32px", position: "relative",
+                       cursor: "pointer",
+                       transition: "all 0.2s ease",
+                     }}>
+                     {opt.highlighted && !isSelected && (
                        <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
                          RECOMMENDED
                        </div>
                      )}
                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
                        <div>
-                         <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
+                         <div style={{ fontFamily: fonts.mono, fontSize: 10, color: isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accent : COLORS.textMuted), letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
                          <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
                        </div>
                        <div>
@@ -776,8 +781,8 @@ export default function DrvrsEngagement({ room }) {
                            {displayPrice}
                          </div>
                          {oneDaySelected && !isOneDay && (
-                           <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.textDim, textDecoration: "line-through", marginTop: 4 }}>
-                             {originalPrice}
+                           <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.accent, marginTop: 4, fontWeight: 500 }}>
+                             was {originalPrice}
                            </div>
                          )}
                        </div>
@@ -792,35 +797,11 @@ export default function DrvrsEngagement({ room }) {
                          ))}
                        </ul>
                      )}
-                     <button
-                       onClick={() => {
-                         setModalOptionIndex(i);
-                         setShowModal(true);
-                       }}
-                       style={{
-                         display: "inline-block",
-                         background: opt.highlighted ? COLORS.accentDim : "transparent",
-                         border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
-                         borderRadius: 6, padding: "10px 24px",
-                         fontFamily: fonts.mono, fontSize: 11,
-                         color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
-                         letterSpacing: 1, textDecoration: "none", transition: "all 0.2s ease",
-                         cursor: "pointer",
-                       }}
-                       onMouseEnter={(e) => {
-                         e.currentTarget.style.background = opt.highlighted ? COLORS.accentGlow : COLORS.surface;
-                       }}
-                       onMouseLeave={(e) => {
-                         e.currentTarget.style.background = opt.highlighted ? COLORS.accentDim : "transparent";
-                       }}
-                     >
-                       REVIEW &amp; SIGN →
-                     </button>
                    </div>
                  </Fade>
                );
-              })}
-            </div>
+               })}
+               </div>
             {room?.proposalNote && (
               <Fade show delay={800}>
                 <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto 32px" }}>
@@ -828,39 +809,92 @@ export default function DrvrsEngagement({ room }) {
                 </div>
               </Fade>
             )}
-            <Fade show delay={1000}>
-              <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.6 }}>
-                  Questions before signing? Let's talk through it.
+            {selectedOption !== null ? (
+              <Fade show delay={800}>
+                <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 24, display: "flex", gap: 16 }}>
+                  <button
+                    onClick={() => setSelectedOption(null)}
+                    style={{
+                      flex: 1,
+                      padding: "14px 24px",
+                      background: "transparent",
+                      border: `1px solid ${COLORS.border}`,
+                      borderRadius: 6,
+                      fontFamily: fonts.mono,
+                      fontSize: 11,
+                      color: COLORS.textMuted,
+                      letterSpacing: 1,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = COLORS.accent;
+                      e.currentTarget.style.color = COLORS.text;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = COLORS.border;
+                      e.currentTarget.style.color = COLORS.textMuted;
+                    }}
+                  >
+                    CHANGE
+                  </button>
+                  <button
+                    onClick={() => setShowModal(true)}
+                    style={{
+                      flex: 1,
+                      padding: "14px 24px",
+                      background: COLORS.accentDim,
+                      border: `1px solid ${COLORS.accent}55`,
+                      borderRadius: 6,
+                      fontFamily: fonts.mono,
+                      fontSize: 11,
+                      color: COLORS.accent,
+                      letterSpacing: 1,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = COLORS.accentGlow}
+                    onMouseLeave={(e) => e.currentTarget.style.background = COLORS.accentDim}
+                  >
+                    CONTINUE → SIGN
+                  </button>
                 </div>
-                <a
-                  href="https://cal.com/calebcramer"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    flexShrink: 0,
-                    background: "transparent",
-                    border: `1px solid ${COLORS.border}`,
-                    borderRadius: 6,
-                    padding: "10px 24px",
-                    fontFamily: fonts.mono,
-                    fontSize: 10,
-                    color: COLORS.textMuted,
-                    letterSpacing: 1,
-                    textDecoration: "none",
-                    whiteSpace: "nowrap",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.textDim; e.currentTarget.style.color = COLORS.text; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
-                >
-                  BOOK A CALL →
-                </a>
-              </div>
-            </Fade>
-          </div>
-        )}
-      </div>
+              </Fade>
+            ) : (
+              <Fade show delay={1000}>
+                <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+                  <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.6 }}>
+                    Questions before signing? Let's talk through it.
+                  </div>
+                  <a
+                    href="https://cal.com/calebcramer"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      flexShrink: 0,
+                      background: "transparent",
+                      border: `1px solid ${COLORS.border}`,
+                      borderRadius: 6,
+                      padding: "10px 24px",
+                      fontFamily: fonts.mono,
+                      fontSize: 10,
+                      color: COLORS.textMuted,
+                      letterSpacing: 1,
+                      textDecoration: "none",
+                      whiteSpace: "nowrap",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.textDim; e.currentTarget.style.color = COLORS.text; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
+                  >
+                    BOOK A CALL →
+                  </a>
+                </div>
+              </Fade>
+            )}
+            </div>
+            )}
+            </div>
 
       {/* Bottom nav */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 12, padding: "24px 32px", background: `linear-gradient(transparent, ${COLORS.bg}ee 30%, ${COLORS.bg})` }}>
