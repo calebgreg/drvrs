@@ -36,11 +36,24 @@ Deno.serve(async (req) => {
   const subject = room.emailSubject ? interpolate(room.emailSubject) : defaultSubject;
   const body = room.emailBody ? interpolate(room.emailBody) : defaultBody;
 
-  await base44.asServiceRole.integrations.Core.SendEmail({
-    to: room.prospectEmail,
-    subject,
-    body,
+  const resendRes = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'Caleb at drvrs <caleb@drvrs.io>',
+      to: room.prospectEmail,
+      subject,
+      text: body,
+    }),
   });
+
+  if (!resendRes.ok) {
+    const err = await resendRes.text();
+    return Response.json({ error: `Resend error: ${err}` }, { status: 500 });
+  }
 
   return Response.json({ success: true, roomUrl });
 });
