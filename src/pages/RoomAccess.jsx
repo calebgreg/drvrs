@@ -156,7 +156,7 @@ export default function RoomAccess() {
     if (roomData.status === "signed") {
       return <ProjectTrackingView room={roomData} isAdmin={false} />;
     }
-    return <DrvrsEngagement room={roomData} />;
+    return <DrvrsEngagement roomData={roomData} />;
   }
 
   return null;
