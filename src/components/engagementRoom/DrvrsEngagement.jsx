@@ -436,12 +436,13 @@ function FanAmplifyVisual() {
 }
 
 export default function DrvrsEngagement({ room }) {
-  const [stage, setStage] = useState(0);
-  const [treePhase, setTreePhase] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [modalOptionIndex, setModalOptionIndex] = useState(null);
-  const containerRef = useRef(null);
+   const [stage, setStage] = useState(0);
+   const [treePhase, setTreePhase] = useState(0);
+   const [selectedOption, setSelectedOption] = useState(null);
+   const [oneDayEverSelected, setOneDayEverSelected] = useState(false);
+   const [showModal, setShowModal] = useState(false);
+   const [modalOptionIndex, setModalOptionIndex] = useState(null);
+   const containerRef = useRef(null);
 
   useEffect(() => {
     if (stages[stage].id === "decomp") {
@@ -750,8 +751,8 @@ export default function DrvrsEngagement({ room }) {
               ].map((opt, i) => {
                 const isOneDay = i === 0;
                 const isSelected = selectedOption === i;
-                const oneDaySelected = selectedOption === 0;
-                const creditedPrice = oneDaySelected && !isOneDay ? opt.basePrice - 2500 : opt.basePrice;
+                if (isOneDay && isSelected) setOneDayEverSelected(true);
+                const creditedPrice = oneDayEverSelected && !isOneDay ? opt.basePrice - 2500 : opt.basePrice;
                 const displayPrice = `$${creditedPrice.toLocaleString()}`;
                 const originalPrice = `$${opt.basePrice.toLocaleString()}`;
 
@@ -780,7 +781,7 @@ export default function DrvrsEngagement({ room }) {
                          <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>
                            {displayPrice}
                          </div>
-                         {oneDaySelected && !isOneDay && (
+                         {oneDayEverSelected && !isOneDay && (
                            <div>
                              <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.accent, marginTop: 4, fontWeight: 500 }}>
                                was {originalPrice}
