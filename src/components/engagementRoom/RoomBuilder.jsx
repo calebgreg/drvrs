@@ -53,7 +53,7 @@ const DEFAULT_ROOM = {
   engagementOneInitiativeTitle: "ONE INITIATIVE",
   engagementOneInitiativeDescription: "Full 60-day engagement. Define the promise, validate delivery with early customers, build the evidence that PMF is real. Milestone-based.",
   engagementOneTeamTitle: "ONE TEAM",
-  engagementOneTeamDescription: "Embedded in your team. 6-month engagement. Own the GTM strategy end to end, build and run outbound, own events, and hire the first sales leader when ready.",
+  engagementOneTeamDescription: "A drvr embedded in the team. GTM strategy owned end to end. 6-month engagement with weekly working sessions, outbound execution, and hiring the first sales leader when the system is ready.",
   engagementFooter: "See the proposal — pick the one that fits and sign.",
   proposalOptions: [
     {
