@@ -764,7 +764,49 @@ export default function DrvrsEngagement({ room }) {
               </div>
             </Fade>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
-              {(room?.proposalOptions || []).map((opt, i) => (
+             {(room?.proposalOptions || [
+               {
+                 name: "One Day",
+                 price: "$2,500",
+                 timeline: "Half-day session",
+                 deliverables: [
+                   "Positioning statement built around the outcome",
+                   "Target agency profile with disqualifiers",
+                   "Outbound sequence ready to send",
+                   "Revised demo talk track"
+                 ],
+                 highlighted: false
+               },
+               {
+                 name: "One Initiative",
+                 price: "$6,000",
+                 timeline: "60 Days",
+                 deliverables: [
+                   "Everything in One Day",
+                   "10 target agencies identified and contacted",
+                   "Hands-on onboarding to engineer the outcome",
+                   "Fan interviews with extracted language",
+                   "Referral channel map",
+                   "Ad-ready copy from fan language"
+                 ],
+                 highlighted: true
+               },
+               {
+                 name: "One Team",
+                 price: "$32,000",
+                 timeline: "6 Months",
+                 deliverables: [
+                   "A drvr embedded in the team",
+                   "GTM strategy owned end to end",
+                   "Weekly working sessions",
+                   "Outbound built and run until there is someone to hand it to",
+                   "Conference strategy and event execution",
+                   "First sales hire made when the system is ready for one",
+                   "The goal is to leave something behind that works without us"
+                 ],
+                 highlighted: false
+               }
+             ]).map((opt, i) => (
                 <Fade key={i} show delay={400 + i * 200}>
                   <div style={{
                     background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
