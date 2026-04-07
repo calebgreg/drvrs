@@ -788,7 +788,7 @@ export default function DrvrsEngagement({ room }) {
             <Fade show delay={1000}>
               <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
                 <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.6 }}>
-                  Not ready to sign? That's fine — but let's not let it stall.
+                  Questions before signing? Let's talk through it.
                 </div>
                 <a
                   href="https://cal.com/calebcramer"
