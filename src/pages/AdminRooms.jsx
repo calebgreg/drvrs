@@ -103,6 +103,7 @@ export default function AdminRooms() {
         )}
         {(view === "create" || view === "edit") && (
           <RoomBuilder
+            key={editingRoom?.id || "new"}
             room={editingRoom}
             onSaved={() => { setView("list"); loadRooms(); }}
           />
