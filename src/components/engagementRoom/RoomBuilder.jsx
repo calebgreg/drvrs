@@ -52,36 +52,26 @@ const DEFAULT_ROOM = {
   engagementOneDayDescription: "Name the outcome. Build the positioning, the ICP, and the outbound sequence around it. Flat fee. Everything needed to start validating delivery.",
   engagementOneInitiativeTitle: "ONE INITIATIVE",
   engagementOneInitiativeDescription: "Full 60-day engagement. Define the promise, validate delivery with early customers, build the evidence that PMF is real. Milestone-based.",
-  engagementOneTeamTitle: "ONE TEAM",
-  engagementOneTeamDescription: "A drvr embedded in the team. GTM strategy owned end to end. 6-month engagement with weekly working sessions, outbound execution, and hiring the first sales leader when the system is ready.",
   engagementFooter: "See the proposal — pick the one that fits and sign.",
   proposalOptions: [
     {
-      name: "ONE DAY",
-      price: "$2,500",
-      timeline: "",
-      deliverables: ["Positioning statement built around the outcome", "Target agency profile with disqualifiers", "Outbound sequence ready to send", "Revised demo talk track"],
+      name: "One Day",
+      price: "",
+      timeline: "Half-day session",
+      deliverables: ["Positioning statement", "Demo talk track", "Outbound language"],
       agreementUrl: "",
       highlighted: false,
     },
     {
-      name: "ONE INITIATIVE",
-      price: "$6,000",
-      timeline: "60 Days",
-      deliverables: ["Everything in One Day", "10 target agencies identified and contacted", "Hands-on onboarding to engineer the outcome", "Fan interviews with extracted language", "Referral channel map", "Ad-ready copy from fan language"],
+      name: "One Initiative",
+      price: "",
+      timeline: "60-day engagement",
+      deliverables: ["Define the promise", "Validate delivery with 10 customers", "Build measurable evidence of PMF", "Milestone-based"],
       agreementUrl: "",
       highlighted: true,
     },
-    {
-      name: "ONE TEAM",
-      price: "$32,000",
-      timeline: "6 Months",
-      deliverables: ["A drvr embedded in the team", "GTM strategy owned end to end", "Weekly working sessions", "Outbound built and run until there is someone to hand it to", "Conference strategy and event execution", "First sales hire made when the system is ready for one", "The goal is to leave something behind that works without us"],
-      agreementUrl: "",
-      highlighted: false,
-    },
   ],
-  proposalNote: "Three ways to engage. Pick the one that fits.",
+  proposalNote: "Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.",
   emailSubject: "Your drvrs diagnostic — {{companyName}}",
   emailBody: `Hi {{prospectName}},
 
@@ -462,9 +452,6 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
           <SectionHeader label="One Initiative Option" />
           <Field label="Title" value={data.engagementOneInitiativeTitle} onChange={v => set("engagementOneInitiativeTitle", v)} />
           <Field label="Description" value={data.engagementOneInitiativeDescription} onChange={v => set("engagementOneInitiativeDescription", v)} multiline />
-          <SectionHeader label="One Team Option" />
-          <Field label="Title" value={data.engagementOneTeamTitle} onChange={v => set("engagementOneTeamTitle", v)} />
-          <Field label="Description" value={data.engagementOneTeamDescription} onChange={v => set("engagementOneTeamDescription", v)} multiline />
           <SectionHeader label="Footer" />
           <Field label="Footer Message" value={data.engagementFooter} onChange={v => set("engagementFooter", v)} />
         </div>
