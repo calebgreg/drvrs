@@ -3,19 +3,22 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 
 const COLORS = {
-  bg: "#0d0d0d",
-  surface: "#141414",
-  border: "#222",
-  text: "#f0ede6",
-  textMuted: "#555",
-  textDim: "#888",
-  accent: "#f0ede6",
+  bg: "#0a1a14",
+  surface: "#0f2219",
+  border: "rgba(245,240,232,0.06)",
+  borderStrong: "rgba(245,240,232,0.12)",
+  text: "#f5f0e8",
+  textMuted: "#7a8a82",
+  textDim: "rgba(245,240,232,0.3)",
+  accent: "#2d8a6e",
+  accentDim: "rgba(45,138,110,0.15)",
+  accentGlow: "rgba(45,138,110,0.3)",
 };
 
 const fonts = {
-  body: "'DM Sans', sans-serif",
-  serif: "'DM Serif Display', serif",
-  mono: "'DM Mono', 'Courier New', monospace",
+  mono: "'JetBrains Mono', 'SF Mono', 'Fira Code', monospace",
+  body: "'DM Sans', 'Helvetica Neue', sans-serif",
+  display: "'DM Serif Display', Georgia, serif",
 };
 
 export default function ESignPage() {
@@ -36,7 +39,6 @@ export default function ESignPage() {
       const rooms = await base44.entities.EngagementRoom.filter({ slug });
       if (!rooms.length) { setError("Room not found"); setLoading(false); return; }
       setRoom(rooms[0]);
-
       const templates = await base44.entities.AgreementTemplate.list();
       if (templates.length) setAgreement(templates[0]);
       setLoading(false);
@@ -46,7 +48,6 @@ export default function ESignPage() {
 
   const option = room?.proposalOptions?.[optionIndex];
 
-  // Interpolate variables in agreement
   const interpolate = (html) => {
     if (!html || !room) return html;
     return html
@@ -62,7 +63,6 @@ export default function ESignPage() {
     if (!signedName.trim() || !agreed) return;
     setSubmitting(true);
 
-    // Create signature record
     const record = await base44.entities.SignatureRecord.create({
       roomId: room.id,
       roomSlug: slug,
@@ -77,7 +77,6 @@ export default function ESignPage() {
       paymentStatus: "pending",
     });
 
-    // Create Stripe checkout session
     const res = await base44.functions.invoke("createCheckoutSession", {
       signatureRecordId: record.id,
       roomSlug: slug,
@@ -96,65 +95,92 @@ export default function ESignPage() {
   };
 
   if (loading) return (
-    <div style={{ background: COLORS.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ color: COLORS.textDim, fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2 }}>LOADING</div>
+    <div style={{ background: COLORS.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fonts.mono }}>
+      <div style={{ color: COLORS.textDim, fontSize: 11, letterSpacing: 3 }}>LOADING</div>
     </div>
   );
 
   if (error) return (
     <div style={{ background: COLORS.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ color: "#e55", fontFamily: fonts.body, fontSize: 14 }}>{error}</div>
+      <div style={{ color: "#ef4444", fontFamily: fonts.body, fontSize: 14 }}>{error}</div>
     </div>
   );
 
+  const canSubmit = signedName.trim().length > 0 && agreed && !submitting;
+
   return (
-    <div style={{ background: COLORS.bg, minHeight: "100vh", fontFamily: fonts.body, color: COLORS.text }}>
-      {/* Header */}
-      <div style={{ borderBottom: `1px solid ${COLORS.border}`, padding: "20px 40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ fontFamily: fonts.mono, fontSize: 11, letterSpacing: 2, color: COLORS.textDim }}>DRVRS · AGREEMENT</div>
-        {option && (
-          <div style={{ fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1, color: COLORS.textDim }}>
-            {option.name} · {option.price}
-          </div>
-        )}
+    <div style={{ background: COLORS.bg, minHeight: "100vh", fontFamily: fonts.body, color: COLORS.text, position: "relative" }}>
+      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+
+      {/* Grain */}
+      <div style={{ position: "fixed", inset: 0, opacity: 0.035, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`, backgroundSize: "200px 200px", pointerEvents: "none", zIndex: 1000 }} />
+
+      {/* Top nav */}
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "2rem 3rem", mixBlendMode: "difference" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
+          <div style={{ width: 26, height: 12, background: COLORS.text, borderRadius: 6, flexShrink: 0 }} />
+          <span style={{ fontFamily: fonts.body, fontSize: "1.1rem", fontWeight: 400, color: COLORS.text, letterSpacing: "0.1em" }}>drvrs</span>
+        </div>
+        <div style={{ fontFamily: fonts.mono, fontSize: "0.7rem", fontWeight: 400, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.text, opacity: 0.5 }}>
+          {room?.companyName?.toUpperCase()}
+        </div>
       </div>
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "60px 40px" }}>
-        {/* Title */}
-        <div style={{ marginBottom: 48 }}>
-          <div style={{ fontFamily: fonts.mono, fontSize: 10, letterSpacing: 2, color: COLORS.textDim, marginBottom: 12 }}>SERVICE AGREEMENT</div>
-          <h1 style={{ fontFamily: fonts.serif, fontSize: 32, fontWeight: 400, margin: 0, lineHeight: 1.2 }}>
+      {/* Content */}
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "120px 40px 80px", boxSizing: "border-box" }}>
+
+        {/* Title block */}
+        <div style={{ marginBottom: 52 }}>
+          <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, textTransform: "uppercase", marginBottom: 16 }}>
+            SERVICE AGREEMENT
+          </div>
+          <div style={{ fontFamily: fonts.display, fontSize: 36, fontWeight: 400, color: COLORS.text, lineHeight: 1.2, marginBottom: 12 }}>
             {room?.companyName}
-          </h1>
-          <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, marginTop: 8 }}>
+          </div>
+          {option && (
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12 }}>
+              <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, background: COLORS.accentDim, padding: "4px 10px", borderRadius: 4, letterSpacing: 1.5, textTransform: "uppercase" }}>
+                {option.name}
+              </span>
+              <span style={{ fontFamily: fonts.display, fontSize: 20, color: COLORS.text }}>{option.price}</span>
+              {option.timeline && <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 1 }}>{option.timeline}</span>}
+            </div>
+          )}
+          <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim, marginTop: 16, letterSpacing: 1 }}>
             {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
           </div>
         </div>
 
         {/* Agreement content */}
-        <div
-          style={{
-            background: COLORS.surface,
-            border: `1px solid ${COLORS.border}`,
-            borderRadius: 8,
-            padding: "32px 40px",
-            marginBottom: 40,
-            maxHeight: 480,
-            overflowY: "auto",
-            fontSize: 14,
-            lineHeight: 1.8,
-            color: COLORS.textDim,
-          }}
-          dangerouslySetInnerHTML={{ __html: interpolate(agreement?.content) || defaultAgreement(room, option) }}
-        />
+        <div style={{ marginBottom: 48 }}>
+          <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 2, textTransform: "uppercase", marginBottom: 16 }}>
+            TERMS & CONDITIONS
+          </div>
+          <div
+            style={{
+              background: COLORS.surface,
+              border: `1px solid ${COLORS.border}`,
+              borderRadius: 8,
+              padding: "28px 32px",
+              maxHeight: 400,
+              overflowY: "auto",
+              fontSize: 13.5,
+              lineHeight: 1.85,
+              color: COLORS.textMuted,
+            }}
+            dangerouslySetInnerHTML={{ __html: interpolate(agreement?.content) || defaultAgreement(room, option) }}
+          />
+        </div>
 
         {/* Signature block */}
-        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 40 }}>
-          <div style={{ fontFamily: fonts.mono, fontSize: 10, letterSpacing: 2, color: COLORS.textDim, marginBottom: 24 }}>ELECTRONIC SIGNATURE</div>
+        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 48 }}>
+          <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 2, textTransform: "uppercase", marginBottom: 28 }}>
+            ELECTRONIC SIGNATURE
+          </div>
 
-          <div style={{ marginBottom: 24 }}>
-            <label style={{ display: "block", fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1, color: COLORS.textDim, marginBottom: 10 }}>
-              TYPE YOUR FULL NAME TO SIGN
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ display: "block", fontFamily: fonts.mono, fontSize: 9, letterSpacing: 1.5, color: COLORS.textDim, marginBottom: 12, textTransform: "uppercase" }}>
+              Type your full name to sign
             </label>
             <input
               type="text"
@@ -164,64 +190,72 @@ export default function ESignPage() {
               style={{
                 width: "100%",
                 background: "transparent",
-                border: `1px solid ${COLORS.border}`,
+                border: `1px solid ${signedName.trim() ? COLORS.accent + "55" : COLORS.border}`,
                 borderRadius: 6,
-                padding: "14px 16px",
-                fontFamily: fonts.serif,
-                fontSize: 20,
+                padding: "14px 18px",
+                fontFamily: fonts.display,
+                fontSize: 22,
                 color: COLORS.text,
                 outline: "none",
                 boxSizing: "border-box",
+                transition: "border-color 0.2s ease",
               }}
+              onFocus={e => e.target.style.borderColor = COLORS.accent + "88"}
+              onBlur={e => e.target.style.borderColor = signedName.trim() ? COLORS.accent + "55" : COLORS.border}
             />
           </div>
 
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 32 }}>
+          {/* Checkbox */}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 36 }}>
             <div
               onClick={() => setAgreed(!agreed)}
               style={{
                 width: 18,
                 height: 18,
-                border: `1px solid ${agreed ? COLORS.text : COLORS.border}`,
+                border: `1px solid ${agreed ? COLORS.accent : COLORS.borderStrong}`,
                 borderRadius: 3,
                 flexShrink: 0,
                 marginTop: 2,
                 cursor: "pointer",
-                background: agreed ? COLORS.text : "transparent",
+                background: agreed ? COLORS.accentDim : "transparent",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                transition: "all 0.2s ease",
               }}
             >
-              {agreed && <span style={{ color: COLORS.bg, fontSize: 12, lineHeight: 1 }}>✓</span>}
+              {agreed && <span style={{ color: COLORS.accent, fontSize: 11, lineHeight: 1 }}>✓</span>}
             </div>
-            <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.6 }}>
+            <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.7 }}>
               I have read and agree to the terms of this agreement. I understand that typing my name above constitutes a legally binding electronic signature.
             </div>
           </div>
 
+          {/* CTA button */}
           <button
             onClick={handleSign}
-            disabled={!signedName.trim() || !agreed || submitting}
+            disabled={!canSubmit}
             style={{
               width: "100%",
               padding: "18px",
-              background: signedName.trim() && agreed ? COLORS.text : COLORS.surface,
-              color: signedName.trim() && agreed ? COLORS.bg : COLORS.textMuted,
-              border: `1px solid ${signedName.trim() && agreed ? COLORS.text : COLORS.border}`,
+              background: canSubmit ? COLORS.accentDim : "transparent",
+              color: canSubmit ? COLORS.accent : COLORS.textDim,
+              border: `1px solid ${canSubmit ? COLORS.accent + "55" : COLORS.border}`,
               borderRadius: 6,
               fontFamily: fonts.mono,
               fontSize: 11,
               letterSpacing: 2,
-              cursor: signedName.trim() && agreed ? "pointer" : "not-allowed",
+              cursor: canSubmit ? "pointer" : "not-allowed",
               transition: "all 0.2s ease",
             }}
+            onMouseEnter={e => { if (canSubmit) e.currentTarget.style.background = COLORS.accentGlow; }}
+            onMouseLeave={e => { if (canSubmit) e.currentTarget.style.background = COLORS.accentDim; }}
           >
             {submitting ? "REDIRECTING TO PAYMENT..." : "SIGN & PROCEED TO PAYMENT →"}
           </button>
 
-          <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.textMuted, textAlign: "center", marginTop: 16 }}>
-            Secured by Stripe · Payment required to complete engagement
+          <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, textAlign: "center", marginTop: 16, letterSpacing: 1 }}>
+            SECURED BY STRIPE · PAYMENT REQUIRED TO COMPLETE ENGAGEMENT
           </div>
         </div>
       </div>
