@@ -494,9 +494,10 @@ function PlaybookQuote({ children }) {
 }
 
 
-export default function DrvrsEngagement({ roomData = {} }) {
+export default function DrvrsEngagement({ roomData = {}, onSelectOption }) {
   const [stage, setStage] = useState(0);
   const [treePhase, setTreePhase] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -1105,13 +1106,28 @@ export default function DrvrsEngagement({ roomData = {} }) {
             </Fade>
             {roomData?.proposalOptions && roomData.proposalOptions.map((option, i) => (
               <Fade key={i} show delay={200 + i * 150}>
-                <div style={{
-                  background: option.highlighted ? COLORS.accentDim : COLORS.surface,
-                  border: `1px solid ${option.highlighted ? COLORS.accent + "55" : COLORS.border}`,
-                  borderRadius: 8,
-                  padding: 24,
-                  marginBottom: 16,
-                }}>
+                <button
+                  onClick={() => setSelectedOption(selectedOption === option.name ? null : option.name)}
+                  style={{
+                    width: "100%",
+                    background: selectedOption === option.name ? COLORS.accent + "22" : (option.highlighted ? COLORS.accentDim : COLORS.surface),
+                    border: `1px solid ${selectedOption === option.name ? COLORS.accent : (option.highlighted ? COLORS.accent + "55" : COLORS.border)}`,
+                    borderRadius: 8,
+                    padding: 24,
+                    marginBottom: 16,
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    textAlign: "left",
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = COLORS.accent;
+                    e.currentTarget.style.background = selectedOption === option.name ? COLORS.accent + "22" : COLORS.accent + "11";
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = selectedOption === option.name ? COLORS.accent : (option.highlighted ? COLORS.accent + "55" : COLORS.border);
+                    e.currentTarget.style.background = selectedOption === option.name ? COLORS.accent + "22" : (option.highlighted ? COLORS.accentDim : COLORS.surface);
+                  }}
+                >
                   <div style={{ fontFamily: fonts.mono, fontSize: 10, color: option.highlighted ? COLORS.accent : COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>
                     {option.name}
                   </div>
@@ -1133,9 +1149,34 @@ export default function DrvrsEngagement({ roomData = {} }) {
                       ))}
                     </div>
                   )}
-                </div>
+                </button>
               </Fade>
             ))}
+            {selectedOption && (
+              <Fade show delay={700}>
+                <button
+                  onClick={() => onSelectOption?.(selectedOption)}
+                  style={{
+                    width: "100%",
+                    background: COLORS.accentDim,
+                    border: `1px solid ${COLORS.accent}55`,
+                    borderRadius: 6,
+                    padding: "14px 24px",
+                    cursor: "pointer",
+                    fontFamily: fonts.mono,
+                    fontSize: 11,
+                    color: COLORS.accent,
+                    letterSpacing: 1,
+                    marginTop: 16,
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={e => { e.target.style.background = COLORS.accentGlow; }}
+                  onMouseLeave={e => { e.target.style.background = COLORS.accentDim; }}
+                >
+                  PROCEED TO SIGN
+                </button>
+              </Fade>
+            )}
           </div>
         )}
       </div>

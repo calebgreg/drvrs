@@ -156,7 +156,10 @@ export default function RoomAccess() {
     if (roomData.status === "signed") {
       return <ProjectTrackingView room={roomData} isAdmin={false} />;
     }
-    return <DrvrsEngagement roomData={roomData} />;
+    const handleSelectOption = (optionName) => {
+      window.location.href = `/room/${slug}/sign?option=${encodeURIComponent(optionName)}`;
+    };
+    return <DrvrsEngagement roomData={roomData} onSelectOption={handleSelectOption} />;
   }
 
   return null;
