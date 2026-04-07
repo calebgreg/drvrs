@@ -97,7 +97,11 @@ export default function AdminRooms() {
           <RoomsList
             rooms={rooms}
             loading={loading}
-            onEdit={(room) => { setEditingRoom(room); setView("edit"); }}
+            onEdit={async (room) => {
+              const fresh = await base44.entities.EngagementRoom.get(room.id);
+              setEditingRoom(fresh);
+              setView("edit");
+            }}
             onRefresh={loadRooms}
           />
         )}
