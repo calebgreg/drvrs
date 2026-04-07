@@ -33,6 +33,7 @@ const stages = [
   { id: "shifts", label: "Shifts" },
   { id: "work", label: "Work" },
   { id: "playbook", label: "Plays" },
+  { id: "proposal", label: "Proposal" },
   { id: "engage", label: "Next" },
 ];
 
@@ -988,12 +989,56 @@ export default function DrvrsEngagement() {
           </div>
         )}
 
+        {/* ── PROPOSAL ── */}
+        {currentId === "proposal" && (
+          <div>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
+                07 — PROPOSAL
+              </div>
+            </Fade>
+            {roomData?.proposalOptions && roomData.proposalOptions.map((option, i) => (
+              <Fade key={i} show delay={200 + i * 150}>
+                <div style={{
+                  background: option.highlighted ? COLORS.accentDim : COLORS.surface,
+                  border: `1px solid ${option.highlighted ? COLORS.accent + "55" : COLORS.border}`,
+                  borderRadius: 8,
+                  padding: 24,
+                  marginBottom: 16,
+                }}>
+                  <div style={{ fontFamily: fonts.mono, fontSize: 10, color: option.highlighted ? COLORS.accent : COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>
+                    {option.name}
+                  </div>
+                  <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+                    {option.price}
+                  </div>
+                  {option.timeline && (
+                    <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, marginBottom: 14 }}>
+                      {option.timeline}
+                    </div>
+                  )}
+                  {option.deliverables && option.deliverables.length > 0 && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {option.deliverables.map((d, j) => (
+                        <div key={j} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div style={{ width: 4, height: 4, borderRadius: "50%", background: option.highlighted ? COLORS.accent : COLORS.warning, opacity: 0.5, flexShrink: 0 }} />
+                          <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Fade>
+            ))}
+          </div>
+        )}
+
         {/* ── ENGAGE ── */}
         {currentId === "engage" && (
           <div>
             <Fade show delay={100}>
               <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
-                07 — ENGAGEMENT
+                08 — ENGAGEMENT
               </div>
             </Fade>
             <Fade show delay={200}>
@@ -1084,7 +1129,7 @@ export default function DrvrsEngagement() {
             <Fade show delay={700}>
               <div style={{ textAlign: "center", marginTop: 32 }}>
                 <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, marginBottom: 24 }}>
-                  Happy to do a 30-minute call to figure out which fits.
+                  {roomData?.engagementFooter || "Happy to do a 30-minute call to figure out which fits."}
                 </div>
                 <div style={{ fontFamily: fonts.display, fontSize: 20, fontWeight: 400, color: COLORS.textDim, letterSpacing: 2 }}>
                   drvrs.io
