@@ -524,10 +524,10 @@ export default function DrvrsEngagement({ room }) {
         {currentId === "goal" && (
           <div>
             <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>01 — THE GOAL</div></Fade>
-            <Fade show delay={300}><div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 400, color: COLORS.text, marginBottom: 32, lineHeight: 1.2 }}>50 paying customers.</div></Fade>
-            <Fade show delay={600}><div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginBottom: 24, maxWidth: 600 }}>50 customers is not a revenue target. It is the number that tells everyone this thing works. That agencies keep paying, that the use case is real, that the pocket has been found.</div></Fade>
-            <Fade show delay={900}><div style={{ fontFamily: fonts.mono, fontSize: 13, color: COLORS.accent, background: COLORS.accentDim, display: "inline-block", padding: "8px 16px", borderRadius: 4, letterSpacing: 0.5 }}>50 is a PMF signal, not a sales target.</div></Fade>
-            <Fade show delay={1200}><div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginTop: 32, maxWidth: 600 }}>That distinction changes what matters. The question is not "how do we get more leads." The question is "what system produces product-market fit, and where is it stuck."</div></Fade>
+            <Fade show delay={300}><div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 400, color: COLORS.text, marginBottom: 32, lineHeight: 1.2 }}>{room?.goalTitle}</div></Fade>
+            <Fade show delay={600}><div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginBottom: 24, maxWidth: 600 }}>{room?.goalDescription}</div></Fade>
+            <Fade show delay={900}><div style={{ fontFamily: fonts.mono, fontSize: 13, color: COLORS.accent, background: COLORS.accentDim, display: "inline-block", padding: "8px 16px", borderRadius: 4, letterSpacing: 0.5 }}>{room?.goalCallout}</div></Fade>
+            <Fade show delay={1200}><div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginTop: 32, maxWidth: 600 }}>{room?.goalFooter}</div></Fade>
           </div>
         )}
 
@@ -535,7 +535,7 @@ export default function DrvrsEngagement({ room }) {
         {currentId === "decomp" && (
           <div>
             <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 24 }}>02 — THE SYSTEM</div></Fade>
-            <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 560 }}>Product-market fit is not a feeling. It is a system with three components. If any one collapses to zero, PMF is zero. It does not matter how strong the other two are.</div></Fade>
+            <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 560 }}>{room?.decompositionDescription}</div></Fade>
             <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
               <svg width="520" height="240" viewBox="0 0 520 240">
                 <TreeEdge x1={260} y1={60} x2={110} y2={180} show={treePhase >= 2} delay={0} />

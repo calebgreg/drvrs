@@ -25,19 +25,21 @@ Deno.serve(async (req) => {
     invitedAt: new Date().toISOString(),
   });
 
+  const defaultSubject = `Your drvrs diagnostic — ${room.companyName}`;
+  const defaultBody = `Hi ${room.prospectName || room.companyName},\n\nYour personalized drvrs diagnostic engagement room is ready.\n\nAccess it here:\n${roomUrl}\n\nThis link is unique to you. Bookmark it for continued access.\n\n— drvrs`;
+
+  const interpolate = (str) => str
+    .replace(/\{\{prospectName\}\}/g, room.prospectName || room.companyName)
+    .replace(/\{\{companyName\}\}/g, room.companyName)
+    .replace(/\{\{roomUrl\}\}/g, roomUrl);
+
+  const subject = room.emailSubject ? interpolate(room.emailSubject) : defaultSubject;
+  const body = room.emailBody ? interpolate(room.emailBody) : defaultBody;
+
   await base44.asServiceRole.integrations.Core.SendEmail({
     to: room.prospectEmail,
-    subject: `Your drvrs diagnostic — ${room.companyName}`,
-    body: `Hi ${room.prospectName || room.companyName},
-
-Your personalized drvrs diagnostic engagement room is ready.
-
-Access it here:
-${roomUrl}
-
-This link is unique to you. Bookmark it for continued access.
-
-— drvrs`,
+    subject,
+    body,
   });
 
   return Response.json({ success: true, roomUrl });

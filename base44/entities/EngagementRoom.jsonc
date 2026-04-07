@@ -248,6 +248,14 @@
     },
     "proposalNote": {
       "type": "string"
+    },
+    "emailSubject": {
+      "type": "string",
+      "description": "Custom subject line for the invite email"
+    },
+    "emailBody": {
+      "type": "string",
+      "description": "Custom body for the invite email. Supports {{prospectName}}, {{companyName}}, {{roomUrl}} variables."
     }
   },
   "required": [

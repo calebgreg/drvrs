@@ -72,7 +72,18 @@ const DEFAULT_ROOM = {
     },
   ],
   proposalNote: "Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.",
-};
+  emailSubject: "Your drvrs diagnostic — {{companyName}}",
+  emailBody: `Hi {{prospectName}},
+
+  Your personalized drvrs diagnostic engagement room is ready.
+
+  Access it here:
+  {{roomUrl}}
+
+  This link is unique to you. Bookmark it for continued access.
+
+  — drvrs`,
+  };
 
 function Field({ label, value, onChange, multiline = false, mono = false }) {
   const inputStyle = {
@@ -228,6 +239,7 @@ Generate exactly 2 proposal options tailored to this company and context. One sh
     { id: "playbook", label: "PLAYBOOK" },
     { id: "engagement", label: "CLOSE" },
     { id: "proposal", label: "PROPOSAL" },
+    { id: "email", label: "EMAIL" },
   ];
 
   return (
@@ -459,6 +471,18 @@ Generate exactly 2 proposal options tailored to this company and context. One sh
           }}>+ ADD OPTION</button>
           <SectionHeader label="Closing Note" />
           <Field label="Note below options" value={data.proposalNote} onChange={v => set("proposalNote", v)} multiline />
+        </div>
+      )}
+
+      {/* Email */}
+      {activeTab === "email" && (
+        <div>
+          <SectionHeader label="Invite Email" />
+          <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, marginBottom: 20, lineHeight: 1.8 }}>
+            Available variables: <span style={{ color: COLORS.accent }}>{"{{prospectName}}"}</span> · <span style={{ color: COLORS.accent }}>{"{{companyName}}"}</span> · <span style={{ color: COLORS.accent }}>{"{{roomUrl}}"}</span>
+          </div>
+          <Field label="Subject" value={data.emailSubject} onChange={v => set("emailSubject", v)} />
+          <Field label="Body" value={data.emailBody} onChange={v => set("emailBody", v)} multiline />
         </div>
       )}
 
