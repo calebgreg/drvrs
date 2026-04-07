@@ -704,9 +704,48 @@ export default function DrvrsEngagement({ room }) {
               </div>
             </Fade>
             <Fade show delay={600}>
-              <div style={{ textAlign: "center", marginTop: 24 }}>
-                <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, marginBottom: 24 }}>Happy to do a 30-minute call to figure out which fits.</div>
-                <div style={{ fontFamily: fonts.display, fontSize: 20, fontWeight: 300, color: COLORS.textDim, letterSpacing: 2 }}>drvrs.io</div>
+              <div style={{
+                background: COLORS.surface,
+                border: `1px solid ${COLORS.border}`,
+                borderRadius: 8,
+                padding: "28px 32px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 24,
+              }}>
+                <div>
+                  <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Next Step</div>
+                  <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 500, marginBottom: 6 }}>
+                    30 minutes to figure out which fits.
+                  </div>
+                  <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted }}>
+                    Caleb Cramer · drvrs.io
+                  </div>
+                </div>
+                <a
+                  href="https://cal.com/calebcramer"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    flexShrink: 0,
+                    background: COLORS.accentDim,
+                    border: `1px solid ${COLORS.accent}55`,
+                    borderRadius: 6,
+                    padding: "12px 28px",
+                    fontFamily: fonts.mono,
+                    fontSize: 11,
+                    color: COLORS.accent,
+                    letterSpacing: 1,
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = COLORS.accentGlow; e.currentTarget.style.borderColor = COLORS.accent; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = COLORS.accentDim; e.currentTarget.style.borderColor = `${COLORS.accent}55`; }}
+                >
+                  BOOK A CALL →
+                </a>
               </div>
             </Fade>
           </div>
