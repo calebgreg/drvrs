@@ -256,6 +256,59 @@
     "emailBody": {
       "type": "string",
       "description": "Custom body for the invite email. Supports {{prospectName}}, {{companyName}}, {{roomUrl}} variables."
+    },
+    "selectedOption": {
+      "type": "string",
+      "description": "The name of the proposal option the prospect selected and signed"
+    },
+    "projectTracking": {
+      "type": "array",
+      "description": "Project phases and deliverables, populated after signing",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "in_progress",
+              "completed"
+            ],
+            "default": "pending"
+          },
+          "deliverables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "to_do",
+                    "done"
+                  ],
+                  "default": "to_do"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "required": [

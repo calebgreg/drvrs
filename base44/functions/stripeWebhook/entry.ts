@@ -29,11 +29,32 @@ Deno.serve(async (req) => {
     const records = await base44.asServiceRole.entities.SignatureRecord.filter({ id: signatureRecordId });
     const record = records[0];
 
-    // Update engagement room status
+    // Update engagement room status + seed project tracking
     const rooms = await base44.asServiceRole.entities.EngagementRoom.filter({ slug: roomSlug });
     if (rooms.length > 0) {
-      await base44.asServiceRole.entities.EngagementRoom.update(rooms[0].id, {
+      const room = rooms[0];
+      const selectedOpt = room.proposalOptions?.find(o => o.name === record?.optionName);
+
+      // Seed projectTracking from the selected proposal option's deliverables
+      let projectTracking = room.projectTracking;
+      if ((!projectTracking || projectTracking.length === 0) && selectedOpt?.deliverables?.length > 0) {
+        projectTracking = [{
+          id: "phase-1",
+          name: selectedOpt.name,
+          status: "pending",
+          deliverables: selectedOpt.deliverables.map((d, i) => ({
+            id: `d-${i}`,
+            name: d,
+            description: "",
+            status: "to_do",
+          })),
+        }];
+      }
+
+      await base44.asServiceRole.entities.EngagementRoom.update(room.id, {
         status: "signed",
+        selectedOption: record?.optionName || null,
+        projectTracking,
       });
     }
 
