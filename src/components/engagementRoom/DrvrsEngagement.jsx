@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import ProposalModal from "./ProposalModal";
 
 const COLORS = {
   bg: "#0a1a14",
@@ -438,6 +439,8 @@ export default function DrvrsEngagement({ room }) {
   const [stage, setStage] = useState(0);
   const [treePhase, setTreePhase] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalOptionIndex, setModalOptionIndex] = useState(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -686,133 +689,137 @@ export default function DrvrsEngagement({ room }) {
         )}
 
         {/* PROPOSAL */}
-        {currentId === "proposal" && (
-          <div>
-            <Fade show delay={100}>
-              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 8 }}>07 — THE PROPOSAL</div>
-            </Fade>
-            <Fade show delay={200}>
-              <div style={{ fontFamily: fonts.display, fontSize: 36, fontWeight: 300, color: COLORS.text, marginBottom: 8, lineHeight: 1.2 }}>
-                What working together looks like.
-              </div>
-            </Fade>
-            <Fade show delay={350}>
-              <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
-                Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.
-              </div>
-            </Fade>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
-             {[
-               {
-                 name: "One Day",
-                 basePrice: 2500,
-                 timeline: "Half-day session",
-                 deliverables: [
-                   "Positioning statement built around the outcome",
-                   "Target agency profile with disqualifiers",
-                   "Outbound sequence ready to send",
-                   "Revised demo talk track"
-                 ],
-                 highlighted: false
-               },
-               {
-                 name: "One Initiative",
-                 basePrice: 6000,
-                 timeline: "60 Days",
-                 deliverables: [
-                   "Everything in One Day",
-                   "10 target agencies identified and contacted",
-                   "Hands-on onboarding to engineer the outcome",
-                   "Fan interviews with extracted language",
-                   "Referral channel map",
-                   "Ad-ready copy from fan language"
-                 ],
-                 highlighted: true
-               },
-               {
-                 name: "One Team",
-                 basePrice: 32000,
-                 timeline: "6 Months",
-                 deliverables: [
-                   "A drvr embedded in the team",
-                   "GTM strategy owned end to end",
-                   "Weekly working sessions",
-                   "Outbound built and run until there is someone to hand it to",
-                   "Conference strategy and event execution",
-                   "First sales hire made when the system is ready for one",
-                   "The goal is to leave something behind that works without us"
-                 ],
-                 highlighted: false
-               }
-             ].map((opt, i) => {
-               const isOneDay = i === 0;
-               const isSelected = selectedOption === i;
-               const oneDaySelected = selectedOption === 0;
-               const creditedPrice = oneDaySelected && !isOneDay ? opt.basePrice - 2500 : opt.basePrice;
-               const displayPrice = `$${creditedPrice.toLocaleString()}`;
-               const originalPrice = `$${opt.basePrice.toLocaleString()}`;
+         {currentId === "proposal" && (
+           <div>
+             <Fade show delay={100}>
+               <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 8 }}>07 — THE PROPOSAL</div>
+             </Fade>
+             <Fade show delay={200}>
+               <div style={{ fontFamily: fonts.display, fontSize: 36, fontWeight: 300, color: COLORS.text, marginBottom: 8, lineHeight: 1.2 }}>
+                 What working together looks like.
+               </div>
+             </Fade>
+             <Fade show delay={350}>
+               <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
+                 Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.
+               </div>
+             </Fade>
+             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
+              {[
+                {
+                  name: "One Day",
+                  basePrice: 2500,
+                  timeline: "Half-day session",
+                  deliverables: [
+                    "Positioning statement built around the outcome",
+                    "Target agency profile with disqualifiers",
+                    "Outbound sequence ready to send",
+                    "Revised demo talk track"
+                  ],
+                  highlighted: false
+                },
+                {
+                  name: "One Initiative",
+                  basePrice: 6000,
+                  timeline: "60 Days",
+                  deliverables: [
+                    "Everything in One Day",
+                    "10 target agencies identified and contacted",
+                    "Hands-on onboarding to engineer the outcome",
+                    "Fan interviews with extracted language",
+                    "Referral channel map",
+                    "Ad-ready copy from fan language"
+                  ],
+                  highlighted: true
+                },
+                {
+                  name: "One Team",
+                  basePrice: 32000,
+                  timeline: "6 Months",
+                  deliverables: [
+                    "A drvr embedded in the team",
+                    "GTM strategy owned end to end",
+                    "Weekly working sessions",
+                    "Outbound built and run until there is someone to hand it to",
+                    "Conference strategy and event execution",
+                    "First sales hire made when the system is ready for one",
+                    "The goal is to leave something behind that works without us"
+                  ],
+                  highlighted: false
+                }
+              ].map((opt, i) => {
+                const isOneDay = i === 0;
+                const oneDaySelected = selectedOption === 0;
+                const creditedPrice = oneDaySelected && !isOneDay ? opt.basePrice - 2500 : opt.basePrice;
+                const displayPrice = `$${creditedPrice.toLocaleString()}`;
+                const originalPrice = `$${opt.basePrice.toLocaleString()}`;
 
-               return (
-                <Fade key={i} show delay={400 + i * 200}>
-                  <div style={{
-                    background: isSelected ? COLORS.accentDim : (opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface),
-                    border: `1px solid ${isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accent + "55" : COLORS.border)}`,
-                    borderRadius: 10, padding: "28px 32px", position: "relative",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}>
-                    {opt.highlighted && !isSelected && (
-                      <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
-                        RECOMMENDED
-                      </div>
-                    )}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
-                      <div>
-                        <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted && !oneDaySelected ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
-                        <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
-                      </div>
-                      <div>
-                        <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>
-                          {displayPrice}
-                        </div>
-                        {oneDaySelected && !isOneDay && (
-                          <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.textDim, textDecoration: "line-through", marginTop: 4 }}>
-                            {originalPrice}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    {(opt.deliverables || []).length > 0 && (
-                      <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
-                        {opt.deliverables.filter(d => d.trim()).map((d, j) => (
-                          <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                            <span style={{ color: COLORS.accent, fontSize: 12, marginTop: 2, flexShrink: 0 }}>—</span>
-                            <span style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.5 }}>{d}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    <a
-                      href={`/room/${room?.slug}/sign?option=${i}${selectedOption === 0 && i !== 0 ? '&oneday=true' : ''}`}
-                      onClick={(e) => {
-                        setSelectedOption(i);
-                      }}
-                      style={{
-                        display: "inline-block",
-                        background: isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accentDim : "transparent"),
-                        border: `1px solid ${isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accent : COLORS.border)}`,
-                        borderRadius: 6, padding: "10px 24px",
-                        fontFamily: fonts.mono, fontSize: 11,
-                        color: isSelected ? "#0a1a14" : (opt.highlighted ? COLORS.accent : COLORS.textMuted),
-                        letterSpacing: 1, textDecoration: "none", transition: "all 0.2s ease",
-                      }}
-                    >
-                      REVIEW &amp; SIGN →
-                    </a>
-                  </div>
-                </Fade>
-              );
-             })}
+                return (
+                 <Fade key={i} show delay={400 + i * 200}>
+                   <div style={{
+                     background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
+                     border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
+                     borderRadius: 10, padding: "28px 32px", position: "relative",
+                   }}>
+                     {opt.highlighted && (
+                       <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
+                         RECOMMENDED
+                       </div>
+                     )}
+                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
+                       <div>
+                         <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
+                         <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
+                       </div>
+                       <div>
+                         <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>
+                           {displayPrice}
+                         </div>
+                         {oneDaySelected && !isOneDay && (
+                           <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.textDim, textDecoration: "line-through", marginTop: 4 }}>
+                             {originalPrice}
+                           </div>
+                         )}
+                       </div>
+                     </div>
+                     {(opt.deliverables || []).length > 0 && (
+                       <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
+                         {opt.deliverables.filter(d => d.trim()).map((d, j) => (
+                           <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                             <span style={{ color: COLORS.accent, fontSize: 12, marginTop: 2, flexShrink: 0 }}>—</span>
+                             <span style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.5 }}>{d}</span>
+                           </li>
+                         ))}
+                       </ul>
+                     )}
+                     <button
+                       onClick={() => {
+                         setModalOptionIndex(i);
+                         setShowModal(true);
+                       }}
+                       style={{
+                         display: "inline-block",
+                         background: opt.highlighted ? COLORS.accentDim : "transparent",
+                         border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
+                         borderRadius: 6, padding: "10px 24px",
+                         fontFamily: fonts.mono, fontSize: 11,
+                         color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
+                         letterSpacing: 1, textDecoration: "none", transition: "all 0.2s ease",
+                         cursor: "pointer",
+                       }}
+                       onMouseEnter={(e) => {
+                         e.currentTarget.style.background = opt.highlighted ? COLORS.accentGlow : COLORS.surface;
+                       }}
+                       onMouseLeave={(e) => {
+                         e.currentTarget.style.background = opt.highlighted ? COLORS.accentDim : "transparent";
+                       }}
+                     >
+                       REVIEW &amp; SIGN →
+                     </button>
+                   </div>
+                 </Fade>
+               );
+              })}
             </div>
             {room?.proposalNote && (
               <Fade show delay={800}>
@@ -874,6 +881,16 @@ export default function DrvrsEngagement({ room }) {
           >{stage === 0 ? "BEGIN" : "CONTINUE"}</button>
         )}
       </div>
-    </div>
-  );
-}
+
+      <ProposalModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSelect={(i) => {
+          window.location.href = `/room/${room?.slug}/sign?option=${i}${selectedOption === 0 && i !== 0 ? '&oneday=true' : ''}`;
+        }}
+        oneDaySelected={selectedOption === 0}
+        roomSlug={room?.slug}
+      />
+      </div>
+      );
+      }
