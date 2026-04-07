@@ -100,7 +100,8 @@ export default function AdminRooms() {
             onEdit={async (room) => {
               const fresh = await base44.entities.EngagementRoom.get(room.id);
               setEditingRoom(fresh);
-              setView("edit");
+              // Use setTimeout to ensure state has flushed before switching view
+              setTimeout(() => setView("edit"), 0);
             }}
             onRefresh={loadRooms}
           />
