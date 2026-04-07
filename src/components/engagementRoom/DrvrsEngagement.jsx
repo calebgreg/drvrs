@@ -439,7 +439,7 @@ export default function DrvrsEngagement({ room }) {
    const [stage, setStage] = useState(0);
    const [treePhase, setTreePhase] = useState(0);
    const [selectedOption, setSelectedOption] = useState(null);
-   const [oneDayEverSelected, setOneDayEverSelected] = useState(false);
+   const [selectedOptionPrice, setSelectedOptionPrice] = useState(null);
    const [showModal, setShowModal] = useState(false);
    const [modalOptionIndex, setModalOptionIndex] = useState(null);
    const containerRef = useRef(null);
@@ -749,10 +749,10 @@ export default function DrvrsEngagement({ room }) {
                   highlighted: false
                 }
               ].map((opt, i) => {
-                const isOneDay = i === 0;
                 const isSelected = selectedOption === i;
-                if (isOneDay && isSelected) setOneDayEverSelected(true);
-                const creditedPrice = oneDayEverSelected && !isOneDay ? opt.basePrice - 2500 : opt.basePrice;
+                if (isSelected) setSelectedOptionPrice(opt.basePrice);
+                const hasCredit = selectedOptionPrice && i > selectedOption;
+                const creditedPrice = hasCredit ? Math.max(0, opt.basePrice - selectedOptionPrice) : opt.basePrice;
                 const displayPrice = `$${creditedPrice.toLocaleString()}`;
                 const originalPrice = `$${opt.basePrice.toLocaleString()}`;
 
@@ -781,13 +781,13 @@ export default function DrvrsEngagement({ room }) {
                          <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>
                            {displayPrice}
                          </div>
-                         {oneDayEverSelected && !isOneDay && (
+                         {hasCredit && (
                            <div>
                              <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.accent, marginTop: 4, fontWeight: 500 }}>
                                was {originalPrice}
                              </div>
                              <div style={{ fontFamily: fonts.body, fontSize: 11, color: COLORS.accent, marginTop: 2, opacity: 0.8 }}>
-                               (One Day credit applied)
+                               (${selectedOptionPrice?.toLocaleString()} credit applied)
                              </div>
                            </div>
                          )}
