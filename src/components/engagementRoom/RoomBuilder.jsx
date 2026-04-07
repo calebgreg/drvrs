@@ -117,7 +117,19 @@ function SectionHeader({ label }) {
 }
 
 export default function RoomBuilder({ room, onSaved }) {
-  const [data, setData] = useState(room || { ...DEFAULT_ROOM });
+  const [data, setData] = useState(() => {
+    if (!room) return { ...DEFAULT_ROOM };
+    // Deep merge: DEFAULT_ROOM fills in any missing/empty fields from the saved room
+    const merged = { ...DEFAULT_ROOM };
+    Object.keys(room).forEach(key => {
+      const val = room[key];
+      if (val === null || val === undefined) return;
+      if (typeof val === 'string' && val.trim() === '') return;
+      if (Array.isArray(val) && val.length === 0) return;
+      merged[key] = val;
+    });
+    return merged;
+  });
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState("basics");
