@@ -691,11 +691,12 @@ export default function DrvrsEngagement({ room }) {
             <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>07 — ENGAGEMENT</div></Fade>
             <Fade show delay={200}>
               <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.accent}33`, borderRadius: 8, padding: 24, marginBottom: 12 }}>
-                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2, marginBottom: 12 }}>ONE DAY</div>
-                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>Define the Promise</div>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>Half-day working session. Flat fee.</div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12 }}>
+                  <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2 }}>ONE DAY</div>
+                  <div style={{ fontFamily: fonts.display, fontSize: 20, color: COLORS.text }}>$2,500</div>
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {["One-sentence positioning statement", "Target agency profile with disqualifiers", "5-touch outbound sequence ready to send", "Demo talk track built around the outcome"].map((d, i) => (
+                  {["Positioning statement built around the outcome", "Target agency profile with disqualifiers", "Outbound sequence ready to send", "Revised demo talk track"].map((d, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.accent, opacity: 0.5, flexShrink: 0 }} />
                       <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
@@ -706,11 +707,13 @@ export default function DrvrsEngagement({ room }) {
             </Fade>
             <Fade show delay={350}>
               <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 24, marginBottom: 12 }}>
-                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>ONE INITIATIVE</div>
-                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>Promise Through Evidence</div>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>60-day engagement. Milestone-based.</div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12 }}>
+                  <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.warning, letterSpacing: 2 }}>ONE INITIATIVE</div>
+                  <div style={{ fontFamily: fonts.display, fontSize: 20, color: COLORS.text }}>$6,000</div>
+                  <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 1 }}>60 DAYS</div>
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {["Everything in One Day", "10 target agencies identified and contacted", "Hands-on onboarding to engineer the outcome", "Fan interviews with extracted language", "Referral channel map across cluster groups and associations", "Ad-ready copy written from fan language"].map((d, i) => (
+                  {["Everything in One Day", "10 target agencies identified and contacted", "Hands-on onboarding to engineer the outcome", "Fan interviews with extracted language", "Referral channel map", "Ad-ready copy from fan language"].map((d, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.warning, opacity: 0.5, flexShrink: 0 }} />
                       <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
@@ -721,11 +724,13 @@ export default function DrvrsEngagement({ room }) {
             </Fade>
             <Fade show delay={500}>
               <div style={{ background: COLORS.surface, border: `1px solid rgba(245,240,232,0.12)`, borderRadius: 8, padding: 24, marginBottom: 12 }}>
-                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.text, opacity: 0.5, letterSpacing: 2, marginBottom: 12 }}>ONE TEAM</div>
-                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>Fractional Revenue Leadership</div>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>Embedded in the team. Monthly retainer.</div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12 }}>
+                  <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.text, opacity: 0.5, letterSpacing: 2 }}>ONE TEAM</div>
+                  <div style={{ fontFamily: fonts.display, fontSize: 20, color: COLORS.text }}>$32,000</div>
+                  <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 1 }}>6 MONTHS</div>
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {["Everything in One Initiative", "Weekly working sessions", "Own the GTM strategy end to end", "Build and run outbound until there is someone to hand it to", "Conference strategy, booth presence, and event follow-through", "Hire the first sales leader when the time is right"].map((d, i) => (
+                  {["A drvr embedded in the team", "GTM strategy owned end to end", "Weekly working sessions", "Outbound built and run until there is someone to hand it to", "Conference strategy and event execution", "First sales hire made when the system is ready for one", "The goal is to leave something behind that works without us"].map((d, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.text, opacity: 0.3, flexShrink: 0 }} />
                       <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
