@@ -276,7 +276,6 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
     { id: "shifts", label: "SHIFTS" },
     { id: "work", label: "WORK" },
     { id: "playbook", label: "PLAYBOOK" },
-    { id: "engagement", label: "CLOSE" },
     { id: "proposal", label: "PROPOSAL" },
     { id: "email", label: "EMAIL" },
   ];
@@ -440,20 +439,6 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
             background: COLORS.accentDim, border: `1px solid ${COLORS.accent}44`, borderRadius: 6,
             padding: "8px 16px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1,
           }}>+ ADD PLAY</button>
-        </div>
-      )}
-
-      {/* Engagement */}
-      {activeTab === "engagement" && (
-        <div>
-          <SectionHeader label="One Day Option" />
-          <Field label="Title" value={data.engagementOneDayTitle} onChange={v => set("engagementOneDayTitle", v)} />
-          <Field label="Description" value={data.engagementOneDayDescription} onChange={v => set("engagementOneDayDescription", v)} multiline />
-          <SectionHeader label="One Initiative Option" />
-          <Field label="Title" value={data.engagementOneInitiativeTitle} onChange={v => set("engagementOneInitiativeTitle", v)} />
-          <Field label="Description" value={data.engagementOneInitiativeDescription} onChange={v => set("engagementOneInitiativeDescription", v)} multiline />
-          <SectionHeader label="Footer" />
-          <Field label="Footer Message" value={data.engagementFooter} onChange={v => set("engagementFooter", v)} />
         </div>
       )}
 
