@@ -456,6 +456,15 @@ export default function DrvrsEngagement({ room }) {
     if (stages[stage].id === "constraint") setTreePhase(4);
   }, [stage]);
 
+  useEffect(() => {
+    if (selectedOption === null) {
+      setSelectedOptionPrice(null);
+    } else {
+      const prices = [2500, 6000, 32000];
+      setSelectedOptionPrice(prices[selectedOption]);
+    }
+  }, [selectedOption]);
+
   const canNext = stage < stages.length - 1;
   const canPrev = stage > 0;
   const currentId = stages[stage].id;
@@ -750,7 +759,6 @@ export default function DrvrsEngagement({ room }) {
                 }
               ].map((opt, i) => {
                 const isSelected = selectedOption === i;
-                if (isSelected) setSelectedOptionPrice(opt.basePrice);
                 const hasCredit = selectedOptionPrice && i > selectedOption;
                 const creditedPrice = hasCredit ? Math.max(0, opt.basePrice - selectedOptionPrice) : opt.basePrice;
                 const displayPrice = `$${creditedPrice.toLocaleString()}`;
