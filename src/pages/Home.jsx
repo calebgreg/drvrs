@@ -728,7 +728,10 @@ export default function Home() {
 
         <footer className="d-footer">
           <a className="drvrs-logo"><div className="drvrs-logo-pill" /> drvrs</a>
-          <span style={{ fontSize: "0.65rem", letterSpacing: "0.08em" }}>&copy; 2026</span>
+          <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+            <button onClick={() => base44.auth.redirectToLogin()} style={{ background: "none", border: "none", color: "#f5f0e8", fontSize: "0.75rem", letterSpacing: "0.08em", cursor: "pointer", textTransform: "uppercase", transition: "opacity 0.3s ease" }} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>Log In</button>
+            <span style={{ fontSize: "0.65rem", letterSpacing: "0.08em" }}>&copy; 2026</span>
+          </div>
         </footer>
 
       </div>
