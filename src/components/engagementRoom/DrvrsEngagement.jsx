@@ -34,7 +34,6 @@ const stages = [
   { id: "work", label: "Work" },
   { id: "playbook", label: "Plays" },
   { id: "engage", label: "Next" },
-  { id: "proposal", label: "Proposal" },
 ];
 
 // ─── Fade wrapper ───
@@ -183,23 +182,6 @@ function ShiftCard({ title, before, after, delay, show }) {
   );
 }
 
-// ─── Playbook helper components ───
-function PlaybookText({ children }) {
-  return <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>{children}</div>;
-}
-function PlaybookLabel({ children }) {
-  return <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>{children}</div>;
-}
-function PlaybookQuote({ children }) {
-  return (
-    <div style={{
-      fontFamily: fonts.display, fontStyle: "italic", fontSize: 15,
-      color: COLORS.text, lineHeight: 1.6,
-      borderLeft: `2px solid ${COLORS.accent}44`, paddingLeft: 16,
-      marginTop: 14, marginBottom: 6,
-    }}>{children}</div>
-  );
-}
 
 // ─── Playbook Section ───
 function PlaybookSection({ items }) {
@@ -268,20 +250,15 @@ function PlaybookSection({ items }) {
 function MissedCallsVisual() {
   const hours = ["5pm", "6pm", "7pm", "8pm", "9pm", "Sat", "Sun"];
   const calls = [
-    { h: 0, val: "$340" },
-    { h: 1, val: "$220" },
-    { h: 1, val: "$180" },
-    { h: 2, val: "$510" },
-    { h: 3, val: "$290" },
-    { h: 4, val: "$175" },
-    { h: 5, val: "$420" },
-    { h: 5, val: "$315" },
-    { h: 6, val: "$260" },
-  ];
-  const positions = [
-    { left: 1, top: 4 }, { left: 15, top: 20 }, { left: 13, top: 36 },
-    { left: 29, top: 8 }, { left: 43, top: 28 }, { left: 57, top: 12 },
-    { left: 71, top: 4 }, { left: 73, top: 28 }, { left: 86, top: 16 },
+    { h: 0, caught: false, val: "$340" },
+    { h: 1, caught: false, val: "$220" },
+    { h: 1, caught: false, val: "$180" },
+    { h: 2, caught: false, val: "$510" },
+    { h: 3, caught: false, val: "$290" },
+    { h: 4, caught: false, val: "$175" },
+    { h: 5, caught: false, val: "$420" },
+    { h: 5, caught: false, val: "$315" },
+    { h: 6, caught: false, val: "$260" },
   ];
   return (
     <div style={{ width: "100%", maxWidth: 440 }}>
@@ -294,17 +271,30 @@ function MissedCallsVisual() {
         ))}
       </div>
       <div style={{ position: "relative", height: 48, borderBottom: `1px solid ${COLORS.border}` }}>
-        {calls.map((c, i) => (
-          <div key={i} style={{
-            position: "absolute", left: `${positions[i].left}%`, top: positions[i].top,
-            display: "flex", alignItems: "center", gap: 4,
-          }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: COLORS.constraint, opacity: 0.6 }} />
-            <span style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.constraint, opacity: 0.5 }}>{c.val}</span>
-          </div>
-        ))}
+        {calls.map((c, i) => {
+          const left = (c.h / 6) * 100 + (Math.random() * 8);
+          const top = 4 + (i % 3) * 16;
+          return (
+            <div key={i} style={{
+              position: "absolute", left: `${left}%`, top,
+              display: "flex", alignItems: "center", gap: 4,
+            }}>
+              <div style={{
+                width: 6, height: 6, borderRadius: "50%",
+                background: COLORS.constraint, opacity: 0.6,
+              }} />
+              <span style={{
+                fontFamily: fonts.mono, fontSize: 8,
+                color: COLORS.constraint, opacity: 0.5,
+              }}>{c.val}</span>
+            </div>
+          );
+        })}
       </div>
-      <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 8, textAlign: "center", letterSpacing: "0.1em" }}>
+      <div style={{
+        fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim,
+        marginTop: 8, textAlign: "center", letterSpacing: "0.1em",
+      }}>
         MISSED INBOUND · ONE WEEK · ONE AGENCY
       </div>
     </div>
@@ -319,21 +309,34 @@ function NetworkVisual() {
   });
   return (
     <svg width="400" height="150" viewBox="0 0 400 150" style={{ width: "100%", maxWidth: 400 }}>
+      {/* cluster group hub */}
       {members.map((m, i) => (
-        <line key={i} x1={cx} y1={cy} x2={m.x} y2={m.y} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.3" />
+        <line key={i} x1={cx} y1={cy} x2={m.x} y2={m.y}
+          stroke="#2d8a6e" strokeWidth="0.5" opacity="0.3" />
       ))}
       {members.map((m, i) => (
-        <circle key={`n${i}`} cx={m.x} cy={m.y} r="4" fill="#0a1a14" stroke="#2d8a6e" strokeWidth="1" opacity="0.6" />
+        <circle key={`n${i}`} cx={m.x} cy={m.y} r="4"
+          fill="#0a1a14" stroke="#2d8a6e" strokeWidth="1" opacity="0.6" />
       ))}
       <circle cx={cx} cy={cy} r="10" fill="rgba(45,138,110,0.15)" stroke="#2d8a6e" strokeWidth="1.5" />
-      <text x={cx} y={cy + 3} textAnchor="middle" fontSize="6" fontFamily={fonts.mono} fill="#2d8a6e" letterSpacing="0.05em">CG</text>
+      <text x={cx} y={cy + 3} textAnchor="middle" fontSize="6" fontFamily={fonts.mono}
+        fill="#2d8a6e" letterSpacing="0.05em">CG</text>
+
+      {/* carrier node */}
       <line x1="320" y1="45" x2={cx + 10} y2={cy} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.2" strokeDasharray="3 3" />
       <circle cx="340" cy="40" r="8" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
-      <text x="340" y="43" textAnchor="middle" fontSize="5" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6">MGA</text>
+      <text x="340" y="43" textAnchor="middle" fontSize="5" fontFamily={fonts.mono}
+        fill="#2d8a6e" opacity="0.6">MGA</text>
+
+      {/* state assoc node */}
       <line x1="60" y1="45" x2={cx - 10} y2={cy} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.2" strokeDasharray="3 3" />
       <circle cx="40" cy="40" r="8" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
-      <text x="40" y="43" textAnchor="middle" fontSize="5" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6">BIG I</text>
-      <text x={cx} y="138" textAnchor="middle" fontSize="7" fontFamily={fonts.mono} fill={COLORS.textDim} letterSpacing="0.15em">TRUST FLOWS THROUGH NODES</text>
+      <text x="40" y="43" textAnchor="middle" fontSize="5" fontFamily={fonts.mono}
+        fill="#2d8a6e" opacity="0.6">BIG I</text>
+
+      {/* label */}
+      <text x={cx} y="138" textAnchor="middle" fontSize="7" fontFamily={fonts.mono}
+        fill={COLORS.textDim} letterSpacing="0.15em">TRUST FLOWS THROUGH NODES</text>
     </svg>
   );
 }
@@ -349,8 +352,12 @@ function ConversationVisual() {
         }}>
           <span style={{ fontFamily: fonts.mono, fontSize: 20, color: COLORS.textDim }}>500</span>
         </div>
-        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 8, letterSpacing: "0.1em" }}>AUTOMATED EMAILS</div>
-        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 2, opacity: 0.5 }}>CURIOUS CLICKS</div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 8, letterSpacing: "0.1em" }}>
+          AUTOMATED EMAILS
+        </div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 2, opacity: 0.5 }}>
+          CURIOUS CLICKS
+        </div>
       </div>
       <div style={{ fontFamily: fonts.display, fontSize: 14, color: COLORS.textDim, paddingBottom: 28 }}>vs</div>
       <div style={{ flex: 1, textAlign: "center" }}>
@@ -361,8 +368,12 @@ function ConversationVisual() {
         }}>
           <span style={{ fontFamily: fonts.mono, fontSize: 20, color: COLORS.accent }}>10</span>
         </div>
-        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.accent, marginTop: 8, letterSpacing: "0.1em" }}>REAL CONVERSATIONS</div>
-        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.accent, marginTop: 2, opacity: 0.6 }}>VISIBLE REACTIONS</div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.accent, marginTop: 8, letterSpacing: "0.1em" }}>
+          REAL CONVERSATIONS
+        </div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.accent, marginTop: 2, opacity: 0.6 }}>
+          VISIBLE REACTIONS
+        </div>
       </div>
     </div>
   );
@@ -375,11 +386,16 @@ function CircuitVisual() {
         <clipPath id="circClip"><rect x="0" y="0" width="420" height="160" /></clipPath>
       </defs>
       <g clipPath="url(#circClip)">
+        {/* Four heavily overlapping circles */}
         <circle cx="130" cy="80" r="72" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.5" />
         <circle cx="195" cy="72" r="65" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.45" />
         <circle cx="255" cy="78" r="60" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
         <circle cx="310" cy="85" r="55" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.35" />
+
+        {/* Center overlap zone - brighter fill to show density */}
         <circle cx="210" cy="78" r="30" fill="rgba(45,138,110,0.12)" stroke="none" />
+
+        {/* Tiny dots representing principals scattered across overlaps */}
         {[
           [145,55],[155,95],[120,72],[138,110],[168,60],[175,88],[185,42],
           [200,68],[210,90],[195,105],[218,55],[230,78],[240,95],[225,110],
@@ -389,15 +405,27 @@ function CircuitVisual() {
         ].map(([x, y], i) => (
           <circle key={i} cx={x} cy={y} r="2" fill="#2d8a6e" opacity={0.25 + (x > 175 && x < 250 ? 0.25 : 0)} />
         ))}
-        <text x="80" y="80" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.7" letterSpacing="0.06em">BIG I</text>
-        <text x="80" y="90" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.7" letterSpacing="0.06em">STATE</text>
-        <text x="195" y="22" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6" letterSpacing="0.06em">APPLIED</text>
-        <text x="195" y="32" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6" letterSpacing="0.06em">NET</text>
-        <text x="290" y="22" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.5" letterSpacing="0.06em">NETVU</text>
-        <text x="350" y="78" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.45" letterSpacing="0.06em">CLUSTER</text>
-        <text x="350" y="88" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.45" letterSpacing="0.06em">MTG</text>
+
+        {/* Labels outside circles */}
+        <text x="80" y="80" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+          fill="#2d8a6e" opacity="0.7" letterSpacing="0.06em">BIG I</text>
+        <text x="80" y="90" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+          fill="#2d8a6e" opacity="0.7" letterSpacing="0.06em">STATE</text>
+        <text x="195" y="22" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+          fill="#2d8a6e" opacity="0.6" letterSpacing="0.06em">APPLIED</text>
+        <text x="195" y="32" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+          fill="#2d8a6e" opacity="0.6" letterSpacing="0.06em">NET</text>
+        <text x="290" y="22" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+          fill="#2d8a6e" opacity="0.5" letterSpacing="0.06em">NETVU</text>
+        <text x="350" y="78" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+          fill="#2d8a6e" opacity="0.45" letterSpacing="0.06em">CLUSTER</text>
+        <text x="350" y="88" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+          fill="#2d8a6e" opacity="0.45" letterSpacing="0.06em">MTG</text>
       </g>
-      <text x="210" y="172" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill={COLORS.textDim} letterSpacing="0.18em">THE OVERLAP IS THE OPPORTUNITY</text>
+
+      {/* Bottom label */}
+      <text x="210" y="172" textAnchor="middle" fontSize="8" fontFamily={fonts.mono}
+        fill={COLORS.textDim} letterSpacing="0.18em">THE OVERLAP IS THE OPPORTUNITY</text>
     </svg>
   );
 }
@@ -405,15 +433,21 @@ function CircuitVisual() {
 function FanAmplifyVisual() {
   return (
     <svg width="360" height="80" viewBox="0 0 360 80" style={{ width: "100%", maxWidth: 360 }}>
+      {/* single fan */}
       <circle cx="30" cy="40" r="10" fill="rgba(45,138,110,0.15)" stroke="#2d8a6e" strokeWidth="1.5" />
       <text x="30" y="43" textAnchor="middle" fontSize="7" fontFamily={fonts.mono} fill="#2d8a6e">1</text>
+
+      {/* arrow */}
       <line x1="45" y1="40" x2="85" y2="40" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
       <text x="65" y="32" textAnchor="middle" fontSize="6" fontFamily={fonts.mono} fill={COLORS.textDim}>tells</text>
+
+      {/* 3 peers */}
       {[0, 1, 2].map(i => {
         const y = 20 + i * 20;
         return (
           <g key={i}>
             <circle cx="105" cy={y} r="7" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="1" opacity="0.6" />
+            {/* each peer tells 3 more */}
             <line x1="115" y1={y} x2="145" y2={y} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.3" />
             {[0, 1, 2].map(j => {
               const y2 = y - 8 + j * 8;
@@ -427,15 +461,39 @@ function FanAmplifyVisual() {
           </g>
         );
       })}
+
+      {/* arrow to ads */}
       <line x1="195" y1="40" x2="230" y2="40" stroke="#2d8a6e" strokeWidth="1" opacity="0.3" strokeDasharray="3 3" />
       <text x="213" y="32" textAnchor="middle" fontSize="6" fontFamily={fonts.mono} fill={COLORS.textDim}>then</text>
-      <rect x="240" y="25" width="100" height="30" rx="4" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="0.5" opacity="0.5" />
-      <text x="290" y="43" textAnchor="middle" fontSize="7" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.7" letterSpacing="0.08em">ADS COMPOUND</text>
+
+      {/* ads block */}
+      <rect x="240" y="25" width="100" height="30" rx="4"
+        fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="0.5" opacity="0.5" />
+      <text x="290" y="43" textAnchor="middle" fontSize="7" fontFamily={fonts.mono}
+        fill="#2d8a6e" opacity="0.7" letterSpacing="0.08em">ADS COMPOUND</text>
     </svg>
   );
 }
 
-export default function DrvrsEngagement({ room }) {
+function PlaybookText({ children }) {
+  return <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>{children}</div>;
+}
+function PlaybookLabel({ children }) {
+  return <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>{children}</div>;
+}
+function PlaybookQuote({ children }) {
+  return (
+    <div style={{
+      fontFamily: fonts.display, fontStyle: "italic", fontSize: 15,
+      color: COLORS.text, lineHeight: 1.6,
+      borderLeft: `2px solid ${COLORS.accent}44`, paddingLeft: 16,
+      marginTop: 14, marginBottom: 6,
+    }}>{children}</div>
+  );
+}
+
+
+export default function DrvrsEngagement() {
   const [stage, setStage] = useState(0);
   const [treePhase, setTreePhase] = useState(0);
   const containerRef = useRef(null);
@@ -449,34 +507,70 @@ export default function DrvrsEngagement({ room }) {
       ];
       return () => timers.forEach(clearTimeout);
     }
-    if (stages[stage].id === "constraint") setTreePhase(4);
+    if (stages[stage].id === "constraint") {
+      setTreePhase(4);
+    }
   }, [stage]);
 
   const canNext = stage < stages.length - 1;
   const canPrev = stage > 0;
   const currentId = stages[stage].id;
 
+  const showTree = ["decomp", "constraint", "shifts", "work", "engage"].includes(currentId);
+  const isConstraintStage = ["constraint", "shifts", "work", "engage"].includes(currentId);
+
   return (
-    <div ref={containerRef} style={{ minHeight: "100vh", background: COLORS.bg, color: COLORS.text, fontFamily: fonts.body, position: "relative", overflow: "hidden" }}>
+    <div ref={containerRef} style={{
+      minHeight: "100vh",
+      background: COLORS.bg,
+      color: COLORS.text,
+      fontFamily: fonts.body,
+      position: "relative",
+      overflow: "hidden",
+    }}>
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
 
-      {/* Grain */}
-      <div style={{ position: "fixed", inset: 0, opacity: 0.035, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`, backgroundSize: "200px 200px", pointerEvents: "none", zIndex: 1000 }} />
+      {/* Grain overlay */}
+      <div style={{
+        position: "fixed", inset: 0, opacity: 0.035,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        backgroundSize: "200px 200px",
+        pointerEvents: "none", zIndex: 1000,
+      }} />
 
       {/* Top nav */}
-      <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "2rem 3rem", mixBlendMode: "difference" }}>
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "2rem 3rem",
+        mixBlendMode: "difference",
+      }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-          <div style={{ width: 26, height: 12, background: COLORS.text, borderRadius: 6, flexShrink: 0 }} />
-          <span style={{ fontFamily: fonts.body, fontSize: "1.1rem", fontWeight: 400, color: COLORS.text, letterSpacing: "0.1em" }}>drvrs</span>
-
+          <div style={{
+            width: 26, height: 12, background: COLORS.text,
+            borderRadius: 6, transition: "width 0.4s ease", flexShrink: 0,
+          }} />
+          <span style={{
+            fontFamily: fonts.body, fontSize: "1.1rem", fontWeight: 400,
+            color: COLORS.text, letterSpacing: "0.1em",
+          }}>
+            drvrs
+          </span>
         </div>
-        <div style={{ fontFamily: fonts.body, fontSize: "0.78rem", fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.text, opacity: 0.5 }}>
-          {room?.companyName?.toUpperCase()}
+        <div style={{
+          fontFamily: fonts.body, fontSize: "0.78rem", fontWeight: 400,
+          letterSpacing: "0.1em", textTransform: "uppercase",
+          color: COLORS.text, opacity: 0.5,
+        }}>
+          INSURVOICE
         </div>
       </div>
 
       {/* Stage indicator */}
-      <div style={{ position: "fixed", left: 32, top: "50%", transform: "translateY(-50%)", zIndex: 100, display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{
+        position: "fixed", left: 32, top: "50%", transform: "translateY(-50%)", zIndex: 100,
+        display: "flex", flexDirection: "column", gap: 8,
+      }}>
         {stages.map((s, i) => (
           <button key={s.id} onClick={() => setStage(i)} style={{
             padding: "6px 0", width: 48, borderRadius: 4,
@@ -487,65 +581,127 @@ export default function DrvrsEngagement({ room }) {
             textTransform: "uppercase", cursor: "pointer",
             display: "flex", alignItems: "center", justifyContent: "center",
             transition: "all 0.3s ease",
-          }}>{s.label}</button>
+          }}>
+            {s.label}
+          </button>
         ))}
       </div>
 
-      {/* Main */}
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "100px 80px 120px 80px", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: currentId === "playbook" ? "flex-start" : "center" }}>
+      {/* Main content area */}
+      <div style={{
+        maxWidth: 900, margin: "0 auto", padding: "100px 80px 120px 80px",
+        minHeight: "100vh", display: "flex", flexDirection: "column",
+        justifyContent: currentId === "playbook" ? "flex-start" : "center",
+      }}>
 
-        {/* INTRO */}
+        {/* ── INTRO ── */}
         {currentId === "intro" && (
           <div style={{ textAlign: "center" }}>
             <Fade show delay={200}>
-              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim, letterSpacing: 3, textTransform: "uppercase", marginBottom: 48 }}>
-                Prepared for {room?.companyName}
+              <div style={{
+                fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim,
+                letterSpacing: 3, textTransform: "uppercase", marginBottom: 48,
+              }}>
+                Prepared for Insurvoice
               </div>
             </Fade>
             <Fade show delay={500}>
-              <div style={{ fontFamily: fonts.display, fontSize: 48, fontWeight: 400, color: COLORS.text, letterSpacing: 0.5, lineHeight: 1.2, marginBottom: 48 }}>
+              <div style={{
+                fontFamily: fonts.display, fontSize: 48, fontWeight: 400,
+                color: COLORS.text, letterSpacing: 0.5, lineHeight: 1.2,
+                marginBottom: 48,
+              }}>
                 GTM Strategy
               </div>
             </Fade>
             <Fade show delay={800}>
-              <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, maxWidth: 380, margin: "0 auto", lineHeight: 1.7 }}>
-                A look at the system that should be producing your first 50 customers, where it is stuck, and what to do about it.
+              <div style={{
+                fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted,
+                maxWidth: 380, margin: "0 auto", lineHeight: 1.7,
+              }}>
+                A look at the system that should be producing your first 50 customers, 
+                where it is stuck, and what to do about it.
               </div>
             </Fade>
             <Fade show delay={1100}>
-              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim, letterSpacing: 2, marginTop: 48 }}>
+              <div style={{
+                fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim,
+                letterSpacing: 2, marginTop: 48,
+              }}>
                 CALEB CRAMER · DRVRS.IO
               </div>
             </Fade>
           </div>
         )}
 
-        {/* GOAL */}
+        {/* ── GOAL ── */}
         {currentId === "goal" && (
           <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>01 — THE GOAL</div></Fade>
-            <Fade show delay={300}><div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 400, color: COLORS.text, marginBottom: 32, lineHeight: 1.2 }}>{room?.goalTitle}</div></Fade>
-            <Fade show delay={600}><div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginBottom: 24, maxWidth: 600 }}>{room?.goalDescription}</div></Fade>
-            <Fade show delay={900}><div style={{ fontFamily: fonts.mono, fontSize: 13, color: COLORS.accent, background: COLORS.accentDim, display: "inline-block", padding: "8px 16px", borderRadius: 4, letterSpacing: 0.5 }}>{room?.goalCallout}</div></Fade>
-            <Fade show delay={1200}><div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginTop: 32, maxWidth: 600 }}>{room?.goalFooter}</div></Fade>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
+                01 — THE GOAL
+              </div>
+            </Fade>
+            <Fade show delay={300}>
+              <div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 400, color: COLORS.text, marginBottom: 32, lineHeight: 1.2 }}>
+                50 paying customers.
+              </div>
+            </Fade>
+            <Fade show delay={600}>
+              <div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginBottom: 24, maxWidth: 600 }}>
+                50 customers is not a revenue target. It is the number that tells 
+                everyone this thing works. That agencies keep paying, that the use case is real, 
+                that the pocket has been found.
+              </div>
+            </Fade>
+            <Fade show delay={900}>
+              <div style={{
+                fontFamily: fonts.mono, fontSize: 13, color: COLORS.accent,
+                background: COLORS.accentDim, display: "inline-block",
+                padding: "8px 16px", borderRadius: 4, letterSpacing: 0.5,
+              }}>
+                50 is a PMF signal, not a sales target.
+              </div>
+            </Fade>
+            <Fade show delay={1200}>
+              <div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.textMuted, lineHeight: 1.8, marginTop: 32, maxWidth: 600 }}>
+                That distinction changes what matters. The question is not "how do we get more leads." 
+                The question is "what system produces product-market fit, and where is it stuck."
+              </div>
+            </Fade>
           </div>
         )}
 
-        {/* DECOMP */}
+        {/* ── DECOMPOSITION ── */}
         {currentId === "decomp" && (
           <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 24 }}>02 — THE SYSTEM</div></Fade>
-            <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 560 }}>{room?.decompositionDescription}</div></Fade>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 24 }}>
+                02 — THE SYSTEM
+              </div>
+            </Fade>
+            <Fade show delay={200}>
+              <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 32, maxWidth: 560 }}>
+                Product-market fit is not a feeling. It is a system with three components. 
+                If any one collapses to zero, PMF is zero. It does not matter how strong the other two are.
+              </div>
+            </Fade>
             <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
               <svg width="520" height="240" viewBox="0 0 520 240">
+                {/* Edges */}
                 <TreeEdge x1={260} y1={60} x2={110} y2={180} show={treePhase >= 2} delay={0} />
                 <TreeEdge x1={260} y1={60} x2={260} y2={180} show={treePhase >= 2} delay={150} />
                 <TreeEdge x1={260} y1={60} x2={410} y2={180} show={treePhase >= 2} delay={300} />
+
+                {/* Multiplication signs */}
                 {treePhase >= 2 && <>
                   <text x="185" y="186" textAnchor="middle" fill={COLORS.textDim} fontSize="16" fontFamily={fonts.mono}>×</text>
                   <text x="335" y="186" textAnchor="middle" fill={COLORS.textDim} fontSize="16" fontFamily={fonts.mono}>×</text>
                 </>}
+
+                {/* Root */}
                 <TreeNode label="PMF" x={260} y={60} active show={treePhase >= 1} delay={0} />
+                {/* Level 2 */}
                 <TreeNode label="PROMISE" x={110} y={180} active show={treePhase >= 2} delay={0} />
                 <TreeNode label="DELIVERY" x={260} y={180} active show={treePhase >= 2} delay={150} />
                 <TreeNode label="EVIDENCE" x={410} y={180} active show={treePhase >= 2} delay={300} />
@@ -558,9 +714,16 @@ export default function DrvrsEngagement({ room }) {
                   { label: "Delivery", desc: "Does the product produce it on purpose?" },
                   { label: "Evidence", desc: "Can you prove it happened?" },
                 ].map((item, i) => (
-                  <div key={i} style={{ flex: 1, background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "14px 16px" }}>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 6 }}>{item.label}</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.5 }}>{item.desc}</div>
+                  <div key={i} style={{
+                    flex: 1, background: COLORS.surface, border: `1px solid ${COLORS.border}`,
+                    borderRadius: 6, padding: "14px 16px",
+                  }}>
+                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 6 }}>
+                      {item.label}
+                    </div>
+                    <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.5 }}>
+                      {item.desc}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -568,17 +731,23 @@ export default function DrvrsEngagement({ room }) {
           </div>
         )}
 
-        {/* CONSTRAINT */}
+        {/* ── CONSTRAINT ── */}
         {currentId === "constraint" && (
           <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.constraint, letterSpacing: 3, marginBottom: 24 }}>03 — THE CONSTRAINT</div></Fade>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.constraint, letterSpacing: 3, marginBottom: 24 }}>
+                03 — THE CONSTRAINT
+              </div>
+            </Fade>
             <div style={{ display: "flex", justifyContent: "center", margin: "0 0 24px 0" }}>
               <svg width="520" height="240" viewBox="0 0 520 240">
                 <TreeEdge x1={260} y1={60} x2={110} y2={180} show delay={0} isConstraintPath />
                 <TreeEdge x1={260} y1={60} x2={260} y2={180} show delay={0} />
                 <TreeEdge x1={260} y1={60} x2={410} y2={180} show delay={0} />
+
                 <text x="185" y="186" textAnchor="middle" fill={COLORS.textDim} fontSize="16" fontFamily={fonts.mono}>×</text>
                 <text x="335" y="186" textAnchor="middle" fill={COLORS.textDim} fontSize="16" fontFamily={fonts.mono}>×</text>
+
                 <TreeNode label="PMF" x={260} y={60} active show delay={0} />
                 <TreeNode label="PROMISE" x={110} y={180} isConstraint show delay={0} />
                 <TreeNode label="DELIVERY" x={260} y={180} active show delay={0} />
@@ -586,41 +755,92 @@ export default function DrvrsEngagement({ room }) {
               </svg>
             </div>
             <Fade show delay={300}>
-              <div style={{ background: COLORS.constraintDim, border: `1px solid ${COLORS.constraint}33`, borderRadius: 8, padding: "20px 24px", marginBottom: 20 }}>
-                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.constraint, letterSpacing: 2, marginBottom: 8 }}>CONSTRAINT IDENTIFIED</div>
-                <div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.text, lineHeight: 1.7 }}>The current positioning leads with a feature comparison, not an outcome. When the promise is undefined, delivery is accidental and evidence is unmeasurable.</div>
+              <div style={{
+                background: COLORS.constraintDim, border: `1px solid ${COLORS.constraint}33`,
+                borderRadius: 8, padding: "20px 24px", marginBottom: 20,
+              }}>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.constraint, letterSpacing: 2, marginBottom: 8 }}>
+                  CONSTRAINT IDENTIFIED
+                </div>
+                <div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.text, lineHeight: 1.7 }}>
+                  The current positioning leads with a feature comparison, not an outcome. 
+                  When the promise is undefined, delivery is accidental and evidence is unmeasurable.
+                </div>
               </div>
             </Fade>
-            <Fade show delay={600}><div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, maxWidth: 560 }}>The product works. The problem is real. But the way it is described to the market does not name the outcome the customer experiences. That gap is where PMF stalls.</div></Fade>
+            <Fade show delay={600}>
+              <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, maxWidth: 560 }}>
+                The problem is real. The technology exists. But the way it is described to the market 
+                does not name the outcome the customer experiences. That gap is where PMF stalls.
+              </div>
+            </Fade>
           </div>
         )}
 
-        {/* SHIFTS */}
+        {/* ── SHIFTS ── */}
         {currentId === "shifts" && (
           <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>04 — WHAT CHANGES</div></Fade>
-            <ShiftCard show delay={200} title="The Promise" before="Feature comparison. Cheaper than alternatives. The conversation starts with price." after="A specific outcome compelling enough that agencies pay a premium for it. Price stops being the reason to buy and stops being the objection." />
-            <ShiftCard show delay={400} title="How Delivery Gets Validated" before="Sign up customers and hope the product clicks. Adoption is passive." after="Engineer the outcome for early customers. Make sure the event happens. Measure whether it repeats." />
-            <ShiftCard show delay={600} title="How Evidence Gets Built" before="Testimonials and logos. Social proof without specificity." after="A measurable pattern. What percentage of customers experience the outcome, how often, and how reliably." />
-            <ShiftCard show delay={800} title="How Growth Works" before="Paid ads to a broad audience. Expensive, low signal." after="Early customers who experienced the outcome become the distribution channel. Their language becomes the marketing. Their networks become the pipeline." />
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
+                04 — WHAT CHANGES
+              </div>
+            </Fade>
+            <ShiftCard show delay={200}
+              title="The Promise"
+              before="Feature comparison. Cheaper than alternatives. The conversation starts with price."
+              after="A specific outcome compelling enough that agencies pay a premium for it. Price stops being the reason to buy and stops being the objection."
+            />
+            <ShiftCard show delay={400}
+              title="How Delivery Gets Validated"
+              before="Sign up customers and hope the product clicks. Adoption is passive."
+              after="Engineer the outcome for early customers. Make sure the event happens. Measure whether it repeats."
+            />
+            <ShiftCard show delay={600}
+              title="How Evidence Gets Built"
+              before="Testimonials and logos. Social proof without specificity."
+              after="A measurable pattern. What percentage of customers experience the outcome, how often, and how reliably."
+            />
+            <ShiftCard show delay={800}
+              title="How Growth Works"
+              before="Paid ads to a broad audience. Expensive, low signal."
+              after="Early customers who experienced the outcome become the distribution channel. Their language becomes the marketing. Their networks become the pipeline."
+            />
           </div>
         )}
 
-        {/* WORK */}
+        {/* ── THE WORK ── */}
         {currentId === "work" && (
           <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>05 — THE WORK</div></Fade>
-            <PhaseCard show delay={200} number="1" title="Define the Promise" status="Ready" description="One working session to name the outcome Insurvoice produces for an agency. Not the feature. The event the customer experiences. This becomes the positioning, the demo talk track, and the outbound language. Half-day." />
-            <PhaseCard show delay={400} number="2" title="Validate Delivery" status="Pending" description="Identify the agency profile most likely to experience the outcome. Get 10 of them into the product. Engineer the event with each one. Cold outbound, direct conversations, hands-on onboarding. 30 to 45 days." />
-            <PhaseCard show delay={600} number="3" title="Build the Evidence" status="Pending" description="Interview the agencies that experienced the outcome. Measure the pattern. Extract their language. Their words become the marketing copy, their referrals become the pipeline, their data becomes the proof that PMF is real." />
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
+                05 — THE WORK
+              </div>
+            </Fade>
+            <PhaseCard show delay={200} number="1" title="Define the Promise" status="Ready"
+              description="One working session to name the outcome Insurvoice produces for an agency. Not the feature. The event the customer experiences. This becomes the positioning, the demo talk track, and the outbound language. Half-day."
+            />
+            <PhaseCard show delay={400} number="2" title="Validate Delivery" status="Pending"
+              description="Identify the agency profile most likely to experience the outcome. Get 10 of them into the product. Engineer the event with each one. Cold outbound, direct conversations, hands-on onboarding. 30 to 45 days."
+            />
+            <PhaseCard show delay={600} number="3" title="Build the Evidence" status="Pending"
+              description="Interview the agencies that experienced the outcome. Measure the pattern. Extract their language. Their words become the marketing copy, their referrals become the pipeline, their data becomes the proof that PMF is real."
+            />
           </div>
         )}
 
-        {/* PLAYBOOK */}
+        {/* ── PLAYBOOK ── */}
         {currentId === "playbook" && (
           <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 12 }}>06 — THE PLAYBOOK</div></Fade>
-            <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>This is yours whether we work together or not. Five plays, ready to run.</div></Fade>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 12 }}>
+                06 — THE PLAYBOOK
+              </div>
+            </Fade>
+            <Fade show delay={200}>
+              <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>
+                This is yours whether we work together or not. Five plays, ready to run.
+              </div>
+            </Fade>
             <PlaybookSection items={[
               {
                 tag: "PROMISE",
@@ -628,8 +848,18 @@ export default function DrvrsEngagement({ room }) {
                 visual: <MissedCallsVisual />,
                 content: (
                   <>
-                    <PlaybookText>An independent agency with 4 producers and no dedicated ops staff misses inbound calls after 5pm, on weekends, and during lunch. Those calls are quote requests, renewal questions, and first notice of loss. Each one has a dollar value. The agency principal knows this. It keeps them up at night. They just have not heard anyone name it back to them as a solvable problem.</PlaybookText>
-                    <PlaybookText>The product that names the outcome the buyer already feels is the product that gets bought at a premium. The product that describes its own features gets compared on price.</PlaybookText>
+                    <PlaybookText>
+                      An independent agency with 4 producers and no dedicated ops staff misses 
+                      inbound calls after 5pm, on weekends, and during lunch. Those calls are quote 
+                      requests, renewal questions, and first notice of loss. Each one has a dollar 
+                      value. The agency principal knows this. It keeps them up at night. They just 
+                      have not heard anyone name it back to them as a solvable problem.
+                    </PlaybookText>
+                    <PlaybookText>
+                      The product that names the outcome the buyer already feels is the product 
+                      that gets bought at a premium. The product that describes its own features 
+                      gets compared on price.
+                    </PlaybookText>
                   </>
                 ),
               },
@@ -639,9 +869,26 @@ export default function DrvrsEngagement({ room }) {
                 visual: <NetworkVisual />,
                 content: (
                   <>
-                    <PlaybookText>Agency principals do not buy from ads. They buy from peers. The buying pattern in independent insurance is: someone in the cluster group mentions it, or someone at the Big I state conference mentions it, or their carrier rep mentions it. Three touches from three different trusted sources and the principal calls.</PlaybookText>
-                    <PlaybookText>This means the fastest path to the first 10 customers is not a funnel. It is getting inside the rooms where principals already talk to each other. Cluster group meetings. State association events. Carrier advisory councils. A warm introduction from a cluster group leader to their 15 member agencies is worth more than 1,000 impressions.</PlaybookText>
-                    <PlaybookText>The people who control these rooms are findable. There are roughly 40 to 50 meaningful cluster groups in the US, a Big I association in every state, and a handful of MGA and carrier relationships in every region who want their appointed agencies performing better. These are the nodes.</PlaybookText>
+                    <PlaybookText>
+                      Agency principals do not buy from ads. They buy from peers. The buying 
+                      pattern in independent insurance is: someone in the cluster group mentions 
+                      it, or someone at the Big I state conference mentions it, or their 
+                      carrier rep mentions it. Three touches from three different trusted sources 
+                      and the principal calls.
+                    </PlaybookText>
+                    <PlaybookText>
+                      This means the fastest path to the first 10 customers is not a funnel. It is 
+                      getting inside the rooms where principals already talk to each other. Cluster 
+                      group meetings. State association events. Carrier advisory councils. A warm 
+                      introduction from a cluster group leader to their 15 member agencies is 
+                      worth more than 1,000 impressions.
+                    </PlaybookText>
+                    <PlaybookText>
+                      The people who control these rooms are findable. There are roughly 40 to 50 
+                      meaningful cluster groups in the US, a Big I association in every state, and 
+                      a handful of MGA and carrier relationships in every region who want their 
+                      appointed agencies performing better. These are the nodes.
+                    </PlaybookText>
                   </>
                 ),
               },
@@ -651,9 +898,23 @@ export default function DrvrsEngagement({ room }) {
                 visual: <ConversationVisual />,
                 content: (
                   <>
-                    <PlaybookText>Paid advertising is a scale tool. It amplifies a signal that already exists. Before the signal exists, every dollar spent on ads is a guess. The signal comes from direct conversations where the reaction is visible.</PlaybookText>
-                    <PlaybookText>An agency principal who sighs when asked about their after-hours calls is a different lead than an agency principal who clicks an ad. The sigh means they feel the problem. The click means they were curious. At this stage, the sigh is worth more. It can only be found in a real conversation.</PlaybookText>
-                    <PlaybookText>The math on early outbound is counterintuitive. 10 deeply researched, personalized conversations per day will find the first believers faster than 500 automated emails. The believers are not hiding. They are just not being asked the right question by someone who understands their day.</PlaybookText>
+                    <PlaybookText>
+                      Paid advertising is a scale tool. It amplifies a signal that already exists. 
+                      Before the signal exists, every dollar spent on ads is a guess. The signal 
+                      comes from direct conversations where the reaction is visible.
+                    </PlaybookText>
+                    <PlaybookText>
+                      An agency principal who sighs when asked about their after-hours calls is 
+                      a different lead than an agency principal who clicks an ad. The sigh means 
+                      they feel the problem. The click means they were curious. At this stage, 
+                      the sigh is worth more. It can only be found in a real conversation.
+                    </PlaybookText>
+                    <PlaybookText>
+                      The math on early outbound is counterintuitive. 10 deeply researched, 
+                      personalized conversations per day will find the first believers faster 
+                      than 500 automated emails. The believers are not hiding. They are just 
+                      not being asked the right question by someone who understands their day.
+                    </PlaybookText>
                   </>
                 ),
               },
@@ -663,9 +924,34 @@ export default function DrvrsEngagement({ room }) {
                 visual: <CircuitVisual />,
                 content: (
                   <>
-                    <PlaybookText>Insurance is a small industry that thinks it is big. There are a finite number of events where independent agency principals gather. State Big I conferences. Applied Net. NetVu. Regional cluster group meetings. The same 200 to 300 agency principals show up repeatedly.</PlaybookText>
-                    <PlaybookText>This is an advantage. A consistent presence at 4 to 5 events per year creates recognition that paid channels cannot replicate. The principal who sees the same company at three different events in six months starts to think "they are everywhere" even though the audience is the same 400 people.</PlaybookText>
-                    <PlaybookText>The booth is not the play. The booth is proof of existence. The play is the attendee list, the pre-scheduled conversations, and the dinner the night before with 8 principals who match the profile. The event is a magnet that gathers the right people in one place. Everything around the event is where the work happens.</PlaybookText>
+                    <PlaybookText>
+                      Insurance is a small industry that thinks it is big. There are a 
+                      finite number of events where independent agency principals gather. 
+                      State Big I conferences. Applied Net. NetVu. Regional cluster group 
+                      meetings. The same 200 to 300 agency principals show up repeatedly.
+                    </PlaybookText>
+                    <PlaybookText>
+                      This is an advantage. A consistent presence at 4 to 5 events per year 
+                      creates recognition that paid channels cannot replicate. The principal 
+                      who sees the same company at three different events in six months starts 
+                      to think "they are everywhere" even though the audience is the same 
+                      400 people.
+                    </PlaybookText>
+                    <PlaybookText>
+                      The booth is not the play. The booth is proof of existence. The play is 
+                      the attendee list, the pre-scheduled conversations, and the dinner the 
+                      night before with 8 principals who match the profile. The event is a 
+                      magnet that gathers the right people in one place. Everything around 
+                      the event is where the work happens.
+                    </PlaybookText>
+                    <PlaybookText>
+                      For a product like Insurvoice, there is a move most companies never 
+                      think to make: set up a live phone number at the booth. Hand it to 
+                      every principal who stops by and say "call this after 6pm tonight." 
+                      Let them experience it firsthand on their own terms. Follow up the 
+                      next morning referencing their specific call. That follow-up is a 
+                      different conversation than anything a slide deck produces.
+                    </PlaybookText>
                   </>
                 ),
               },
@@ -675,9 +961,26 @@ export default function DrvrsEngagement({ room }) {
                 visual: <FanAmplifyVisual />,
                 content: (
                   <>
-                    <PlaybookText>The agency principal who experienced the outcome and kept paying is the most credible voice in the market. More credible than the website. More credible than the sales deck. More credible than the founder on a podcast. When that principal tells a peer "this thing caught a call last Tuesday that would have been a lost policy," that is the most effective marketing that exists.</PlaybookText>
-                    <PlaybookText>The words fans use to describe the product to their peers are the positioning, the ad copy, and the website headline. They just need to be captured. Three questions in a 15-minute interview surface them: what was happening before, what changed, and who else should know about this.</PlaybookText>
-                    <PlaybookText>Paid advertising becomes a different instrument after this. Instead of guessing at messaging and audience, the language is proven and the targeting is specific. This is when ad spend starts compounding instead of burning.</PlaybookText>
+                    <PlaybookText>
+                      The agency principal who experienced the outcome and kept paying is the 
+                      most credible voice in the market. More credible than the website. More 
+                      credible than the sales deck. More credible than the founder on a podcast. 
+                      When that principal tells a peer "this thing caught a call last Tuesday 
+                      that would have been a lost policy," that is the most effective marketing 
+                      that exists.
+                    </PlaybookText>
+                    <PlaybookText>
+                      The words fans use to describe the product to their peers are the 
+                      positioning, the ad copy, and the website headline. They just need to be 
+                      captured. Three questions in a 15-minute interview surface them: what was 
+                      happening before, what changed, and who else should know about this.
+                    </PlaybookText>
+                    <PlaybookText>
+                      Paid advertising becomes a different instrument after this. Instead of 
+                      guessing at messaging and audience, the language is proven and the 
+                      targeting is specific. This is when ad spend starts compounding 
+                      instead of burning.
+                    </PlaybookText>
                   </>
                 ),
               },
@@ -685,133 +988,107 @@ export default function DrvrsEngagement({ room }) {
           </div>
         )}
 
-        {/* ENGAGE */}
+        {/* ── ENGAGE ── */}
         {currentId === "engage" && (
           <div>
-            <Fade show delay={100}><div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>07 — ENGAGEMENT</div></Fade>
-            <Fade show delay={300}>
-              <div style={{ display: "flex", gap: 16, marginBottom: 32 }}>
-                <div style={{ flex: 1, background: COLORS.surface, border: `1px solid ${COLORS.accent}33`, borderRadius: 8, padding: 24 }}>
-                  <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2, marginBottom: 12 }}>ONE DAY</div>
-                  <div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.text, fontWeight: 600, marginBottom: 8 }}>Define the Promise</div>
-                  <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6 }}>Name the outcome. Build the positioning, the ICP, and the outbound sequence around it. Flat fee. Everything needed to start validating delivery.</div>
-                </div>
-                <div style={{ flex: 1, background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 24 }}>
-                  <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>ONE INITIATIVE</div>
-                  <div style={{ fontFamily: fonts.body, fontSize: 16, color: COLORS.text, fontWeight: 600, marginBottom: 8 }}>Promise Through Evidence</div>
-                  <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6 }}>Full 60-day engagement. Define the promise, validate delivery with early customers, build the evidence that PMF is real. Milestone-based.</div>
-                </div>
-              </div>
-            </Fade>
-            <Fade show delay={600}>
-              <div style={{ textAlign: "center", marginTop: 8 }}>
-                <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7 }}>
-                  See the proposal — pick the one that fits and sign.
-                </div>
-              </div>
-            </Fade>
-          </div>
-        )}
-
-        {/* PROPOSAL */}
-        {currentId === "proposal" && (
-          <div>
             <Fade show delay={100}>
-              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 8 }}>08 — THE PROPOSAL</div>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
+                07 — ENGAGEMENT
+              </div>
             </Fade>
             <Fade show delay={200}>
-              <div style={{ fontFamily: fonts.display, fontSize: 36, fontWeight: 300, color: COLORS.text, marginBottom: 8, lineHeight: 1.2 }}>
-                What working together looks like.
+              <div style={{
+                background: COLORS.surface, border: `1px solid ${COLORS.accent}33`,
+                borderRadius: 8, padding: 24, marginBottom: 12,
+              }}>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2, marginBottom: 12 }}>ONE DAY</div>
+                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+                  Define the Promise
+                </div>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
+                  Half-day working session. Flat fee.
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    "One-sentence positioning statement",
+                    "Target agency profile with disqualifiers",
+                    "5-touch outbound sequence ready to send",
+                    "Demo talk track built around the outcome",
+                  ].map((d, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.accent, opacity: 0.5, flexShrink: 0 }} />
+                      <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Fade>
             <Fade show delay={350}>
-              <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
-                Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.
+              <div style={{
+                background: COLORS.surface, border: `1px solid ${COLORS.border}`,
+                borderRadius: 8, padding: 24, marginBottom: 12,
+              }}>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>ONE INITIATIVE</div>
+                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+                  Promise Through Evidence
+                </div>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
+                  60-day engagement. Milestone-based.
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    "Everything in One Day",
+                    "10 target agencies identified and contacted",
+                    "Hands-on onboarding to engineer the outcome",
+                    "Fan interviews with extracted language",
+                    "Referral channel map across cluster groups and associations",
+                    "Ad-ready copy written from fan language",
+                  ].map((d, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.warning, opacity: 0.5, flexShrink: 0 }} />
+                      <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Fade>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
-              {(room?.proposalOptions || []).map((opt, i) => (
-                <Fade key={i} show delay={400 + i * 200}>
-                  <div style={{
-                    background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
-                    border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
-                    borderRadius: 10, padding: "28px 32px", position: "relative",
-                  }}>
-                    {opt.highlighted && (
-                      <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
-                        RECOMMENDED
-                      </div>
-                    )}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
-                      <div>
-                        <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
-                        <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
-                      </div>
-                      <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>{opt.price}</div>
+            <Fade show delay={500}>
+              <div style={{
+                background: COLORS.surface, border: `1px solid rgba(245,240,232,0.12)`,
+                borderRadius: 8, padding: 24, marginBottom: 12,
+              }}>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.text, opacity: 0.5, letterSpacing: 2, marginBottom: 12 }}>ONE TEAM</div>
+                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+                  Fractional Revenue Leadership
+                </div>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
+                  Embedded in the team. Monthly retainer.
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    "Everything in One Initiative",
+                    "Weekly working sessions",
+                    "Own the GTM strategy end to end",
+                    "Build and run outbound until there is someone to hand it to",
+                    "Conference strategy, booth presence, and event follow-through",
+                    "Hire the first sales leader when the time is right",
+                  ].map((d, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.text, opacity: 0.3, flexShrink: 0 }} />
+                      <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
                     </div>
-                    {(opt.deliverables || []).length > 0 && (
-                      <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
-                        {opt.deliverables.filter(d => d.trim()).map((d, j) => (
-                          <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                            <span style={{ color: COLORS.accent, fontSize: 12, marginTop: 2, flexShrink: 0 }}>—</span>
-                            <span style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.5 }}>{d}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    <a
-                      href={`/room/${room?.slug}/sign?option=${i}`}
-                      style={{
-                        display: "inline-block",
-                        background: opt.highlighted ? COLORS.accentDim : "transparent",
-                        border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
-                        borderRadius: 6, padding: "10px 24px",
-                        fontFamily: fonts.mono, fontSize: 11,
-                        color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
-                        letterSpacing: 1, textDecoration: "none", transition: "all 0.2s ease",
-                      }}
-                    >
-                      REVIEW &amp; SIGN →
-                    </a>
-                  </div>
-                </Fade>
-              ))}
-            </div>
-            {room?.proposalNote && (
-              <Fade show delay={800}>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto 32px" }}>
-                  {room.proposalNote}
+                  ))}
                 </div>
-              </Fade>
-            )}
-            <Fade show delay={1000}>
-              <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.6 }}>
-                  Questions before signing? Let's talk through it.
+              </div>
+            </Fade>
+            <Fade show delay={700}>
+              <div style={{ textAlign: "center", marginTop: 32 }}>
+                <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, marginBottom: 24 }}>
+                  Happy to do a 30-minute call to figure out which fits.
                 </div>
-                <a
-                  href="https://cal.com/calebcramer"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    flexShrink: 0,
-                    background: "transparent",
-                    border: `1px solid ${COLORS.border}`,
-                    borderRadius: 6,
-                    padding: "10px 24px",
-                    fontFamily: fonts.mono,
-                    fontSize: 10,
-                    color: COLORS.textMuted,
-                    letterSpacing: 1,
-                    textDecoration: "none",
-                    whiteSpace: "nowrap",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.textDim; e.currentTarget.style.color = COLORS.text; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
-                >
-                  BOOK A CALL →
-                </a>
+                <div style={{ fontFamily: fonts.display, fontSize: 20, fontWeight: 400, color: COLORS.textDim, letterSpacing: 2 }}>
+                  drvrs.io
+                </div>
               </div>
             </Fade>
           </div>
@@ -819,22 +1096,36 @@ export default function DrvrsEngagement({ room }) {
       </div>
 
       {/* Bottom nav */}
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 12, padding: "24px 32px", background: `linear-gradient(transparent, ${COLORS.bg}ee 30%, ${COLORS.bg})` }}>
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        display: "flex", justifyContent: "center", gap: 12, padding: "24px 32px",
+        background: `linear-gradient(transparent, ${COLORS.bg}ee 30%, ${COLORS.bg})`,
+      }}>
         {canPrev && (
-          <button
-            onClick={() => setStage(s => s - 1)}
-            onMouseEnter={e => { e.target.style.borderColor = COLORS.textDim; e.target.style.color = COLORS.text; }}
-            onMouseLeave={e => { e.target.style.borderColor = COLORS.border; e.target.style.color = COLORS.textMuted; }}
-            style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "10px 24px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMuted, letterSpacing: 1, transition: "all 0.2s ease" }}
-          >BACK</button>
+          <button onClick={() => setStage(s => s - 1)} style={{
+            background: COLORS.surface, border: `1px solid ${COLORS.border}`,
+            borderRadius: 6, padding: "10px 24px", cursor: "pointer",
+            fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMuted, letterSpacing: 1,
+            transition: "all 0.2s ease",
+          }}
+          onMouseEnter={e => { e.target.style.borderColor = COLORS.textDim; e.target.style.color = COLORS.text; }}
+          onMouseLeave={e => { e.target.style.borderColor = COLORS.border; e.target.style.color = COLORS.textMuted; }}
+          >
+            BACK
+          </button>
         )}
         {canNext && (
-          <button
-            onClick={() => setStage(s => s + 1)}
-            onMouseEnter={e => { e.target.style.background = COLORS.accentGlow; }}
-            onMouseLeave={e => { e.target.style.background = COLORS.accentDim; }}
-            style={{ background: COLORS.accentDim, border: `1px solid ${COLORS.accent}55`, borderRadius: 6, padding: "10px 32px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 11, color: COLORS.accent, letterSpacing: 1, transition: "all 0.2s ease" }}
-          >{stage === 0 ? "BEGIN" : "CONTINUE"}</button>
+          <button onClick={() => setStage(s => s + 1)} style={{
+            background: COLORS.accentDim, border: `1px solid ${COLORS.accent}55`,
+            borderRadius: 6, padding: "10px 32px", cursor: "pointer",
+            fontFamily: fonts.mono, fontSize: 11, color: COLORS.accent, letterSpacing: 1,
+            transition: "all 0.2s ease",
+          }}
+          onMouseEnter={e => { e.target.style.background = COLORS.accentGlow; }}
+          onMouseLeave={e => { e.target.style.background = COLORS.accentDim; }}
+          >
+            {stage === 0 ? "BEGIN" : "CONTINUE"}
+          </button>
         )}
       </div>
     </div>
