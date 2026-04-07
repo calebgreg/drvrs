@@ -16,8 +16,7 @@ Deno.serve(async (req) => {
   }
 
   const accessKey = crypto.randomUUID().replace(/-/g, '').slice(0, 24);
-  const appUrl = req.headers.get('origin') || 'https://drvrs.io';
-  const roomUrl = `${appUrl}/room/${room.slug}?key=${accessKey}`;
+  const roomUrl = `https://drvrs.io/room/${room.slug}?key=${accessKey}`;
 
   await base44.asServiceRole.entities.EngagementRoom.update(roomId, {
     accessKey,
