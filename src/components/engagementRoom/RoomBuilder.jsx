@@ -143,6 +143,8 @@ export default function RoomBuilder({ room, onSaved }) {
   });
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [generatingOption, setGeneratingOption] = useState(null); // index of option being generated
+  const [optionPrompts, setOptionPrompts] = useState({}); // per-option prompt text
   const [activeTab, setActiveTab] = useState("basics");
 
   const set = (key, value) => setData(d => ({ ...d, [key]: value }));
@@ -213,6 +215,43 @@ Generate exactly 2 proposal options tailored to this company and context. One sh
       }));
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleGenerateOption = async (index) => {
+    setGeneratingOption(index);
+    try {
+      const prompt = optionPrompts[index] || "";
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are writing a single proposal option for a consulting engagement room.
+
+Context:
+- Company: ${data.companyName}
+- Prospect: ${data.prospectName}
+- Goal: ${data.goalTitle}
+- Core constraint: ${data.constraintDescription}
+- Work phases: ${(data.workSection || []).map(w => w.title + " — " + w.description).join("; ")}
+
+${prompt ? `Additional instructions from the user: ${prompt}` : "Generate a well-scoped consulting option tailored to this company."}
+
+Generate ONE proposal option with a compelling name, specific price, timeline, and deliverables list.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            price: { type: "string" },
+            timeline: { type: "string" },
+            deliverables: { type: "array", items: { type: "string" } },
+          }
+        }
+      });
+      setData(d => {
+        const arr = [...(d.proposalOptions || [])];
+        arr[index] = { ...arr[index], ...result };
+        return { ...d, proposalOptions: arr };
+      });
+    } finally {
+      setGeneratingOption(null);
     }
   };
 
@@ -444,6 +483,30 @@ Generate exactly 2 proposal options tailored to this company and context. One sh
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                 <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1 }}>OPTION {i + 1}</span>
                 <button onClick={() => removeArrayItem("proposalOptions", i)} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: fonts.mono, fontSize: 9, color: "rgba(239,68,68,0.6)", letterSpacing: 1 }}>REMOVE</button>
+              </div>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textMuted, letterSpacing: 1.5, textTransform: "uppercase", display: "block", marginBottom: 6 }}>AI Prompt (optional)</label>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    value={optionPrompts[i] || ""}
+                    onChange={e => setOptionPrompts(p => ({ ...p, [i]: e.target.value }))}
+                    placeholder={`e.g. "a retainer option, $3k/mo, 3 month minimum"`}
+                    style={{ flex: 1, background: COLORS.surfaceDeep, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "8px 12px", color: COLORS.text, fontFamily: fonts.body, fontSize: 12, outline: "none" }}
+                  />
+                  <button
+                    onClick={() => handleGenerateOption(i)}
+                    disabled={generatingOption === i}
+                    style={{
+                      background: generatingOption === i ? COLORS.surfaceDeep : COLORS.accentDim,
+                      border: `1px solid ${COLORS.accent}55`, borderRadius: 6,
+                      padding: "8px 14px", cursor: generatingOption === i ? "not-allowed" : "pointer",
+                      fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1,
+                      whiteSpace: "nowrap", opacity: generatingOption === i ? 0.7 : 1,
+                    }}
+                  >
+                    {generatingOption === i ? "..." : "✦ AI"}
+                  </button>
+                </div>
               </div>
               <Field label="Option Name" value={opt.name} onChange={v => setArrayItem("proposalOptions", i, "name", v)} />
               <Field label="Price (e.g. $4,500)" value={opt.price} onChange={v => setArrayItem("proposalOptions", i, "price", v)} mono />
