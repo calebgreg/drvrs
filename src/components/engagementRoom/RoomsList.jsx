@@ -116,7 +116,7 @@ export default function RoomsList({ rooms, loading, onEdit, onRefresh }) {
                   background: "transparent", border: `1px solid ${COLORS.border}`,
                   borderRadius: 6, padding: "7px 14px", cursor: "pointer",
                   fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1,
-                }}>PREVIEW</button>
+                }}>VIEW</button>
 
                 <button onClick={() => onEdit(room)} style={{
                   background: "transparent", border: `1px solid ${COLORS.border}`,
