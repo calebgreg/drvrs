@@ -494,7 +494,7 @@ function PlaybookQuote({ children }) {
 }
 
 
-export default function DrvrsEngagement() {
+export default function DrvrsEngagement({ roomData = {} }) {
   const [stage, setStage] = useState(0);
   const [treePhase, setTreePhase] = useState(0);
   const containerRef = useRef(null);
