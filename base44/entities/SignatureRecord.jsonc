@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "properties": {
+    "roomId": {
+      "type": "string",
+      "description": "ID of the EngagementRoom"
+    },
+    "roomSlug": {
+      "type": "string"
+    },
+    "prospectName": {
+      "type": "string"
+    },
+    "prospectEmail": {
+      "type": "string"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "optionName": {
+      "type": "string",
+      "description": "Name of the proposal option selected"
+    },
+    "optionPrice": {
+      "type": "string"
+    },
+    "signedName": {
+      "type": "string",
+      "description": "The typed name the prospect entered as their signature"
+    },
+    "signedAt": {
+      "type": "string",
+      "description": "ISO timestamp of when they signed"
+    },
+    "agreementContent": {
+      "type": "string",
+      "description": "Snapshot of the agreement HTML at time of signing"
+    },
+    "stripeSessionId": {
+      "type": "string",
+      "description": "Stripe checkout session ID"
+    },
+    "paymentStatus": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "failed"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "roomId",
+    "prospectEmail",
+    "signedName"
+  ],
+  "name": "SignatureRecord"
+}

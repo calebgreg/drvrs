@@ -12,6 +12,9 @@ import OneInitiativeCTA from './pages/OneInitiativeCTA';
 import OneTeamCTA from './pages/OneTeamCTA';
 import AdminRooms from './pages/AdminRooms';
 import RoomAccess from './pages/RoomAccess';
+import ESignPage from './pages/ESignPage';
+import SignSuccess from './pages/SignSuccess';
+import AgreementEditor from './pages/AgreementEditor';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -68,6 +71,9 @@ const AuthenticatedApp = () => {
       <Route path="/OneTeamCTA" element={<OneTeamCTA />} />
       <Route path="/admin/rooms" element={<AdminRooms />} />
       <Route path="/room/:slug" element={<RoomAccess />} />
+      <Route path="/room/:slug/sign" element={<ESignPage />} />
+      <Route path="/room/:slug/success" element={<SignSuccess />} />
+      <Route path="/admin/agreement" element={<AgreementEditor />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

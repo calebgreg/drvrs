@@ -759,8 +759,9 @@ export default function DrvrsEngagement({ room }) {
                         ))}
                       </ul>
                     )}
-                    {opt.agreementUrl ? (
-                      <a href={opt.agreementUrl} target="_blank" rel="noopener noreferrer" style={{
+                    <a
+                      href={`/room/${room?.slug}/sign?option=${i}`}
+                      style={{
                         display: "inline-block",
                         background: opt.highlighted ? COLORS.accentDim : "transparent",
                         border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
@@ -768,12 +769,10 @@ export default function DrvrsEngagement({ room }) {
                         fontFamily: fonts.mono, fontSize: 11,
                         color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
                         letterSpacing: 1, textDecoration: "none", transition: "all 0.2s ease",
-                      }}>
-                        ACCEPT &amp; SIGN →
-                      </a>
-                    ) : (
-                      <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 1 }}>AGREEMENT LINK COMING</div>
-                    )}
+                      }}
+                    >
+                      REVIEW &amp; SIGN →
+                    </a>
                   </div>
                 </Fade>
               ))}

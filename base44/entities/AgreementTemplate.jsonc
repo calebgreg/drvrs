@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "string",
+      "description": "Rich text HTML content of the global agreement template"
+    },
+    "version": {
+      "type": "number",
+      "description": "Version number, incremented on each save"
+    }
+  },
+  "name": "AgreementTemplate",
+  "required": []
+}
