@@ -781,8 +781,13 @@ export default function DrvrsEngagement({ room }) {
                            {displayPrice}
                          </div>
                          {oneDaySelected && !isOneDay && (
-                           <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.accent, marginTop: 4, fontWeight: 500 }}>
-                             was {originalPrice}
+                           <div>
+                             <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.accent, marginTop: 4, fontWeight: 500 }}>
+                               was {originalPrice}
+                             </div>
+                             <div style={{ fontFamily: fonts.body, fontSize: 11, color: COLORS.accent, marginTop: 2, opacity: 0.8 }}>
+                               (One Day credit applied)
+                             </div>
                            </div>
                          )}
                        </div>
