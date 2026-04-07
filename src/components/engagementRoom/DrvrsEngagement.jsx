@@ -764,7 +764,7 @@ export default function DrvrsEngagement({ room }) {
               </div>
             </Fade>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
-             {(room?.proposalOptions || [
+             {[
                {
                  name: "One Day",
                  price: "$2,500",
@@ -806,7 +806,7 @@ export default function DrvrsEngagement({ room }) {
                  ],
                  highlighted: false
                }
-             ]).map((opt, i) => (
+             ].map((opt, i) => (
                 <Fade key={i} show delay={400 + i * 200}>
                   <div style={{
                     background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
