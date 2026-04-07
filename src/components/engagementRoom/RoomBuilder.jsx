@@ -52,6 +52,8 @@ const DEFAULT_ROOM = {
   engagementOneDayDescription: "Name the outcome. Build the positioning, the ICP, and the outbound sequence around it. Flat fee. Everything needed to start validating delivery.",
   engagementOneInitiativeTitle: "ONE INITIATIVE",
   engagementOneInitiativeDescription: "Full 60-day engagement. Define the promise, validate delivery with early customers, build the evidence that PMF is real. Milestone-based.",
+  engagementOneTeamTitle: "ONE TEAM",
+  engagementOneTeamDescription: "Embedded in your team. 6-month engagement. Own the GTM strategy end to end, build and run outbound, own events, and hire the first sales leader when ready.",
   engagementFooter: "See the proposal — pick the one that fits and sign.",
   proposalOptions: [
     {
@@ -460,6 +462,9 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
           <SectionHeader label="One Initiative Option" />
           <Field label="Title" value={data.engagementOneInitiativeTitle} onChange={v => set("engagementOneInitiativeTitle", v)} />
           <Field label="Description" value={data.engagementOneInitiativeDescription} onChange={v => set("engagementOneInitiativeDescription", v)} multiline />
+          <SectionHeader label="One Team Option" />
+          <Field label="Title" value={data.engagementOneTeamTitle} onChange={v => set("engagementOneTeamTitle", v)} />
+          <Field label="Description" value={data.engagementOneTeamDescription} onChange={v => set("engagementOneTeamDescription", v)} multiline />
           <SectionHeader label="Footer" />
           <Field label="Footer Message" value={data.engagementFooter} onChange={v => set("engagementFooter", v)} />
         </div>
