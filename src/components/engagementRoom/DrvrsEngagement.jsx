@@ -13,8 +13,6 @@ const COLORS = {
   accentGlow: "rgba(45,138,110,0.3)",
   warning: "#F59E0B",
   warningDim: "rgba(245, 158, 11, 0.15)",
-  warning: "#F59E0B",
-  warningDim: "rgba(245, 158, 11, 0.15)",
   warningGlow: "rgba(245, 158, 11, 0.3)",
   constraint: "#EF4444",
   constraintDim: "rgba(239, 68, 68, 0.12)",
@@ -39,6 +37,7 @@ const stages = [
   { id: "proposal", label: "Proposal" },
 ];
 
+// ─── Fade wrapper ───
 function Fade({ show, delay = 0, children, style = {} }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -49,20 +48,31 @@ function Fade({ show, delay = 0, children, style = {} }) {
     setVisible(false);
   }, [show, delay]);
   return (
-    <div style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(12px)", transition: "opacity 0.6s ease, transform 0.6s ease", ...style }}>
+    <div style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? "translateY(0)" : "translateY(12px)",
+      transition: "opacity 0.6s ease, transform 0.6s ease",
+      ...style,
+    }}>
       {children}
     </div>
   );
 }
 
+// ─── Tree Node ───
 function TreeNode({ label, sublabel, x, y, active, isConstraint, delay = 0, show }) {
   const [vis, setVis] = useState(false);
   useEffect(() => {
-    if (show) { const t = setTimeout(() => setVis(true), delay); return () => clearTimeout(t); }
+    if (show) {
+      const t = setTimeout(() => setVis(true), delay);
+      return () => clearTimeout(t);
+    }
   }, [show, delay]);
+
   const glowColor = isConstraint ? COLORS.constraintGlow : COLORS.accentGlow;
   const borderColor = isConstraint ? COLORS.constraint : active ? COLORS.accent : COLORS.border;
   const bgColor = isConstraint ? COLORS.constraintDim : active ? COLORS.accentDim : COLORS.surface;
+
   return (
     <g style={{ opacity: vis ? 1 : 0, transition: "opacity 0.5s ease" }}>
       {(active || isConstraint) && vis && (
@@ -74,52 +84,89 @@ function TreeNode({ label, sublabel, x, y, active, isConstraint, delay = 0, show
       <circle cx={x} cy={y} r="44" fill={bgColor} stroke={borderColor} strokeWidth="1.5" />
       <text x={x} y={sublabel ? y - 4 : y + 1} textAnchor="middle" dominantBaseline="middle"
         fill={isConstraint ? COLORS.constraint : active ? COLORS.accent : COLORS.text}
-        fontSize="11" fontFamily={fonts.mono} fontWeight="600" letterSpacing="0.5">{label}</text>
+        fontSize="11" fontFamily={fonts.mono} fontWeight="600" letterSpacing="0.5">
+        {label}
+      </text>
       {sublabel && (
         <text x={x} y={y + 12} textAnchor="middle" dominantBaseline="middle"
-          fill={COLORS.textDim} fontSize="8" fontFamily={fonts.mono}>{sublabel}</text>
+          fill={COLORS.textDim} fontSize="8" fontFamily={fonts.mono}>
+          {sublabel}
+        </text>
       )}
     </g>
   );
 }
 
+// ─── Tree Edge ───
 function TreeEdge({ x1, y1, x2, y2, show, delay = 0, isConstraintPath }) {
   const [vis, setVis] = useState(false);
   useEffect(() => {
-    if (show) { const t = setTimeout(() => setVis(true), delay); return () => clearTimeout(t); }
+    if (show) {
+      const t = setTimeout(() => setVis(true), delay);
+      return () => clearTimeout(t);
+    }
   }, [show, delay]);
+
   const midY = (y1 + y2) / 2;
   const path = `M${x1},${y1 + 44} C${x1},${midY} ${x2},${midY} ${x2},${y2 - 44}`;
+
   return (
     <path d={path} fill="none"
       stroke={isConstraintPath ? COLORS.constraint : COLORS.textDim}
       strokeWidth={isConstraintPath ? "1.5" : "1"}
       strokeDasharray={vis ? "none" : "4 4"}
       opacity={vis ? (isConstraintPath ? 0.8 : 0.4) : 0}
-      style={{ transition: "opacity 0.5s ease" }} />
+      style={{ transition: "opacity 0.5s ease" }}
+    />
   );
 }
 
+// ─── Phase Card ───
 function PhaseCard({ number, title, description, status, delay, show }) {
   return (
     <Fade show={show} delay={delay}>
-      <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "20px 24px", marginBottom: 12 }}>
+      <div style={{
+        background: COLORS.surface,
+        border: `1px solid ${COLORS.border}`,
+        borderRadius: 8,
+        padding: "20px 24px",
+        marginBottom: 12,
+      }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-          <span style={{ fontFamily: fonts.mono, fontSize: 11, color: COLORS.accent, background: COLORS.accentDim, padding: "3px 8px", borderRadius: 4, letterSpacing: 1 }}>PHASE {number}</span>
-          <span style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim, marginLeft: "auto", textTransform: "uppercase", letterSpacing: 1 }}>{status}</span>
+          <span style={{
+            fontFamily: fonts.mono, fontSize: 11, color: COLORS.accent,
+            background: COLORS.accentDim, padding: "3px 8px", borderRadius: 4, letterSpacing: 1,
+          }}>PHASE {number}</span>
+          <span style={{
+            fontFamily: fonts.mono, fontSize: 10, color: COLORS.textDim,
+            marginLeft: "auto", textTransform: "uppercase", letterSpacing: 1,
+          }}>{status}</span>
         </div>
-        <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>{title}</div>
-        <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.6 }}>{description}</div>
+        <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+          {title}
+        </div>
+        <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.6 }}>
+          {description}
+        </div>
       </div>
     </Fade>
   );
 }
 
+// ─── Shift Card ───
 function ShiftCard({ title, before, after, delay, show }) {
   return (
     <Fade show={show} delay={delay}>
-      <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "20px 24px", marginBottom: 12 }}>
-        <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.text, fontWeight: 600, marginBottom: 12 }}>{title}</div>
+      <div style={{
+        background: COLORS.surface,
+        border: `1px solid ${COLORS.border}`,
+        borderRadius: 8,
+        padding: "20px 24px",
+        marginBottom: 12,
+      }}>
+        <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.text, fontWeight: 600, marginBottom: 12 }}>
+          {title}
+        </div>
         <div style={{ display: "flex", gap: 16 }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.constraint, letterSpacing: 1.5, marginBottom: 6, textTransform: "uppercase" }}>Current</div>
@@ -136,6 +183,25 @@ function ShiftCard({ title, before, after, delay, show }) {
   );
 }
 
+// ─── Playbook helper components ───
+function PlaybookText({ children }) {
+  return <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>{children}</div>;
+}
+function PlaybookLabel({ children }) {
+  return <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>{children}</div>;
+}
+function PlaybookQuote({ children }) {
+  return (
+    <div style={{
+      fontFamily: fonts.display, fontStyle: "italic", fontSize: 15,
+      color: COLORS.text, lineHeight: 1.6,
+      borderLeft: `2px solid ${COLORS.accent}44`, paddingLeft: 16,
+      marginTop: 14, marginBottom: 6,
+    }}>{children}</div>
+  );
+}
+
+// ─── Playbook Section ───
 function PlaybookSection({ items }) {
   const [open, setOpen] = useState(null);
   return (
@@ -144,19 +210,50 @@ function PlaybookSection({ items }) {
         const isOpen = open === i;
         return (
           <Fade key={i} show delay={150 + i * 100}>
-            <div style={{ background: COLORS.surface, border: `1px solid ${isOpen ? COLORS.accent + "44" : COLORS.border}`, borderRadius: 8, overflow: "hidden", transition: "border-color 0.3s ease" }}>
-              <button onClick={() => setOpen(isOpen ? null : i)} style={{ width: "100%", background: "none", border: "none", cursor: "pointer", padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{
+              background: COLORS.surface,
+              border: `1px solid ${isOpen ? COLORS.accent + "44" : COLORS.border}`,
+              borderRadius: 8,
+              overflow: "hidden",
+              transition: "border-color 0.3s ease",
+            }}>
+              <button onClick={() => setOpen(isOpen ? null : i)} style={{
+                width: "100%", background: "none", border: "none", cursor: "pointer",
+                padding: "18px 24px",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+              }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, background: COLORS.accentDim, padding: "3px 8px", borderRadius: 4, letterSpacing: 1.5, textTransform: "uppercase" }}>{item.tag}</span>
-                  <span style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.text, fontWeight: 500 }}>{item.title}</span>
+                  <span style={{
+                    fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent,
+                    background: COLORS.accentDim, padding: "3px 8px", borderRadius: 4,
+                    letterSpacing: 1.5, textTransform: "uppercase",
+                  }}>{item.tag}</span>
+                  <span style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.text, fontWeight: 500 }}>
+                    {item.title}
+                  </span>
                 </div>
-                <span style={{ fontFamily: fonts.body, fontSize: 18, color: COLORS.accent, transform: isOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}>+</span>
+                <span style={{
+                  fontFamily: fonts.body, fontSize: 18, color: COLORS.accent,
+                  transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                  transition: "transform 0.3s ease",
+                }}>+</span>
               </button>
-              <div style={{ maxHeight: isOpen ? 800 : 0, opacity: isOpen ? 1 : 0, overflow: "hidden", transition: "max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease" }}>
-                <div style={{ padding: "0 24px 24px 24px", borderTop: `1px solid ${COLORS.border}` }}>
-                  <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>
-                    {item.content}
-                  </div>
+              <div style={{
+                maxHeight: isOpen ? 2000 : 0,
+                opacity: isOpen ? 1 : 0,
+                overflow: "hidden",
+                transition: "max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease",
+              }}>
+                <div style={{
+                  padding: "0 24px 24px 24px",
+                  borderTop: `1px solid ${COLORS.border}`,
+                }}>
+                  {item.visual && (
+                    <div style={{ margin: "20px 0 8px", display: "flex", justifyContent: "center" }}>
+                      {item.visual}
+                    </div>
+                  )}
+                  {item.content}
                 </div>
               </div>
             </div>
@@ -167,9 +264,181 @@ function PlaybookSection({ items }) {
   );
 }
 
+// ─── Playbook Visuals ───
+function MissedCallsVisual() {
+  const hours = ["5pm", "6pm", "7pm", "8pm", "9pm", "Sat", "Sun"];
+  const calls = [
+    { h: 0, val: "$340" },
+    { h: 1, val: "$220" },
+    { h: 1, val: "$180" },
+    { h: 2, val: "$510" },
+    { h: 3, val: "$290" },
+    { h: 4, val: "$175" },
+    { h: 5, val: "$420" },
+    { h: 5, val: "$315" },
+    { h: 6, val: "$260" },
+  ];
+  const positions = [
+    { left: 1, top: 4 }, { left: 15, top: 20 }, { left: 13, top: 36 },
+    { left: 29, top: 8 }, { left: 43, top: 28 }, { left: 57, top: 12 },
+    { left: 71, top: 4 }, { left: 73, top: 28 }, { left: 86, top: 16 },
+  ];
+  return (
+    <div style={{ width: "100%", maxWidth: 440 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
+        {hours.map(h => (
+          <div key={h} style={{
+            fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim,
+            letterSpacing: "0.05em", textAlign: "center", flex: 1,
+          }}>{h}</div>
+        ))}
+      </div>
+      <div style={{ position: "relative", height: 48, borderBottom: `1px solid ${COLORS.border}` }}>
+        {calls.map((c, i) => (
+          <div key={i} style={{
+            position: "absolute", left: `${positions[i].left}%`, top: positions[i].top,
+            display: "flex", alignItems: "center", gap: 4,
+          }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: COLORS.constraint, opacity: 0.6 }} />
+            <span style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.constraint, opacity: 0.5 }}>{c.val}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 8, textAlign: "center", letterSpacing: "0.1em" }}>
+        MISSED INBOUND · ONE WEEK · ONE AGENCY
+      </div>
+    </div>
+  );
+}
+
+function NetworkVisual() {
+  const cx = 200, cy = 70;
+  const members = Array.from({ length: 12 }, (_, i) => {
+    const angle = (i / 12) * Math.PI * 2 - Math.PI / 2;
+    return { x: cx + Math.cos(angle) * 55, y: cy + Math.sin(angle) * 45 };
+  });
+  return (
+    <svg width="400" height="150" viewBox="0 0 400 150" style={{ width: "100%", maxWidth: 400 }}>
+      {members.map((m, i) => (
+        <line key={i} x1={cx} y1={cy} x2={m.x} y2={m.y} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.3" />
+      ))}
+      {members.map((m, i) => (
+        <circle key={`n${i}`} cx={m.x} cy={m.y} r="4" fill="#0a1a14" stroke="#2d8a6e" strokeWidth="1" opacity="0.6" />
+      ))}
+      <circle cx={cx} cy={cy} r="10" fill="rgba(45,138,110,0.15)" stroke="#2d8a6e" strokeWidth="1.5" />
+      <text x={cx} y={cy + 3} textAnchor="middle" fontSize="6" fontFamily={fonts.mono} fill="#2d8a6e" letterSpacing="0.05em">CG</text>
+      <line x1="320" y1="45" x2={cx + 10} y2={cy} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.2" strokeDasharray="3 3" />
+      <circle cx="340" cy="40" r="8" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
+      <text x="340" y="43" textAnchor="middle" fontSize="5" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6">MGA</text>
+      <line x1="60" y1="45" x2={cx - 10} y2={cy} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.2" strokeDasharray="3 3" />
+      <circle cx="40" cy="40" r="8" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
+      <text x="40" y="43" textAnchor="middle" fontSize="5" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6">BIG I</text>
+      <text x={cx} y="138" textAnchor="middle" fontSize="7" fontFamily={fonts.mono} fill={COLORS.textDim} letterSpacing="0.15em">TRUST FLOWS THROUGH NODES</text>
+    </svg>
+  );
+}
+
+function ConversationVisual() {
+  return (
+    <div style={{ display: "flex", gap: 24, alignItems: "flex-end", width: "100%", maxWidth: 360 }}>
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <div style={{
+          height: 48, background: "rgba(45,138,110,0.06)",
+          borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center",
+          border: `1px solid ${COLORS.border}`,
+        }}>
+          <span style={{ fontFamily: fonts.mono, fontSize: 20, color: COLORS.textDim }}>500</span>
+        </div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 8, letterSpacing: "0.1em" }}>AUTOMATED EMAILS</div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.textDim, marginTop: 2, opacity: 0.5 }}>CURIOUS CLICKS</div>
+      </div>
+      <div style={{ fontFamily: fonts.display, fontSize: 14, color: COLORS.textDim, paddingBottom: 28 }}>vs</div>
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <div style={{
+          height: 48, background: COLORS.accentDim,
+          borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center",
+          border: `1px solid ${COLORS.accent}33`,
+        }}>
+          <span style={{ fontFamily: fonts.mono, fontSize: 20, color: COLORS.accent }}>10</span>
+        </div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.accent, marginTop: 8, letterSpacing: "0.1em" }}>REAL CONVERSATIONS</div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 8, color: COLORS.accent, marginTop: 2, opacity: 0.6 }}>VISIBLE REACTIONS</div>
+      </div>
+    </div>
+  );
+}
+
+function CircuitVisual() {
+  return (
+    <svg width="420" height="180" viewBox="0 0 420 180" style={{ width: "100%", maxWidth: 420 }}>
+      <defs>
+        <clipPath id="circClip"><rect x="0" y="0" width="420" height="160" /></clipPath>
+      </defs>
+      <g clipPath="url(#circClip)">
+        <circle cx="130" cy="80" r="72" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.5" />
+        <circle cx="195" cy="72" r="65" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.45" />
+        <circle cx="255" cy="78" r="60" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
+        <circle cx="310" cy="85" r="55" fill="rgba(45,138,110,0.07)" stroke="#2d8a6e" strokeWidth="1" opacity="0.35" />
+        <circle cx="210" cy="78" r="30" fill="rgba(45,138,110,0.12)" stroke="none" />
+        {[
+          [145,55],[155,95],[120,72],[138,110],[168,60],[175,88],[185,42],
+          [200,68],[210,90],[195,105],[218,55],[230,78],[240,95],[225,110],
+          [255,62],[268,85],[275,105],[290,70],[305,90],[315,110],[298,55],
+          [160,75],[190,72],[220,82],[250,75],[280,80],[205,78],[215,70],
+          [170,48],[235,50],[260,100],[140,88],[300,100],[180,110],[245,42],
+        ].map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="2" fill="#2d8a6e" opacity={0.25 + (x > 175 && x < 250 ? 0.25 : 0)} />
+        ))}
+        <text x="80" y="80" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.7" letterSpacing="0.06em">BIG I</text>
+        <text x="80" y="90" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.7" letterSpacing="0.06em">STATE</text>
+        <text x="195" y="22" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6" letterSpacing="0.06em">APPLIED</text>
+        <text x="195" y="32" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.6" letterSpacing="0.06em">NET</text>
+        <text x="290" y="22" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.5" letterSpacing="0.06em">NETVU</text>
+        <text x="350" y="78" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.45" letterSpacing="0.06em">CLUSTER</text>
+        <text x="350" y="88" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.45" letterSpacing="0.06em">MTG</text>
+      </g>
+      <text x="210" y="172" textAnchor="middle" fontSize="8" fontFamily={fonts.mono} fill={COLORS.textDim} letterSpacing="0.18em">THE OVERLAP IS THE OPPORTUNITY</text>
+    </svg>
+  );
+}
+
+function FanAmplifyVisual() {
+  return (
+    <svg width="360" height="80" viewBox="0 0 360 80" style={{ width: "100%", maxWidth: 360 }}>
+      <circle cx="30" cy="40" r="10" fill="rgba(45,138,110,0.15)" stroke="#2d8a6e" strokeWidth="1.5" />
+      <text x="30" y="43" textAnchor="middle" fontSize="7" fontFamily={fonts.mono} fill="#2d8a6e">1</text>
+      <line x1="45" y1="40" x2="85" y2="40" stroke="#2d8a6e" strokeWidth="1" opacity="0.4" />
+      <text x="65" y="32" textAnchor="middle" fontSize="6" fontFamily={fonts.mono} fill={COLORS.textDim}>tells</text>
+      {[0, 1, 2].map(i => {
+        const y = 20 + i * 20;
+        return (
+          <g key={i}>
+            <circle cx="105" cy={y} r="7" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="1" opacity="0.6" />
+            <line x1="115" y1={y} x2="145" y2={y} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.3" />
+            {[0, 1, 2].map(j => {
+              const y2 = y - 8 + j * 8;
+              return (
+                <g key={j}>
+                  <line x1="145" y1={y} x2="165" y2={y2} stroke="#2d8a6e" strokeWidth="0.5" opacity="0.2" />
+                  <circle cx="170" cy={y2} r="4" fill="rgba(45,138,110,0.04)" stroke="#2d8a6e" strokeWidth="0.5" opacity="0.4" />
+                </g>
+              );
+            })}
+          </g>
+        );
+      })}
+      <line x1="195" y1="40" x2="230" y2="40" stroke="#2d8a6e" strokeWidth="1" opacity="0.3" strokeDasharray="3 3" />
+      <text x="213" y="32" textAnchor="middle" fontSize="6" fontFamily={fonts.mono} fill={COLORS.textDim}>then</text>
+      <rect x="240" y="25" width="100" height="30" rx="4" fill="rgba(45,138,110,0.08)" stroke="#2d8a6e" strokeWidth="0.5" opacity="0.5" />
+      <text x="290" y="43" textAnchor="middle" fontSize="7" fontFamily={fonts.mono} fill="#2d8a6e" opacity="0.7" letterSpacing="0.08em">ADS COMPOUND</text>
+    </svg>
+  );
+}
+
 export default function DrvrsEngagement({ room }) {
   const [stage, setStage] = useState(0);
   const [treePhase, setTreePhase] = useState(0);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if (stages[stage].id === "decomp") {
@@ -188,7 +457,7 @@ export default function DrvrsEngagement({ room }) {
   const currentId = stages[stage].id;
 
   return (
-    <div style={{ minHeight: "100vh", background: COLORS.bg, color: COLORS.text, fontFamily: fonts.body, position: "relative", overflow: "hidden" }}>
+    <div ref={containerRef} style={{ minHeight: "100vh", background: COLORS.bg, color: COLORS.text, fontFamily: fonts.body, position: "relative", overflow: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
 
       {/* Grain */}
@@ -197,7 +466,7 @@ export default function DrvrsEngagement({ room }) {
       {/* Top nav */}
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "2rem 3rem", mixBlendMode: "difference" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-          <div style={{ width: 26, height: 12, background: COLORS.text, borderRadius: 6 }} />
+          <div style={{ width: 26, height: 12, background: COLORS.text, borderRadius: 6, flexShrink: 0 }} />
           <span style={{ fontFamily: fonts.body, fontSize: "1.1rem", fontWeight: 400, color: COLORS.text, letterSpacing: "0.1em" }}>drvrs</span>
           <span style={{ fontFamily: fonts.body, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: COLORS.text, opacity: 0.35, marginLeft: 8 }}>diagnostic engagement</span>
         </div>
@@ -338,169 +607,65 @@ export default function DrvrsEngagement({ room }) {
             <Fade show delay={200}><div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>This is yours whether we work together or not. Five plays, ready to run.</div></Fade>
             <PlaybookSection items={[
               {
-                tag: "POSITIONING",
-                title: "The Recoverable Revenue Frame",
+                tag: "PROMISE",
+                title: "The Outcome Already Exists",
+                visual: <MissedCallsVisual />,
                 content: (
-                  <div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>The positioning that works in insurance is not about features or price. It is about the moment an agency principal checks voicemail at 7am and sees six missed calls from last night. Name that moment and the conversation changes.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>The one-sentence position</div>
-                    <div style={{ fontFamily: fonts.display, fontStyle: "italic", fontSize: 15, color: COLORS.text, lineHeight: 1.6, borderLeft: `2px solid ${COLORS.accent}44`, paddingLeft: 16, marginTop: 14, marginBottom: 6 }}>"Insurvoice captures the 30 to 40 percent of inbound revenue that independent agencies lose to after-hours calls, slow follow-up, and lapsed renewals."</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Notice the word "captures." It implies the revenue already exists. The agency is just not collecting it. That framing lands differently than "we are cheaper than your current solution."</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Where to use it</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Homepage headline. First line of every cold email. First 15 seconds of every cold call. Opening slide of every demo. If someone asks "what do you do," this is your answer. Verbatim. Every time.</div>
-                  </div>
+                  <>
+                    <PlaybookText>An independent agency with 4 producers and no dedicated ops staff misses inbound calls after 5pm, on weekends, and during lunch. Those calls are quote requests, renewal questions, and first notice of loss. Each one has a dollar value. The agency principal knows this. It keeps them up at night. They just have not heard anyone name it back to them as a solvable problem.</PlaybookText>
+                    <PlaybookText>The product that names the outcome the buyer already feels is the product that gets bought at a premium. The product that describes its own features gets compared on price.</PlaybookText>
+                  </>
                 ),
               },
               {
-                tag: "ICP",
-                title: "The Agency That Buys First",
+                tag: "DISTRIBUTION",
+                title: "How Insurance Actually Buys",
+                visual: <NetworkVisual />,
                 content: (
-                  <div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Not every agency is the right first customer. The one that buys first has a specific shape. Knowing that shape makes every call, email, and demo more efficient.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>The profile</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Independent (not captive, not cluster-owned). Personal lines heavy or balanced book. 2 to 8 producers. No dedicated ops or admin staff handling phones. High inbound call volume relative to size. Principal is still answering phones or knows they are missing calls. Located in a state with competitive personal lines markets.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>How to find them</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>State Big I association directories. Cluster group rosters (ask the group leaders directly). Google Maps search for "insurance agency" in mid-size metros, then check reviews for complaints about responsiveness. LinkedIn Sales Navigator filtered by title "agency owner" or "principal" at companies with 2 to 10 employees.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Disqualifiers</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Already has a dedicated CSR team working phones. Captive agent (State Farm, Allstate). Large agency with an ops manager. Agency that leads with commercial lines. If they have someone answering every call, the pain is not there yet.</div>
-                  </div>
+                  <>
+                    <PlaybookText>Agency principals do not buy from ads. They buy from peers. The buying pattern in independent insurance is: someone in the cluster group mentions it, or someone at the Big I state conference mentions it, or their carrier rep mentions it. Three touches from three different trusted sources and the principal calls.</PlaybookText>
+                    <PlaybookText>This means the fastest path to the first 10 customers is not a funnel. It is getting inside the rooms where principals already talk to each other. Cluster group meetings. State association events. Carrier advisory councils. A warm introduction from a cluster group leader to their 15 member agencies is worth more than 1,000 impressions.</PlaybookText>
+                    <PlaybookText>The people who control these rooms are findable. There are roughly 40 to 50 meaningful cluster groups in the US, a Big I association in every state, and a handful of MGA and carrier relationships in every region who want their appointed agencies performing better. These are the nodes.</PlaybookText>
+                  </>
                 ),
               },
               {
                 tag: "OUTBOUND",
-                title: "Cold Outreach That Finds the 10",
+                title: "Conversations, Not Campaigns",
+                visual: <ConversationVisual />,
                 content: (
-                  <div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>You are not trying to close 10 agencies. You are trying to find 10 agencies that light up when they hear what you do. Different intent. You are screening for a reaction.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Cold call framework</div>
-                    <div style={{ fontFamily: fonts.display, fontStyle: "italic", fontSize: 15, color: COLORS.text, lineHeight: 1.6, borderLeft: `2px solid ${COLORS.accent}44`, paddingLeft: 16, marginTop: 14, marginBottom: 6 }}>"Hey [name], quick question. When someone calls your agency at 6pm on a Tuesday looking for a quote, what happens to that call right now?"</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Then shut up. If they sigh, laugh, or say "voicemail," you have a live one. If they say "our CSR handles it," they are not your buyer right now. The question does the qualifying for you.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Loom video play</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Pull up the agency's website. Screen record a 90-second walkthrough. "I'm looking at your site. You have a quote request form here, which is great. But what happens at 7pm when someone calls this number instead of filling out this form? Here's what Insurvoice would do." Show the product on their actual site. Make it about them, not you. Send via LinkedIn DM or direct email to the principal. This takes 3 minutes per agency. Do 10 a day.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>LinkedIn DM</div>
-                    <div style={{ fontFamily: fonts.display, fontStyle: "italic", fontSize: 15, color: COLORS.text, lineHeight: 1.6, borderLeft: `2px solid ${COLORS.accent}44`, paddingLeft: 16, marginTop: 14, marginBottom: 6 }}>"Hey [name], saw your agency does a lot of personal lines in [market]. Quick question: what happens to your after-hours calls right now? We help independent agencies capture that revenue. Happy to show you a 2-minute demo if it's relevant."</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Volume</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>20 cold calls per day. 10 Loom videos per day. 15 LinkedIn DMs per day. At that pace, you will find 10 agencies that love you within 30 to 45 days. Probably sooner.</div>
-                  </div>
+                  <>
+                    <PlaybookText>Paid advertising is a scale tool. It amplifies a signal that already exists. Before the signal exists, every dollar spent on ads is a guess. The signal comes from direct conversations where the reaction is visible.</PlaybookText>
+                    <PlaybookText>An agency principal who sighs when asked about their after-hours calls is a different lead than an agency principal who clicks an ad. The sigh means they feel the problem. The click means they were curious. At this stage, the sigh is worth more. It can only be found in a real conversation.</PlaybookText>
+                    <PlaybookText>The math on early outbound is counterintuitive. 10 deeply researched, personalized conversations per day will find the first believers faster than 500 automated emails. The believers are not hiding. They are just not being asked the right question by someone who understands their day.</PlaybookText>
+                  </>
                 ),
               },
               {
                 tag: "EVENTS",
-                title: "Conference Strategy",
+                title: "The Conference Circuit Is Small",
+                visual: <CircuitVisual />,
                 content: (
-                  <div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Conferences are not lead gen. Conferences are proof of existence. The booth says "we are real." The conversations around the event are where pipeline happens.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Which events</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Big I state association annual conferences. Your state first, then adjacent states. NetVu (if Vertafore users are part of your ICP). Applied Net (if Applied users are). Cluster group annual meetings. These are small enough to have real conversations and targeted enough that every person in the room is your buyer.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>How to work them</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Get the attendee list early. Pre-schedule 10 to 15 one-on-one conversations before you arrive. Host a dinner or a happy hour for 8 to 12 agency principals the night before. At the booth, run a live demo loop showing a real after-hours call being handled. Ask every person who stops: "What happens to your after-hours calls right now?" Collect reactions, not business cards.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>The creative play</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Set up a live phone number at the booth. Hand the number to people and say "Call this after 6pm tonight." Let them experience the product firsthand. Follow up the next morning with a Loom video referencing their specific call.</div>
-                  </div>
+                  <>
+                    <PlaybookText>Insurance is a small industry that thinks it is big. There are a finite number of events where independent agency principals gather. State Big I conferences. Applied Net. NetVu. Regional cluster group meetings. The same 200 to 300 agency principals show up repeatedly.</PlaybookText>
+                    <PlaybookText>This is an advantage. A consistent presence at 4 to 5 events per year creates recognition that paid channels cannot replicate. The principal who sees the same company at three different events in six months starts to think "they are everywhere" even though the audience is the same 400 people.</PlaybookText>
+                    <PlaybookText>The booth is not the play. The booth is proof of existence. The play is the attendee list, the pre-scheduled conversations, and the dinner the night before with 8 principals who match the profile. The event is a magnet that gathers the right people in one place. Everything around the event is where the work happens.</PlaybookText>
+                  </>
                 ),
               },
               {
                 tag: "SCALE",
-                title: "How the 10 Find the 40",
+                title: "Fans Write the Playbook",
+                visual: <FanAmplifyVisual />,
                 content: (
-                  <div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Once you have 10 agencies that love the product, you stop selling. You start listening.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Interview the 10</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Ask each fanatic three questions. "What were you doing before Insurvoice and why was it painful?" "What would you tell another agency principal about this?" "Who else in your cluster group or association should be using this?" Record every answer. Their words are your marketing copy. Their referrals are your pipeline. Their cluster group memberships are your distribution channel.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Referral mechanics</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Ask each fanatic to introduce you to 3 agencies. Not a mass email. A personal text or call. "Hey, I've been using this thing called Insurvoice for my after-hours calls. You should talk to them." That introduction closes at 5x the rate of cold outreach. 10 fanatics times 3 referrals is 30 warm conversations. You only need 40 percent of those to convert.</div>
-                    <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1.5, textTransform: "uppercase", marginTop: 20, marginBottom: 6 }}>Now ads work</div>
-                    <div style={{ fontFamily: fonts.body, fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.7, marginTop: 16 }}>Take the words from your fanatic interviews. Use them as YouTube ad scripts. Use them as Facebook ad copy. Use them as landing page headlines. You are not writing marketing anymore. You are amplifying the voice of people who already believe. This is when you turn the ad spend back on. Not before.</div>
-                  </div>
+                  <>
+                    <PlaybookText>The agency principal who experienced the outcome and kept paying is the most credible voice in the market. More credible than the website. More credible than the sales deck. More credible than the founder on a podcast. When that principal tells a peer "this thing caught a call last Tuesday that would have been a lost policy," that is the most effective marketing that exists.</PlaybookText>
+                    <PlaybookText>The words fans use to describe the product to their peers are the positioning, the ad copy, and the website headline. They just need to be captured. Three questions in a 15-minute interview surface them: what was happening before, what changed, and who else should know about this.</PlaybookText>
+                    <PlaybookText>Paid advertising becomes a different instrument after this. Instead of guessing at messaging and audience, the language is proven and the targeting is specific. This is when ad spend starts compounding instead of burning.</PlaybookText>
+                  </>
                 ),
               },
             ]} />
-          </div>
-        )}
-
-        {/* PROPOSAL */}
-        {currentId === "proposal" && (
-          <div>
-            <Fade show delay={100}>
-              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 8 }}>08 — THE PROPOSAL</div>
-            </Fade>
-            <Fade show delay={200}>
-              <div style={{ fontFamily: fonts.display, fontSize: 36, fontWeight: 300, color: COLORS.text, marginBottom: 8, lineHeight: 1.2 }}>
-                What working together looks like.
-              </div>
-            </Fade>
-            <Fade show delay={350}>
-              <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
-                Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.
-              </div>
-            </Fade>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
-              {(room?.proposalOptions || []).map((opt, i) => (
-                <Fade key={i} show delay={400 + i * 200}>
-                  <div style={{
-                    background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
-                    border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
-                    borderRadius: 10, padding: "28px 32px",
-                    position: "relative",
-                  }}>
-                    {opt.highlighted && (
-                      <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
-                        RECOMMENDED
-                      </div>
-                    )}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
-                      <div>
-                        <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
-                        <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
-                      </div>
-                      <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>{opt.price}</div>
-                    </div>
-
-                    {(opt.deliverables || []).length > 0 && (
-                      <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
-                        {opt.deliverables.filter(d => d.trim()).map((d, j) => (
-                          <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                            <span style={{ color: COLORS.accent, fontSize: 12, marginTop: 2, flexShrink: 0 }}>—</span>
-                            <span style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.5 }}>{d}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {opt.agreementUrl ? (
-                      <a
-                        href={opt.agreementUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: "inline-block",
-                          background: opt.highlighted ? COLORS.accentDim : "transparent",
-                          border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
-                          borderRadius: 6, padding: "10px 24px",
-                          fontFamily: fonts.mono, fontSize: 11,
-                          color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
-                          letterSpacing: 1, textDecoration: "none",
-                          transition: "all 0.2s ease",
-                        }}
-                      >
-                        ACCEPT &amp; SIGN →
-                      </a>
-                    ) : (
-                      <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 1 }}>AGREEMENT LINK COMING</div>
-                    )}
-                  </div>
-                </Fade>
-              ))}
-            </div>
-
-            {room?.proposalNote && (
-              <Fade show delay={800}>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto" }}>
-                  {room.proposalNote}
-                </div>
-              </Fade>
-            )}
           </div>
         )}
 
@@ -530,17 +695,100 @@ export default function DrvrsEngagement({ room }) {
             </Fade>
           </div>
         )}
+
+        {/* PROPOSAL */}
+        {currentId === "proposal" && (
+          <div>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 8 }}>08 — THE PROPOSAL</div>
+            </Fade>
+            <Fade show delay={200}>
+              <div style={{ fontFamily: fonts.display, fontSize: 36, fontWeight: 300, color: COLORS.text, marginBottom: 8, lineHeight: 1.2 }}>
+                What working together looks like.
+              </div>
+            </Fade>
+            <Fade show delay={350}>
+              <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
+                Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.
+              </div>
+            </Fade>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 32 }}>
+              {(room?.proposalOptions || []).map((opt, i) => (
+                <Fade key={i} show delay={400 + i * 200}>
+                  <div style={{
+                    background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
+                    border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
+                    borderRadius: 10, padding: "28px 32px", position: "relative",
+                  }}>
+                    {opt.highlighted && (
+                      <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
+                        RECOMMENDED
+                      </div>
+                    )}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
+                      <div>
+                        <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
+                        <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
+                      </div>
+                      <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>{opt.price}</div>
+                    </div>
+                    {(opt.deliverables || []).length > 0 && (
+                      <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
+                        {opt.deliverables.filter(d => d.trim()).map((d, j) => (
+                          <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                            <span style={{ color: COLORS.accent, fontSize: 12, marginTop: 2, flexShrink: 0 }}>—</span>
+                            <span style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.5 }}>{d}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {opt.agreementUrl ? (
+                      <a href={opt.agreementUrl} target="_blank" rel="noopener noreferrer" style={{
+                        display: "inline-block",
+                        background: opt.highlighted ? COLORS.accentDim : "transparent",
+                        border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
+                        borderRadius: 6, padding: "10px 24px",
+                        fontFamily: fonts.mono, fontSize: 11,
+                        color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
+                        letterSpacing: 1, textDecoration: "none", transition: "all 0.2s ease",
+                      }}>
+                        ACCEPT &amp; SIGN →
+                      </a>
+                    ) : (
+                      <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 1 }}>AGREEMENT LINK COMING</div>
+                    )}
+                  </div>
+                </Fade>
+              ))}
+            </div>
+            {room?.proposalNote && (
+              <Fade show delay={800}>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto" }}>
+                  {room.proposalNote}
+                </div>
+              </Fade>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Bottom nav */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 12, padding: "24px 32px", background: `linear-gradient(transparent, ${COLORS.bg}ee 30%, ${COLORS.bg})` }}>
         {canPrev && (
-          <button onClick={() => setStage(s => s - 1)} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "10px 24px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMuted, letterSpacing: 1 }}>BACK</button>
+          <button
+            onClick={() => setStage(s => s - 1)}
+            onMouseEnter={e => { e.target.style.borderColor = COLORS.textDim; e.target.style.color = COLORS.text; }}
+            onMouseLeave={e => { e.target.style.borderColor = COLORS.border; e.target.style.color = COLORS.textMuted; }}
+            style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "10px 24px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 11, color: COLORS.textMuted, letterSpacing: 1, transition: "all 0.2s ease" }}
+          >BACK</button>
         )}
         {canNext && (
-          <button onClick={() => setStage(s => s + 1)} style={{ background: COLORS.accentDim, border: `1px solid ${COLORS.accent}55`, borderRadius: 6, padding: "10px 32px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 11, color: COLORS.accent, letterSpacing: 1 }}>
-            {stage === 0 ? "BEGIN DIAGNOSTIC" : "CONTINUE"}
-          </button>
+          <button
+            onClick={() => setStage(s => s + 1)}
+            onMouseEnter={e => { e.target.style.background = COLORS.accentGlow; }}
+            onMouseLeave={e => { e.target.style.background = COLORS.accentDim; }}
+            style={{ background: COLORS.accentDim, border: `1px solid ${COLORS.accent}55`, borderRadius: 6, padding: "10px 32px", cursor: "pointer", fontFamily: fonts.mono, fontSize: 11, color: COLORS.accent, letterSpacing: 1, transition: "all 0.2s ease" }}
+          >{stage === 0 ? "BEGIN DIAGNOSTIC" : "CONTINUE"}</button>
         )}
       </div>
     </div>
