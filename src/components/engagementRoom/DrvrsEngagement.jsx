@@ -839,7 +839,10 @@ export default function DrvrsEngagement({ room }) {
                     CHANGE
                   </button>
                   <button
-                    onClick={() => setShowModal(true)}
+                    onClick={() => {
+                      const optionName = room?.proposalOptions?.[selectedOption]?.name;
+                      window.location.href = `/room/${room?.slug}/sign?option=${selectedOption}${selectedOption === 0 ? '' : '&oneday=' + (selectedOption === 0)}`;
+                    }}
                     style={{
                       flex: 1,
                       padding: "14px 24px",
