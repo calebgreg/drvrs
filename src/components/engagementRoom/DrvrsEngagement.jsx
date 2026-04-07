@@ -704,48 +704,10 @@ export default function DrvrsEngagement({ room }) {
               </div>
             </Fade>
             <Fade show delay={600}>
-              <div style={{
-                background: COLORS.surface,
-                border: `1px solid ${COLORS.border}`,
-                borderRadius: 8,
-                padding: "28px 32px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 24,
-              }}>
-                <div>
-                  <div style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textDim, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Next Step</div>
-                  <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 500, marginBottom: 6 }}>
-                    30 minutes to figure out which fits.
-                  </div>
-                  <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted }}>
-                    Caleb Cramer · drvrs.io
-                  </div>
+              <div style={{ textAlign: "center", marginTop: 8 }}>
+                <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7 }}>
+                  See the proposal — pick the one that fits and sign.
                 </div>
-                <a
-                  href="https://cal.com/calebcramer"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    flexShrink: 0,
-                    background: COLORS.accentDim,
-                    border: `1px solid ${COLORS.accent}55`,
-                    borderRadius: 6,
-                    padding: "12px 28px",
-                    fontFamily: fonts.mono,
-                    fontSize: 11,
-                    color: COLORS.accent,
-                    letterSpacing: 1,
-                    textDecoration: "none",
-                    whiteSpace: "nowrap",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = COLORS.accentGlow; e.currentTarget.style.borderColor = COLORS.accent; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = COLORS.accentDim; e.currentTarget.style.borderColor = `${COLORS.accent}55`; }}
-                >
-                  BOOK A CALL →
-                </a>
               </div>
             </Fade>
           </div>
@@ -818,11 +780,41 @@ export default function DrvrsEngagement({ room }) {
             </div>
             {room?.proposalNote && (
               <Fade show delay={800}>
-                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto" }}>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto 32px" }}>
                   {room.proposalNote}
                 </div>
               </Fade>
             )}
+            <Fade show delay={1000}>
+              <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textDim, lineHeight: 1.6 }}>
+                  Not ready to sign? That's fine — but let's not let it stall.
+                </div>
+                <a
+                  href="https://cal.com/calebcramer"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    flexShrink: 0,
+                    background: "transparent",
+                    border: `1px solid ${COLORS.border}`,
+                    borderRadius: 6,
+                    padding: "10px 24px",
+                    fontFamily: fonts.mono,
+                    fontSize: 10,
+                    color: COLORS.textMuted,
+                    letterSpacing: 1,
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.textDim; e.currentTarget.style.color = COLORS.text; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
+                >
+                  BOOK A CALL →
+                </a>
+              </div>
+            </Fade>
           </div>
         )}
       </div>
