@@ -33,8 +33,8 @@ const stages = [
   { id: "shifts", label: "Shifts" },
   { id: "work", label: "Work" },
   { id: "playbook", label: "Plays" },
-  { id: "proposal", label: "Proposal" },
   { id: "engage", label: "Next" },
+  { id: "proposal", label: "Proposal" },
 ];
 
 // ─── Fade wrapper ───
@@ -989,56 +989,12 @@ export default function DrvrsEngagement() {
           </div>
         )}
 
-        {/* ── PROPOSAL ── */}
-        {currentId === "proposal" && (
-          <div>
-            <Fade show delay={100}>
-              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
-                07 — PROPOSAL
-              </div>
-            </Fade>
-            {roomData?.proposalOptions && roomData.proposalOptions.map((option, i) => (
-              <Fade key={i} show delay={200 + i * 150}>
-                <div style={{
-                  background: option.highlighted ? COLORS.accentDim : COLORS.surface,
-                  border: `1px solid ${option.highlighted ? COLORS.accent + "55" : COLORS.border}`,
-                  borderRadius: 8,
-                  padding: 24,
-                  marginBottom: 16,
-                }}>
-                  <div style={{ fontFamily: fonts.mono, fontSize: 10, color: option.highlighted ? COLORS.accent : COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>
-                    {option.name}
-                  </div>
-                  <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
-                    {option.price}
-                  </div>
-                  {option.timeline && (
-                    <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, marginBottom: 14 }}>
-                      {option.timeline}
-                    </div>
-                  )}
-                  {option.deliverables && option.deliverables.length > 0 && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                      {option.deliverables.map((d, j) => (
-                        <div key={j} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <div style={{ width: 4, height: 4, borderRadius: "50%", background: option.highlighted ? COLORS.accent : COLORS.warning, opacity: 0.5, flexShrink: 0 }} />
-                          <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Fade>
-            ))}
-          </div>
-        )}
-
         {/* ── ENGAGE ── */}
         {currentId === "engage" && (
           <div>
             <Fade show delay={100}>
               <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
-                08 — ENGAGEMENT
+                07 — ENGAGEMENT
               </div>
             </Fade>
             <Fade show delay={200}>
@@ -1129,10 +1085,106 @@ export default function DrvrsEngagement() {
             <Fade show delay={700}>
               <div style={{ textAlign: "center", marginTop: 32 }}>
                 <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, marginBottom: 24 }}>
-                  {roomData?.engagementFooter || "Happy to do a 30-minute call to figure out which fits."}
+                  Happy to do a 30-minute call to figure out which fits.
                 </div>
                 <div style={{ fontFamily: fonts.display, fontSize: 20, fontWeight: 400, color: COLORS.textDim, letterSpacing: 2 }}>
                   drvrs.io
+                </div>
+              </div>
+            </Fade>
+          </div>
+        )}
+
+        {/* ── PROPOSAL ── */}
+        {currentId === "proposal" && (
+          <div>
+            <Fade show delay={100}>
+              <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 3, marginBottom: 32 }}>
+                08 — PROPOSAL
+              </div>
+            </Fade>
+            <Fade show delay={200}>
+              <div style={{
+                background: COLORS.surface, border: `1px solid ${COLORS.accent}33`,
+                borderRadius: 8, padding: 24, marginBottom: 12,
+              }}>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2, marginBottom: 12 }}>ONE DAY</div>
+                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+                  Define the Promise
+                </div>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
+                  Half-day working session. Flat fee.
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    "One-sentence positioning statement",
+                    "Target agency profile with disqualifiers",
+                    "5-touch outbound sequence ready to send",
+                    "Demo talk track built around the outcome",
+                  ].map((d, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.accent, opacity: 0.5, flexShrink: 0 }} />
+                      <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Fade>
+            <Fade show delay={350}>
+              <div style={{
+                background: COLORS.surface, border: `1px solid ${COLORS.border}`,
+                borderRadius: 8, padding: 24, marginBottom: 12,
+              }}>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>ONE INITIATIVE</div>
+                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+                  Promise Through Evidence
+                </div>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
+                  60-day engagement. Milestone-based.
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    "Everything in One Day",
+                    "10 target agencies identified and contacted",
+                    "Hands-on onboarding to engineer the outcome",
+                    "Fan interviews with extracted language",
+                    "Referral channel map across cluster groups and associations",
+                    "Ad-ready copy written from fan language",
+                  ].map((d, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.warning, opacity: 0.5, flexShrink: 0 }} />
+                      <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Fade>
+            <Fade show delay={500}>
+              <div style={{
+                background: COLORS.surface, border: `1px solid rgba(245,240,232,0.12)`,
+                borderRadius: 8, padding: 24, marginBottom: 12,
+              }}>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.text, opacity: 0.5, letterSpacing: 2, marginBottom: 12 }}>ONE TEAM</div>
+                <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
+                  Fractional Revenue Leadership
+                </div>
+                <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
+                  Embedded in the team. Monthly retainer.
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    "Everything in One Initiative",
+                    "Weekly working sessions",
+                    "Own the GTM strategy end to end",
+                    "Build and run outbound until there is someone to hand it to",
+                    "Conference strategy, booth presence, and event follow-through",
+                    "Hire the first sales leader when the time is right",
+                  ].map((d, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.text, opacity: 0.3, flexShrink: 0 }} />
+                      <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </Fade>
