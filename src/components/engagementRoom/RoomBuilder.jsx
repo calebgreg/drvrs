@@ -79,7 +79,7 @@ const DEFAULT_ROOM = {
       highlighted: false,
     },
   ],
-  proposalNote: "Two ways to engage. Both are scoped, fixed-fee, and built around a single constraint.",
+  proposalNote: "Three ways to engage. Pick the one that fits.",
   emailSubject: "Your drvrs diagnostic — {{companyName}}",
   emailBody: `Hi {{prospectName}},
 
