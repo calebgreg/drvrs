@@ -437,6 +437,7 @@ function FanAmplifyVisual() {
 export default function DrvrsEngagement({ room }) {
   const [stage, setStage] = useState(0);
   const [treePhase, setTreePhase] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -704,7 +705,7 @@ export default function DrvrsEngagement({ room }) {
              {[
                {
                  name: "One Day",
-                 price: "$2,500",
+                 basePrice: 2500,
                  timeline: "Half-day session",
                  deliverables: [
                    "Positioning statement built around the outcome",
@@ -716,7 +717,7 @@ export default function DrvrsEngagement({ room }) {
                },
                {
                  name: "One Initiative",
-                 price: "$6,000",
+                 basePrice: 6000,
                  timeline: "60 Days",
                  deliverables: [
                    "Everything in One Day",
@@ -730,7 +731,7 @@ export default function DrvrsEngagement({ room }) {
                },
                {
                  name: "One Team",
-                 price: "$32,000",
+                 basePrice: 32000,
                  timeline: "6 Months",
                  deliverables: [
                    "A drvr embedded in the team",
@@ -743,24 +744,43 @@ export default function DrvrsEngagement({ room }) {
                  ],
                  highlighted: false
                }
-             ].map((opt, i) => (
+             ].map((opt, i) => {
+               const isOneDay = i === 0;
+               const isSelected = selectedOption === i;
+               const oneDaySelected = selectedOption === 0;
+               const creditedPrice = oneDaySelected && !isOneDay ? opt.basePrice - 2500 : opt.basePrice;
+               const displayPrice = `$${creditedPrice.toLocaleString()}`;
+               const originalPrice = `$${opt.basePrice.toLocaleString()}`;
+
+               return (
                 <Fade key={i} show delay={400 + i * 200}>
                   <div style={{
-                    background: opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface,
-                    border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
+                    background: isSelected ? COLORS.accentDim : (opt.highlighted ? "rgba(45,138,110,0.08)" : COLORS.surface),
+                    border: `1px solid ${isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accent + "55" : COLORS.border)}`,
                     borderRadius: 10, padding: "28px 32px", position: "relative",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
                   }}>
-                    {opt.highlighted && (
+                    {opt.highlighted && !isSelected && (
                       <div style={{ position: "absolute", top: -1, right: 24, background: COLORS.accent, color: "#0a1a14", fontFamily: fonts.mono, fontSize: 8, letterSpacing: 2, padding: "3px 10px", borderRadius: "0 0 6px 6px" }}>
                         RECOMMENDED
                       </div>
                     )}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
                       <div>
-                        <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
+                        <div style={{ fontFamily: fonts.mono, fontSize: 10, color: opt.highlighted && !oneDaySelected ? COLORS.accent : COLORS.textMuted, letterSpacing: 2, marginBottom: 6 }}>{opt.name?.toUpperCase()}</div>
                         <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted }}>{opt.timeline}</div>
                       </div>
-                      <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>{opt.price}</div>
+                      <div>
+                        <div style={{ fontFamily: fonts.display, fontSize: 32, color: COLORS.text, fontWeight: 400 }}>
+                          {displayPrice}
+                        </div>
+                        {oneDaySelected && !isOneDay && (
+                          <div style={{ fontFamily: fonts.body, fontSize: 12, color: COLORS.textDim, textDecoration: "line-through", marginTop: 4 }}>
+                            {originalPrice}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     {(opt.deliverables || []).length > 0 && (
                       <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", display: "flex", flexDirection: "column", gap: 8 }}>
@@ -773,14 +793,17 @@ export default function DrvrsEngagement({ room }) {
                       </ul>
                     )}
                     <a
-                      href={`/room/${room?.slug}/sign?option=${i}`}
+                      href={`/room/${room?.slug}/sign?option=${i}${selectedOption === 0 && i !== 0 ? '&oneday=true' : ''}`}
+                      onClick={(e) => {
+                        setSelectedOption(i);
+                      }}
                       style={{
                         display: "inline-block",
-                        background: opt.highlighted ? COLORS.accentDim : "transparent",
-                        border: `1px solid ${opt.highlighted ? COLORS.accent : COLORS.border}`,
+                        background: isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accentDim : "transparent"),
+                        border: `1px solid ${isSelected ? COLORS.accent : (opt.highlighted ? COLORS.accent : COLORS.border)}`,
                         borderRadius: 6, padding: "10px 24px",
                         fontFamily: fonts.mono, fontSize: 11,
-                        color: opt.highlighted ? COLORS.accent : COLORS.textMuted,
+                        color: isSelected ? "#0a1a14" : (opt.highlighted ? COLORS.accent : COLORS.textMuted),
                         letterSpacing: 1, textDecoration: "none", transition: "all 0.2s ease",
                       }}
                     >
@@ -788,7 +811,8 @@ export default function DrvrsEngagement({ room }) {
                     </a>
                   </div>
                 </Fade>
-              ))}
+              );
+             })}
             </div>
             {room?.proposalNote && (
               <Fade show delay={800}>
