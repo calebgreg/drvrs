@@ -95,9 +95,9 @@ const styles = `
   .hero-ctas { display: flex; gap: 1.25rem; align-items: center; margin-top: 3rem; flex-wrap: wrap; animation: heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.65s both; }
   .hero-hint {
     font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
-    color: rgba(245,240,232,0.35); text-decoration: none; cursor: pointer; transition: color 0.3s;
+    color: rgba(245,240,232,0.75); text-decoration: none; cursor: pointer; transition: color 0.3s;
   }
-  .hero-hint:hover { color: rgba(245,240,232,0.7); }
+  .hero-hint:hover { color: rgba(245,240,232,1); }
 
   /* CTA BUTTON */
   .d-cta {

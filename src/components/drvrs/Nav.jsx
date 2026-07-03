@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { base44 } from "@/api/base44Client";
 
 export default function Nav() {
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    base44.auth.isAuthenticated().then(authed => {
+      if (authed) base44.auth.me().then(u => setIsAdmin(u?.role === "admin"));
+    });
+  }, []);
   return (
     <nav
       style={{
