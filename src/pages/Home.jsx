@@ -1,14 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 
-const navStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+const CTA_URL = "https://tally.so/r/VLPjKa";
+
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap');
 
   .drvrs * { margin: 0; padding: 0; box-sizing: border-box; }
 
   .drvrs {
-    background: #0a1a14;
-    color: #f5f0e8;
+    --ink: #0a1a14;
+    --panel: #10251c;
+    --cream: #f5f0e8;
+    --sand: #ece4d4;
+    --accent: #2d8a6e;
+    --accent-hi: #3fae8b;
+    --muted: #7a8a82;
+    background: var(--ink);
+    color: var(--cream);
     font-family: 'DM Sans', sans-serif;
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
@@ -16,19 +25,15 @@ const navStyles = `
     position: relative;
   }
 
-  /* GRAIN OVERLAY */
+  /* GRAIN */
   .drvrs::before {
     content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    pointer-events: none;
-    opacity: 0.035;
+    position: fixed; inset: 0; z-index: 1000; pointer-events: none; opacity: 0.035;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     background-size: 200px 200px;
   }
 
-  /* NAV — preserved exactly */
+  /* NAV — preserved */
   .drvrs-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 2rem 3rem;
@@ -37,120 +42,168 @@ const navStyles = `
   }
   .drvrs-logo {
     display: flex; align-items: center; gap: 0.6rem;
-    font-family: 'DM Sans', sans-serif;
     font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em;
     color: #f5f0e8; text-decoration: none; cursor: pointer;
   }
-  .drvrs-logo-pill {
-    width: 28px; height: 14px;
-    background: #f5f0e8; border-radius: 7px;
-  }
-  .drvrs-nav-links {
-    display: flex; gap: 2.5rem; align-items: center;
-  }
+  .drvrs-logo-pill { width: 28px; height: 14px; background: #f5f0e8; border-radius: 7px; }
+  .drvrs-nav-links { display: flex; gap: 2.5rem; align-items: center; }
   .drvrs-nav-links a {
-    font-family: 'DM Sans', sans-serif;
     font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em;
     color: #f5f0e8; text-decoration: none; text-transform: uppercase;
     transition: opacity 0.3s ease; cursor: pointer;
   }
   .drvrs-nav-links a:hover { opacity: 0.6; }
-  .drvrs-hamburger {
-    display: none; flex-direction: column; gap: 5px;
-    cursor: pointer; background: none; border: none; padding: 4px;
-  }
-  .drvrs-hamburger span {
-    display: block; width: 22px; height: 1.5px;
-    background: #f5f0e8; transition: all 0.3s ease;
-  }
-  .drvrs-mobile-menu {
-    display: none; position: fixed; inset: 0;
-    background: #0a1a14; z-index: 200;
-    flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
-  }
+  .drvrs-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .drvrs-hamburger span { display: block; width: 22px; height: 1.5px; background: #f5f0e8; transition: all 0.3s ease; }
+  .drvrs-mobile-menu { display: none; position: fixed; inset: 0; background: var(--ink); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
   .drvrs-mobile-menu.open { display: flex; }
-  .drvrs-mobile-menu a {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em;
-    color: #f5f0e8; text-decoration: none; text-transform: uppercase;
-  }
-  .drvrs-mobile-close {
-    position: absolute; top: 2rem; right: 2rem;
-    background: none; border: none;
-    color: #f5f0e8; font-size: 2rem; cursor: pointer; line-height: 1;
-  }
-
-  /* SECTIONS */
-  .sec {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    padding: 12vh 8vw; position: relative; overflow: clip;
-  }
-  .sec--s { min-height: auto; padding: 8vh 8vw; }
-  .sec--dark { background: #0a1a14; }
-  .sec--cream { background: #f5f0e8; color: #0a1a14; }
-  .sec--warm { background: #f0e6d6; color: #0a1a14; }
-  .sec--green { background: #1a3a2a; }
-
-  .sec--dark .glow-r {
-    position: absolute; right: -10vw; top: 10%;
-    width: 50vw; height: 70vh;
-    background: radial-gradient(ellipse at center, rgba(45,138,110,0.08) 0%, transparent 65%);
-    pointer-events: none;
-  }
-  .sec--dark .glow-l {
-    position: absolute; left: -5vw; bottom: 0;
-    width: 40vw; height: 50vh;
-    background: radial-gradient(ellipse at center, rgba(45,138,110,0.05) 0%, transparent 65%);
-    pointer-events: none;
-  }
-  .sec--green .glow-c {
-    position: absolute; left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    width: 60vw; height: 60vh;
-    background: radial-gradient(ellipse at center, rgba(45,138,110,0.15) 0%, transparent 65%);
-    pointer-events: none;
-  }
+  .drvrs-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; }
+  .drvrs-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: #f5f0e8; font-size: 2rem; cursor: pointer; line-height: 1; }
 
   .serif { font-family: 'DM Serif Display', serif; font-weight: 400; }
-  .muted { color: #7a8a82; }
-  .accent { color: #2d8a6e; }
+  .mono { font-family: 'DM Mono', monospace; }
+  .d-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
 
-  .fi { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+  .fi { opacity: 0; transform: translateY(24px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
   .fi.on { opacity: 1; transform: translateY(0); }
-  .fi.d1 { transition-delay: 0.1s; }
-  .fi.d2 { transition-delay: 0.2s; }
-  .fi.d3 { transition-delay: 0.3s; }
+  .fi.d1 { transition-delay: 0.1s; } .fi.d2 { transition-delay: 0.2s; } .fi.d3 { transition-delay: 0.3s; }
 
-  /* TICKER */
-  .ticker-wrap {
-    width: 100%; overflow: hidden; padding: 2.5rem 0; position: relative;
-    border-top: 1px solid rgba(245,240,232,0.06);
-    border-bottom: 1px solid rgba(245,240,232,0.06);
+  /* HERO */
+  .hero {
+    min-height: 92vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 16vh 8vw 10vh; position: relative; overflow: clip;
   }
-  .ticker-track { display: flex; gap: 3rem; animation: tickScroll 35s linear infinite; width: max-content; }
+  .hero-glow {
+    position: absolute; right: -12vw; top: 8%;
+    width: 55vw; height: 75vh;
+    background: radial-gradient(ellipse at center, rgba(45,138,110,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif; font-weight: 400;
+    font-size: clamp(2.9rem, 6vw, 5.2rem);
+    line-height: 1.06; letter-spacing: -0.025em;
+    max-width: 820px;
+    animation: heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.2s both;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent-hi); }
+  .hero-sub {
+    font-size: clamp(1.02rem, 1.4vw, 1.2rem); line-height: 1.7; color: var(--muted);
+    max-width: 480px; margin-top: 2rem;
+    animation: heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.45s both;
+  }
+  .hero-ctas { display: flex; gap: 1.25rem; align-items: center; margin-top: 3rem; flex-wrap: wrap; animation: heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.65s both; }
+  .hero-hint {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(245,240,232,0.35); text-decoration: none; cursor: pointer; transition: color 0.3s;
+  }
+  .hero-hint:hover { color: rgba(245,240,232,0.7); }
+
+  /* CTA BUTTON */
+  .d-cta {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    background: var(--accent); color: var(--cream);
+    padding: 1rem 2.4rem; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 400; text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.3s; letter-spacing: 0.05em;
+  }
+  .d-cta:hover { background: var(--accent-hi); transform: translateY(-2px); }
+  .d-cta svg { width: 15px; height: 15px; }
+
+  /* TICKER — noise wall */
+  .ticker-sec { padding: 0 0 4vh; }
+  .ticker-lede {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(245,240,232,0.35); padding: 0 8vw 1.5rem;
+  }
+  .ticker-lede b { color: var(--accent); font-weight: 400; }
+  .ticker-wall { overflow: hidden; width: 100%; border-top: 1px solid rgba(245,240,232,0.06); border-bottom: 1px solid rgba(245,240,232,0.06); padding: 1.4rem 0; display: flex; flex-direction: column; gap: 1.1rem; }
+  .ticker-row { overflow: hidden; width: 100%; }
+  .ticker-track { display: flex; gap: 3rem; animation: tickScroll linear infinite; width: max-content; }
+  .ticker-row:nth-child(1) .ticker-track { animation-duration: 42s; }
+  .ticker-row:nth-child(2) .ticker-track { animation-duration: 30s; animation-direction: reverse; }
+  .ticker-row:nth-child(3) .ticker-track { animation-duration: 52s; }
   .ticker-item {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(1.1rem, 1.8vw, 1.5rem); font-style: italic;
-    white-space: nowrap; color: rgba(245,240,232,0.55); transition: color 0.4s; cursor: default;
+    font-size: clamp(1rem, 1.6vw, 1.35rem); font-style: italic;
+    white-space: nowrap; color: rgba(245,240,232,0.4); transition: color 0.4s; cursor: default;
   }
-  .ticker-item:hover { color: rgba(245,240,232,0.9); }
+  .ticker-row:nth-child(2) .ticker-item { font-size: clamp(1.15rem, 2vw, 1.6rem); color: rgba(245,240,232,0.65); }
+  .ticker-item:hover { color: rgba(245,240,232,0.95); }
   .ticker-sep { color: rgba(45,138,110,0.4); font-size: 0.8rem; align-self: center; flex-shrink: 0; }
-  @keyframes tickScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+  @keyframes tickScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-  /* SERVICE DOORS */
+  /* DECODER */
+  .dec { width: 100%; max-width: 880px; margin: 0 auto; }
+  .dec-labels { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  .dec-labels span { color: rgba(245,240,232,0.25); transition: color 0.5s; }
+  .dec-labels span.live { color: var(--accent-hi); }
+  .dec-labels .dec-arrow { color: rgba(245,240,232,0.2); font-size: 0.8rem; letter-spacing: 0; }
+  .dec-stage { min-height: 240px; display: flex; flex-direction: column; justify-content: flex-start; gap: 1.5rem; }
+  .dec-quote {
+    font-family: 'DM Serif Display', serif; font-style: italic;
+    font-size: clamp(1.7rem, 3.4vw, 2.8rem); line-height: 1.25; letter-spacing: -0.01em;
+    color: rgba(245,240,232,0.85);
+    transition: all 0.7s cubic-bezier(0.16,1,0.3,1);
+    animation: decIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .dec-quote.dim { color: rgba(245,240,232,0.28); font-size: clamp(1.15rem, 2.2vw, 1.7rem); }
+  .dec-real { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16,1,0.3,1) 0.15s; display: flex; flex-direction: column; gap: 1.1rem; }
+  .dec-real.on { opacity: 1; transform: translateY(0); }
+  .dec-real-txt { font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 400; color: var(--cream); line-height: 1.25; letter-spacing: -0.015em; }
+  .dec-meter { display: flex; align-items: center; gap: 1rem; }
+  .dec-bar-track { width: min(260px, 40vw); height: 5px; background: rgba(45,138,110,0.12); border-radius: 3px; overflow: hidden; }
+  .dec-bar { height: 100%; width: 0; background: var(--accent-hi); border-radius: 3px; box-shadow: 0 0 12px rgba(63,174,139,0.5); transition: width 1s cubic-bezier(0.16,1,0.3,1) 0.3s; }
+  .dec-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-hi); }
+  .dec-ticks { display: flex; gap: 0.6rem; margin-top: 2.75rem; }
+  .dec-tick { width: 26px; height: 3px; border-radius: 2px; background: rgba(245,240,232,0.12); border: none; cursor: pointer; padding: 0; transition: background 0.4s, width 0.4s; }
+  .dec-tick.live { width: 44px; background: var(--accent-hi); }
+  @keyframes decIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTION SHELL */
+  .sec { padding: 14vh 8vw; position: relative; }
+  .sec--cream { background: var(--cream); color: var(--ink); }
+  .sec--sand { background: var(--sand); color: var(--ink); }
+  .sec-head { max-width: 700px; margin-bottom: 4rem; }
+  .sec-head h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(1.9rem, 3.6vw, 3rem); line-height: 1.12; letter-spacing: -0.02em; }
+  .sec-head p { margin-top: 1.25rem; font-size: clamp(0.95rem, 1.2vw, 1.05rem); line-height: 1.7; color: var(--muted); max-width: 460px; }
+
+  /* DECOMP — signature */
+  .decomp-stage { width: 100%; max-width: 720px; margin: 0 auto; }
+  .decomp-node { cursor: pointer; }
+  .decomp-node:focus { outline: none; }
+  .decomp-node:focus-visible circle, .decomp-node:focus-visible rect { stroke: var(--accent-hi); stroke-width: 2.5; }
+  .decomp-read {
+    max-width: 560px; margin: 2.5rem auto 0; min-height: 92px;
+    border: 1px solid rgba(45,138,110,0.3); border-radius: 14px;
+    background: rgba(45,138,110,0.06);
+    padding: 1.4rem 1.75rem;
+    display: flex; flex-direction: column; gap: 0.5rem; justify-content: center;
+    transition: border-color 0.4s;
+  }
+  .decomp-read-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-hi); }
+  .decomp-read-line { font-family: 'DM Serif Display', serif; font-size: clamp(1.1rem, 1.8vw, 1.4rem); line-height: 1.4; color: var(--cream); }
+  .decomp-read-line.idle { color: rgba(245,240,232,0.4); font-style: italic; }
+
+  /* PROOF STRIP */
+  .proof-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(10,26,20,0.12); border: 1px solid rgba(10,26,20,0.12); border-radius: 16px; overflow: hidden; }
+  .proof-cell { background: var(--cream); padding: 2.25rem 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .proof-big { font-family: 'DM Serif Display', serif; font-size: clamp(1.5rem, 2.4vw, 2.1rem); line-height: 1.1; color: var(--ink); }
+  .proof-small { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); line-height: 1.6; }
+
+  /* SERVICE DOORS — preserved */
+  .doors { border-top: 1px solid rgba(245,240,232,0.06); }
+  .doors-head { padding: 8vh 8vw 4vh; }
   .svc-door {
-    padding: clamp(3.5rem, 7vh, 5.5rem) 8vw; cursor: pointer;
+    padding: clamp(3rem, 6vh, 5rem) 8vw; cursor: pointer;
     transition: background 0.4s;
     border-bottom: 1px solid rgba(245,240,232,0.06);
-    display: block; text-decoration: none; color: #f5f0e8;
+    display: block; text-decoration: none; color: var(--cream);
     position: relative; overflow: hidden;
   }
   .svc-door::after {
     content: ''; position: absolute; top: 0; left: 0; right: 0;
-    height: 1px; background: #2d8a6e;
+    height: 1px; background: var(--accent);
     transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease;
   }
   .svc-door:hover { background: rgba(45,138,110,0.04); }
@@ -158,21 +211,24 @@ const navStyles = `
   .svc-door-inner { display: flex; align-items: center; gap: clamp(2rem, 5vw, 5rem); max-width: 900px; }
   .svc-vis { flex-shrink: 0; }
   .svc-text { flex: 1; }
-  .svc-arrow { color: #2d8a6e; font-size: 1.4rem; opacity: 0; transform: translateX(-8px); transition: all 0.3s ease; flex-shrink: 0; }
+  .svc-arrow { color: var(--accent); font-size: 1.4rem; opacity: 0; transform: translateX(-8px); transition: all 0.3s ease; flex-shrink: 0; }
   .svc-door:hover .svc-arrow { opacity: 1; transform: translateX(0); }
   .svc-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.15; margin-bottom: 0.5rem; }
-  .svc-desc { font-size: clamp(0.82rem, 1vw, 0.92rem); color: #7a8a82; line-height: 1.65; }
+  .svc-desc { font-size: clamp(0.82rem, 1vw, 0.92rem); color: var(--muted); line-height: 1.65; }
 
-  /* CTA */
-  .d-cta {
-    display: inline-flex; align-items: center; gap: 0.75rem;
-    background: #2d8a6e; color: #f5f0e8;
-    padding: 1rem 2.5rem; border-radius: 50px;
-    font-size: 0.9rem; font-weight: 400; text-decoration: none; cursor: pointer; border: none;
-    transition: all 0.3s; letter-spacing: 0.05em;
+  /* FINAL CTA */
+  .final {
+    padding: 18vh 8vw; text-align: center; position: relative; overflow: clip;
+    display: flex; flex-direction: column; align-items: center; gap: 1.75rem;
   }
-  .d-cta:hover { background: #35a080; transform: translateY(-2px); }
-  .d-cta svg { width: 15px; height: 15px; }
+  .final-glow {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 70vw; height: 60vh;
+    background: radial-gradient(ellipse at center, rgba(45,138,110,0.13) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .final h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(3rem, 7vw, 6rem); line-height: 1; letter-spacing: -0.03em; }
+  .final p { color: var(--muted); font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.7; max-width: 440px; }
 
   .d-footer {
     padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center;
@@ -182,43 +238,28 @@ const navStyles = `
   .d-footer .drvrs-logo { font-size: 0.95rem; opacity: 0.5; }
   .d-footer .drvrs-logo-pill { width: 20px; height: 10px; }
 
-  .hero-bg-num {
-    position: absolute; right: -2vw; bottom: -5vh;
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(18rem, 30vw, 38rem); line-height: 0.8;
-    color: rgba(245,240,232,0.025); pointer-events: none; user-select: none; letter-spacing: -0.05em;
-  }
-
-  .statement { font-family: 'DM Serif Display', serif; font-size: clamp(3rem, 6vw, 7rem); line-height: 1.0; letter-spacing: -0.03em; }
-  .statement em { font-style: italic; color: rgba(245,240,232,0.35); }
-  .statement-dark { color: #0a1a14; }
-
-  .d-rule { width: 100%; height: 1px; background: rgba(245,240,232,0.06); }
-  .d-eyebrow { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: #2d8a6e; margin-bottom: 1.5rem; }
-
-  .pull {
-    font-family: 'DM Serif Display', serif; font-style: italic;
-    font-size: clamp(1.4rem, 2.5vw, 2rem); line-height: 1.5;
-    color: rgba(245,240,232,0.5);
-    border-left: 2px solid rgba(45,138,110,0.5); padding-left: 1.75rem; max-width: 500px;
-  }
-
   @keyframes heroIn { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes pulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
 
   @media (max-width: 768px) {
     .drvrs-nav { padding: 1.5rem 2rem; }
     .drvrs-nav-links { display: none; }
     .drvrs-hamburger { display: flex; }
+    .hero { padding: 14vh 6vw 8vh; }
     .sec { padding: 10vh 6vw; }
-    .hero-bg-num { display: none; }
+    .ticker-lede { padding: 0 6vw 1.25rem; }
+    .doors-head { padding: 6vh 6vw 3vh; }
+    .svc-door { padding: 2.75rem 6vw; }
     .svc-door-inner { gap: 1.5rem; flex-direction: column; align-items: flex-start; }
-    .svc-title { margin-top: 0.5rem; }
     .svc-arrow { display: none; }
+    .proof-grid { grid-template-columns: 1fr 1fr; }
+    .final { padding: 14vh 6vw; }
+  }
+  @media (max-width: 480px) {
+    .proof-grid { grid-template-columns: 1fr; }
   }
 `;
 
-function F({ children, className = "", delay = "" }) {
+function F({ children, className = "", delay = "", style }) {
   const r = useRef(null);
   const [v, setV] = useState(false);
   useEffect(() => {
@@ -226,25 +267,17 @@ function F({ children, className = "", delay = "" }) {
     if (r.current) o.observe(r.current);
     return () => o.disconnect();
   }, []);
-  return <div ref={r} className={`fi${v ? " on" : ""} ${delay} ${className}`}>{children}</div>;
+  return <div ref={r} className={`fi${v ? " on" : ""} ${delay} ${className}`} style={style}>{children}</div>;
 }
 
-function Ticker() {
-  const items = [
-    "A new hire joined the team", "The champion got promoted", "A reorg reshuffled priorities",
-    "IT sold leadership on a competing platform", "Finance pitched a cost-freeze initiative",
-    "A new VP arrived with their own vendors", "Legal sold the board on a compliance overhaul",
-    "HR launched a culture initiative", "A director built a business case against you",
-    "The budget committee sold a 20% reduction", "Operations sold a consolidation plan",
-    "A consultant sold a 90-day transformation", "The CFO sold patience", "Procurement sold process",
-    "A peer sold urgency on something else entirely",
-  ];
+/* ============ TICKER — noise wall ============ */
+function TickerRow({ items }) {
   const doubled = [...items, ...items];
   return (
-    <div className="ticker-wrap">
+    <div className="ticker-row">
       <div className="ticker-track">
         {doubled.map((t, i) => (
-          <span key={i} style={{display: "flex", alignItems: "center", gap: "3rem"}}>
+          <span key={i} style={{ display: "flex", alignItems: "center", gap: "3rem" }}>
             <span className="ticker-item">{t}</span>
             {i < doubled.length - 1 && <span className="ticker-sep">·</span>}
           </span>
@@ -254,53 +287,82 @@ function Ticker() {
   );
 }
 
-function OrgSystem() {
-  const [tick, setTick] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setTick(t => t + 1), 50);
-    return () => clearInterval(id);
-  }, []);
-
-  const rows = [
-    { heard: '"We love the product"', reality: "VP career on the line", realtiyLabel: "Political pressure", heat: 0.92 },
-    { heard: '"Budget is approved"', reality: "Split across 3 competing projects", realtiyLabel: "Resource conflict", heat: 0.74 },
-    { heard: '"Just need legal sign-off"', reality: "40 contracts ahead of yours", realtiyLabel: "Queue depth", heat: 0.88 },
-    { heard: '"Decision by end of month"', reality: "3 stakeholders not consulted", realtiyLabel: "Alignment gap", heat: 0.61 },
+function Ticker() {
+  const row1 = [
+    "A new hire joined the team", "The champion got promoted", "A reorg reshuffled priorities",
+    "IT sold leadership on a competing platform", "Finance pitched a cost-freeze initiative",
+    "A new VP arrived with their own vendors", "Security sold a vendor review",
   ];
-
+  const row2 = [
+    "Legal sold the board on a compliance overhaul", "A director built a business case against you",
+    "The budget committee sold a 20% reduction", "The CFO sold patience",
+    "A consultant sold a 90-day transformation", "The board sold a hiring freeze",
+  ];
+  const row3 = [
+    "HR launched a culture initiative", "Operations sold a consolidation plan",
+    "Procurement sold process", "A peer sold urgency on something else entirely",
+    "Marketing sold a rebrand", "An analyst sold wait-and-see", "RevOps sold a new process",
+  ];
   return (
-    <div style={{ width: "100%", maxWidth: "1000px", margin: "0 auto" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", marginBottom: "2px" }}>
-        <div style={{ padding: "0 0 1rem 0", fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", fontFamily: "DM Sans, sans-serif" }}>What you hear</div>
-        <div style={{ padding: "0 0 1rem 2rem", fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#2d8a6e", fontFamily: "DM Sans, sans-serif" }}>What's moving</div>
-      </div>
-      {rows.map((row, i) => {
-        const pulse = 0.5 + Math.sin(tick / 25 + i * 1.4) * 0.25;
-        const barW = row.heat * 100;
-        return (
-          <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid rgba(245,240,232,0.06)", minHeight: "100px" }}>
-            <div style={{ padding: "2rem 2rem 2rem 0", display: "flex", alignItems: "center", borderRight: "1px solid rgba(245,240,232,0.06)" }}>
-              <div style={{ fontFamily: "'DM Serif Display', serif", fontStyle: "italic", fontSize: "clamp(1.1rem, 1.8vw, 1.5rem)", lineHeight: 1.3, color: "rgba(245,240,232,0.55)", letterSpacing: "-0.01em" }}>{row.heard}</div>
-            </div>
-            <div style={{ padding: "2rem 0 2rem 2rem", display: "flex", flexDirection: "column", justifyContent: "center", gap: "0.75rem" }}>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(1rem, 1.6vw, 1.3rem)", fontWeight: 400, color: "#f5f0e8", lineHeight: 1.3 }}>{row.reality}</div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                <div style={{ flex: 1, height: "3px", background: "rgba(45,138,110,0.12)", borderRadius: "2px", overflow: "hidden", maxWidth: "180px" }}>
-                  <div style={{ height: "100%", width: `${barW}%`, background: `rgba(45,138,110,${0.4 + pulse * 0.4})`, borderRadius: "2px", boxShadow: `0 0 ${8 * pulse}px rgba(45,138,110,${pulse * 0.6})`, transition: "box-shadow 0.1s ease" }} />
-                </div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.08em", color: "rgba(45,138,110,0.7)" }}>{row.realtiyLabel}</div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
+    <div className="ticker-wall">
+      <TickerRow items={row1} />
+      <TickerRow items={row2} />
+      <TickerRow items={row3} />
     </div>
   );
 }
 
+/* ============ DECODER ============ */
+function Decoder() {
+  const rows = [
+    { heard: '"We love the product"', reality: "The VP's career is on the line.", label: "Political pressure", heat: 0.92 },
+    { heard: '"Budget is approved"', reality: "It's split across 3 competing projects.", label: "Resource conflict", heat: 0.74 },
+    { heard: '"Just need legal sign-off"', reality: "40 contracts are ahead of yours.", label: "Queue depth", heat: 0.88 },
+    { heard: '"Decision by end of month"', reality: "3 stakeholders haven't been consulted.", label: "Alignment gap", heat: 0.61 },
+  ];
+  const [idx, setIdx] = useState(0);
+  const [decoded, setDecoded] = useState(false);
+
+  useEffect(() => {
+    setDecoded(false);
+    const t1 = setTimeout(() => setDecoded(true), 1700);
+    const t2 = setTimeout(() => setIdx(i => (i + 1) % rows.length), 6200);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [idx]);
+
+  const row = rows[idx];
+
+  return (
+    <div className="dec">
+      <div className="dec-labels">
+        <span className={!decoded ? "live" : ""}>What you hear</span>
+        <span className="dec-arrow">→</span>
+        <span className={decoded ? "live" : ""}>What's moving</span>
+      </div>
+      <div className="dec-stage" key={idx}>
+        <div className={`dec-quote${decoded ? " dim" : ""}`}>{row.heard}</div>
+        <div className={`dec-real${decoded ? " on" : ""}`}>
+          <div className="dec-real-txt">{row.reality}</div>
+          <div className="dec-meter">
+            <div className="dec-bar-track"><div className="dec-bar" style={{ width: decoded ? `${row.heat * 100}%` : 0 }} /></div>
+            <div className="dec-label">{row.label}</div>
+          </div>
+        </div>
+      </div>
+      <div className="dec-ticks">
+        {rows.map((_, i) => (
+          <button key={i} className={`dec-tick${i === idx ? " live" : ""}`} aria-label={`Show read ${i + 1}`} onClick={() => setIdx(i)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ============ INTERACTIVE DECOMP (signature) ============ */
 function Decomp() {
   const ref = useRef(null);
   const [fired, setFired] = useState(false);
+  const [active, setActive] = useState(null);
 
   useEffect(() => {
     const h = () => {
@@ -315,16 +377,16 @@ function Decomp() {
 
   const W = 520;
   const nodes = [
-    { id: "rev",  label: "Revenue",        x: 260,  y: 48,  level: 0 },
-    { id: "vol",  label: "Volume",         x: 90,   y: 175, level: 1 },
-    { id: "con",  label: "Conversion",     x: 260,  y: 175, level: 1 },
-    { id: "pri",  label: "Price",          x: 430,  y: 175, level: 1 },
-    { id: "reach", label: "Reach",         x: 42,   y: 310, level: 2 },
-    { id: "act",   label: "Relevance",     x: 138,  y: 310, level: 2 },
-    { id: "qual",  label: "Qualification", x: 214,  y: 310, level: 2 },
-    { id: "off",   label: "Offer",         x: 306,  y: 310, level: 2 },
-    { id: "diff",  label: "Differ­entiation", x: 384, y: 310, level: 2 },
-    { id: "nec",   label: "Necessity",     x: 478,  y: 310, level: 2 },
+    { id: "rev",   label: "Revenue",        x: 260, y: 48,  level: 0 },
+    { id: "vol",   label: "Volume",         x: 90,  y: 175, level: 1 },
+    { id: "con",   label: "Conversion",     x: 260, y: 175, level: 1 },
+    { id: "pri",   label: "Price",          x: 430, y: 175, level: 1 },
+    { id: "reach", label: "Reach",          x: 42,  y: 310, level: 2, parent: "vol", read: "Not enough of the right people know you exist." },
+    { id: "act",   label: "Relevance",      x: 138, y: 310, level: 2, parent: "vol", read: "They know you. They don't see themselves in you." },
+    { id: "qual",  label: "Qualification",  x: 214, y: 310, level: 2, parent: "con", read: "Pipeline full of deals that were never going to close." },
+    { id: "off",   label: "Offer",          x: 306, y: 310, level: 2, parent: "con", read: "The deal asks for too much change at once." },
+    { id: "diff",  label: "Differentiation", x: 384, y: 310, level: 2, parent: "pri", read: "They like you. They can't say why you over anyone else." },
+    { id: "nec",   label: "Necessity",      x: 478, y: 310, level: 2, parent: "pri", read: "Nice to have. Nothing forces the decision." },
   ];
   const edges = [
     { from: "rev", to: "vol" }, { from: "rev", to: "con" }, { from: "rev", to: "pri" },
@@ -333,6 +395,11 @@ function Decomp() {
     { from: "pri", to: "diff" }, { from: "pri", to: "nec" },
   ];
   const getNode = id => nodes.find(n => n.id === id);
+  const activeNode = active ? getNode(active) : null;
+  const activePath = activeNode ? [active, activeNode.parent, "rev"] : [];
+  const isHot = id => activePath.includes(id);
+  const edgeHot = e => activePath.includes(e.from) && activePath.includes(e.to);
+
   const curvePath = (from, to) => {
     const x1 = from.x, y1 = from.y + 22, x2 = to.x, y2 = to.y - 22, my = (y1 + y2) / 2;
     return `M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`;
@@ -341,184 +408,70 @@ function Decomp() {
   const nodeDelay = { 0: 0, 1: 0.25, 2: 0.5 };
 
   return (
-    <div ref={ref} style={{ width: "100%", maxWidth: "600px", margin: "0 auto", padding: "0 20px" }}>
-      <svg viewBox={`0 0 ${W} 380`} style={{ width: "100%", height: "auto" }}>
+    <div ref={ref} className="decomp-stage">
+      <svg viewBox={`0 0 ${W} 380`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
         <defs>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           <filter id="glow-sm" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
         {edges.map((e, i) => {
           const from = getNode(e.from), to = getNode(e.to), d = curvePath(from, to), len = 600, delay = edgeDelay[e.to];
+          const hot = edgeHot(e);
+          const dim = active && !hot;
           return (
-            <g key={i}>
-              <path d={d} fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="6" strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s` }} />
-              <path d={d} fill="none" stroke="rgba(45,138,110,0.5)" strokeWidth="1.5" strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s` }} />
+            <g key={i} style={{ opacity: dim ? 0.25 : 1, transition: "opacity 0.4s ease" }}>
+              <path d={d} fill="none" stroke={hot ? "rgba(63,174,139,0.35)" : "rgba(45,138,110,0.15)"} strokeWidth="6" strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s, stroke 0.4s ease` }} />
+              <path d={d} fill="none" stroke={hot ? "#3fae8b" : "rgba(45,138,110,0.5)"} strokeWidth={hot ? 2 : 1.5} strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s, stroke 0.4s ease` }} />
             </g>
           );
         })}
         {nodes.map(n => {
-          const isRoot = n.level === 0, isMid = n.level === 1, delay = nodeDelay[n.level];
-          return (
-            <g key={n.id} opacity={fired ? 1 : 0} transform={fired ? `translate(0,0)` : `translate(0,12)`} style={{ transition: `opacity 0.5s ease ${delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${delay}s` }}>
-              {isRoot && <><rect x={n.x - 60} y={n.y - 20} width={120} height={40} rx="4" fill="rgba(45,138,110,0.18)" stroke="#2d8a6e" strokeWidth="1.5" filter="url(#glow)" /><text x={n.x} y={n.y + 5} textAnchor="middle" fill="#f5f0e8" fontSize="14" fontFamily="DM Serif Display, serif">{n.label}</text></>}
-              {isMid && <><rect x={n.x - 55} y={n.y - 18} width={110} height={36} rx="3" fill="rgba(45,138,110,0.1)" stroke="rgba(45,138,110,0.5)" strokeWidth="1" /><text x={n.x} y={n.y + 4} textAnchor="middle" fill="rgba(245,240,232,0.85)" fontSize="11" fontFamily="DM Sans, sans-serif" fontWeight="300">{n.label}</text></>}
-              {n.level === 2 && <><circle cx={n.x} cy={n.y - 8} r="4" fill="#2d8a6e" filter="url(#glow-sm)" /><circle cx={n.x} cy={n.y - 8} r="2" fill="#f5f0e8" opacity="0.8"/><text x={n.x} y={n.y + 10} textAnchor="middle" fill="rgba(45,138,110,0.9)" fontSize="11" fontFamily="DM Sans, sans-serif" letterSpacing="0.04em">{n.label}</text></>}
+          const isRoot = n.level === 0, isMid = n.level === 1, isLeaf = n.level === 2;
+          const delay = nodeDelay[n.level];
+          const hot = isHot(n.id);
+          const dim = active && !hot;
+          const inner = (
+            <g opacity={fired ? (dim ? 0.35 : 1) : 0} transform={fired ? "translate(0,0)" : "translate(0,12)"} style={{ transition: `opacity 0.5s ease ${fired ? 0 : delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${delay}s` }}>
+              {isRoot && <>
+                <rect x={n.x - 60} y={n.y - 20} width={120} height={40} rx="8" fill={hot ? "rgba(63,174,139,0.28)" : "rgba(45,138,110,0.18)"} stroke={hot ? "#3fae8b" : "#2d8a6e"} strokeWidth="1.5" filter="url(#glow)" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
+                <text x={n.x} y={n.y + 5} textAnchor="middle" fill="#f5f0e8" fontSize="14" fontFamily="'DM Serif Display', serif">{n.label}</text>
+              </>}
+              {isMid && <>
+                <rect x={n.x - 55} y={n.y - 18} width={110} height={36} rx="7" fill={hot ? "rgba(63,174,139,0.18)" : "rgba(45,138,110,0.1)"} stroke={hot ? "#3fae8b" : "rgba(45,138,110,0.5)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
+                <text x={n.x} y={n.y + 4} textAnchor="middle" fill="rgba(245,240,232,0.85)" fontSize="11" fontFamily="'DM Sans', sans-serif" fontWeight="300">{n.label}</text>
+              </>}
+              {isLeaf && <>
+                <rect x={n.x - 42} y={n.y - 24} width={84} height={48} rx="8" fill="transparent" />
+                <circle cx={n.x} cy={n.y - 8} r={hot ? 6 : 4} fill={hot ? "#3fae8b" : "#2d8a6e"} filter="url(#glow-sm)" style={{ transition: "all 0.3s" }} />
+                <circle cx={n.x} cy={n.y - 8} r="2" fill="#f5f0e8" opacity="0.8" />
+                <text x={n.x} y={n.y + 10} textAnchor="middle" fill={hot ? "#3fae8b" : "rgba(45,138,110,0.9)"} fontSize="11" fontFamily="'DM Sans', sans-serif" letterSpacing="0.04em" style={{ transition: "fill 0.3s" }}>{n.label}</text>
+              </>}
             </g>
           );
+          return isLeaf ? (
+            <g key={n.id} className="decomp-node" role="button" tabIndex={0} aria-label={`Diagnose ${n.label}`}
+              onClick={() => setActive(active === n.id ? null : n.id)}
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActive(active === n.id ? null : n.id); } }}>
+              {inner}
+            </g>
+          ) : <g key={n.id}>{inner}</g>;
         })}
       </svg>
-    </div>
-  );
-}
-
-function DiagnosticCascade() {
-  const outerRef = useRef(null);
-  const trackRef = useRef(null);
-
-  const cards = [
-    {
-      label: "GOAL", labelColor: "#2d8a6e",
-      svg: (
-        <svg viewBox="0 0 400 200" style={{ width: "100%", height: "100%" }}>
-          <rect x="0" y="0" width="400" height="130" fill="rgba(45,138,110,0.04)" />
-          <rect x="0" y="130" width="400" height="70" fill="rgba(45,138,110,0.1)" />
-          <path d="M0,138 Q50,132 100,138 Q150,144 200,138 Q250,132 300,138 Q350,144 400,138" fill="none" stroke="rgba(45,138,110,0.3)" strokeWidth="1" />
-          <g transform="translate(55,120)"><path d="M0,0 L18,0 L21,11 L-3,11 Z" fill="#2d8a6e" opacity="0.9" /><line x1="9" y1="0" x2="9" y2="-20" stroke="#0a1a14" strokeWidth="1" opacity="0.5" /><path d="M9,-20 L21,-13 L9,-7 Z" fill="#2d8a6e" opacity="0.7" /></g>
-          <line x1="82" y1="128" x2="310" y2="128" stroke="#2d8a6e" strokeWidth="1" strokeDasharray="5 7" opacity="0.4" />
-          <circle cx="330" cy="128" r="7" fill="none" stroke="#2d8a6e" strokeWidth="1.5" opacity="0.7" />
-          <circle cx="330" cy="128" r="2" fill="#2d8a6e" opacity="0.8" />
-          <line x1="330" y1="128" x2="330" y2="105" stroke="#2d8a6e" strokeWidth="1" opacity="0.7" />
-          <path d="M330,105 L342,110 L330,115 Z" fill="#2d8a6e" opacity="0.6" />
-        </svg>
-      )
-    },
-    {
-      label: "CONSTRAINTS",
-      svg: (
-        <svg viewBox="0 0 400 260" style={{ width: "100%", height: "100%" }}>
-          <rect x="0" y="0" width="400" height="260" fill="rgba(45,138,110,0.1)" />
-          <path d="M0,50 Q100,46 200,50 Q300,54 400,50" fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="1"/>
-          <path d="M0,100 Q80,96 160,100 Q240,104 400,100" fill="none" stroke="rgba(45,138,110,0.1)" strokeWidth="1"/>
-          <path d="M0,160 Q120,156 240,160 Q320,164 400,160" fill="none" stroke="rgba(45,138,110,0.08)" strokeWidth="1"/>
-          <path d="M340,0 L355,22 L342,38 L360,50 L348,65 L370,72 L400,60 L400,0 Z" fill="rgba(200,210,195,0.7)" stroke="rgba(10,26,20,0.2)" strokeWidth="1.5"/>
-          <path d="M110,95 L122,88 L133,94 L136,106 L126,113 L113,110 L107,101 Z" fill="rgba(160,175,165,0.75)" stroke="rgba(10,26,20,0.25)" strokeWidth="1"/>
-          <path d="M255,155 L266,148 L276,154 L278,166 L268,172 L257,168 L251,160 Z" fill="rgba(160,175,165,0.7)" stroke="rgba(10,26,20,0.2)" strokeWidth="1"/>
-          <path d="M185,210 L192,205 L199,210 L197,218 L188,220 L182,215 Z" fill="rgba(160,175,165,0.6)" stroke="rgba(10,26,20,0.18)" strokeWidth="0.8"/>
-          <g transform="translate(90,170) rotate(-35)">
-            <path d="M0,30 Q-14,20 -14,-10 Q-14,-35 0,-48 Q14,-35 14,-10 Q14,20 0,30 Z" fill="#2d8a6e" opacity="0.85"/>
-            <line x1="0" y1="25" x2="0" y2="-42" stroke="rgba(245,240,232,0.35)" strokeWidth="1"/>
-            <path d="M-10,30 Q-22,45 -30,58" fill="none" stroke="rgba(245,240,232,0.4)" strokeWidth="1.5"/>
-            <path d="M10,30 Q22,45 30,58" fill="none" stroke="rgba(245,240,232,0.25)" strokeWidth="1"/>
-          </g>
-          <path d="M90,170 Q130,140 145,110 Q158,88 180,78 Q220,65 255,80 Q290,95 310,115" fill="none" stroke="#2d8a6e" strokeWidth="1.2" strokeDasharray="6 5" opacity="0.5"/>
-        </svg>
-      )
-    },
-    {
-      label: "DRIVERS",
-      svg: (
-        <svg viewBox="0 0 400 260" style={{ width: "100%", height: "100%" }}>
-          <rect x="0" y="0" width="400" height="260" fill="rgba(45,138,110,0.05)" />
-          {[0,45,90,135,180,225,270,315].map((angle, i) => {
-            const rad = (angle * Math.PI) / 180;
-            return <line key={i} x1="200" y1="130" x2={200 + Math.cos(rad) * 90} y2={130 + Math.sin(rad) * 90} stroke="#2d8a6e" strokeWidth="6" opacity="0.6" strokeLinecap="round"/>;
-          })}
-          <circle cx="200" cy="130" r="90" fill="none" stroke="#2d8a6e" strokeWidth="10" opacity="0.35"/>
-          <circle cx="200" cy="130" r="90" fill="none" stroke="#2d8a6e" strokeWidth="4" opacity="0.55"/>
-          {[0,45,90,135,180,225,270,315].map((angle, i) => {
-            const rad = (angle * Math.PI) / 180;
-            return (
-              <g key={i}>
-                <line x1={200 + Math.cos(rad) * 84} y1={130 + Math.sin(rad) * 84} x2={200 + Math.cos(rad) * 108} y2={130 + Math.sin(rad) * 108} stroke="#2d8a6e" strokeWidth="8" opacity="0.7" strokeLinecap="round"/>
-                <circle cx={200 + Math.cos(rad) * 110} cy={130 + Math.sin(rad) * 110} r="5" fill="#2d8a6e" opacity="0.5"/>
-              </g>
-            );
-          })}
-          <circle cx="200" cy="130" r="28" fill="rgba(45,138,110,0.12)" stroke="#2d8a6e" strokeWidth="5" opacity="0.55"/>
-          <circle cx="200" cy="130" r="16" fill="rgba(45,138,110,0.2)" stroke="#2d8a6e" strokeWidth="2" opacity="0.6"/>
-          {[0,60,120,180,240,300].map((angle,i) => {
-            const rad = (angle * Math.PI) / 180;
-            return <circle key={i} cx={200 + Math.cos(rad)*20} cy={130 + Math.sin(rad)*20} r="3" fill="#2d8a6e" opacity="0.5"/>;
-          })}
-          <circle cx="200" cy="130" r="6" fill="#2d8a6e" opacity="0.9"/>
-        </svg>
-      )
-    },
-    {
-      label: "CONDITIONS",
-      svg: (
-        <svg viewBox="0 0 400 200" style={{ width: "100%", height: "100%" }}>
-          <rect x="0" y="0" width="400" height="110" fill="rgba(45,138,110,0.04)" />
-          <rect x="0" y="110" width="400" height="90" fill="rgba(45,138,110,0.1)" />
-          <path d="M0,118 Q30,100 60,118 Q90,136 120,118 Q150,100 180,118 Q210,136 240,118 Q270,100 300,118 Q330,136 360,118 Q390,100 400,115" fill="none" stroke="rgba(45,138,110,0.5)" strokeWidth="2" />
-          <path d="M0,130 Q40,118 80,130 Q120,142 160,130 Q200,118 240,130 Q280,142 320,130 Q360,118 400,128" fill="none" stroke="rgba(45,138,110,0.25)" strokeWidth="1.5" />
-          <g transform="translate(185,108) rotate(-10,9,5)"><path d="M0,0 L14,0 L16,8 L-2,8 Z" fill="#2d8a6e" opacity="0.8" /><line x1="7" y1="0" x2="7" y2="-14" stroke="#0a1a14" strokeWidth="0.8" opacity="0.5" /><path d="M7,-14 L15,-9 L7,-5 Z" fill="#2d8a6e" opacity="0.6" /></g>
-        </svg>
-      )
-    },
-    {
-      label: "INPUTS",
-      svg: (
-        <svg viewBox="0 0 400 200" style={{ width: "100%", height: "100%" }}>
-          <rect x="0" y="0" width="400" height="200" fill="#e8f0ec" />
-          <rect x="0" y="140" width="400" height="60" fill="rgba(45,138,110,0.13)" />
-          <path d="M0,140 Q100,134 200,140 Q300,146 400,140" fill="none" stroke="rgba(45,138,110,0.25)" strokeWidth="1" />
-          <path d="M120,148 Q200,155 280,148 L270,165 Q200,170 130,165 Z" fill="#2d8a6e" opacity="0.6" />
-          <line x1="200" y1="148" x2="200" y2="35" stroke="#0a1a14" strokeWidth="2.5" opacity="0.5" />
-          <line x1="200" y1="135" x2="270" y2="148" stroke="#0a1a14" strokeWidth="2" opacity="0.4" />
-          <path d="M200,40 Q240,65 265,110 Q250,138 200,135 Z" fill="#2d8a6e" opacity="0.25" stroke="#2d8a6e" strokeWidth="1.5" />
-          <path d="M200,45 Q160,75 140,130 L200,135 Z" fill="#2d8a6e" opacity="0.15" stroke="#2d8a6e" strokeWidth="1" />
-          <path d="M50,55 Q75,50 95,55" fill="none" stroke="rgba(45,138,110,0.3)" strokeWidth="1" strokeDasharray="3 4" />
-          <path d="M40,70 Q70,65 100,70" fill="none" stroke="rgba(45,138,110,0.2)" strokeWidth="1" strokeDasharray="3 4" />
-          <path d="M55,85 Q80,80 105,85" fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="1" strokeDasharray="3 4" />
-        </svg>
-      )
-    },
-  ];
-
-  useEffect(() => {
-    const h = () => {
-      const outer = outerRef.current, track = trackRef.current;
-      if (!outer || !track) return;
-      const rect = outer.getBoundingClientRect();
-      const total = outer.offsetHeight - window.innerHeight;
-      const scrolled = -rect.top;
-      const p = Math.max(0, Math.min(1, scrolled / total));
-      const rawIndex = p * (cards.length - 1);
-      const snapIndex = Math.round(rawIndex);
-      track.style.transition = "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)";
-      track.style.transform = `translateX(${-(snapIndex * window.innerWidth)}px)`;
-    };
-    window.addEventListener("scroll", h, { passive: true });
-    h();
-    return () => window.removeEventListener("scroll", h);
-  }, []);
-
-  return (
-    <div ref={outerRef} style={{ height: `${cards.length * 100}vh`, position: "relative" }}>
-      <div style={{ position: "sticky", top: 0, height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", clipPath: "inset(0)" }}>
-        <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "calc(50% + min(27.5vh, 240px) - 10px)", background: "#0a1a14" }} />
-          <div style={{ position: "absolute", top: "calc(50% + min(27.5vh, 240px) - 10px)", left: 0, right: 0, bottom: 0, background: "#0a1a14" }} />
-          <div style={{ position: "absolute", top: "calc(50% - min(27.5vh, 240px) + 10px)", bottom: "calc(50% - min(27.5vh, 240px) + 10px)", left: 0, right: "calc(50% + min(36vw, 380px) - 10px)", background: "#0a1a14" }} />
-          <div style={{ position: "absolute", top: "calc(50% - min(27.5vh, 240px) + 10px)", bottom: "calc(50% - min(27.5vh, 240px) + 10px)", left: "calc(50% + min(36vw, 380px) - 10px)", right: 0, background: "#0a1a14" }} />
-          <div style={{ position: "absolute", border: "1px solid rgba(245,240,232,0.1)", borderRadius: "10px", top: "calc(50% - min(27.5vh, 240px))", left: "calc(50% - min(36vw, 380px))", width: "min(72vw, 760px)", height: "min(55vh, 480px)", pointerEvents: "none" }} />
-        </div>
-        <div ref={trackRef} style={{ position: "absolute", left: 0, top: 0, bottom: 0, display: "flex", willChange: "transform", zIndex: 1 }}>
-          {cards.map((card, i) => (
-            <div key={i} style={{ flex: "0 0 100vw", width: "100vw", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ width: "min(72vw, 760px)", height: "min(55vh, 480px)", background: "#f5f0e8", borderRadius: "10px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>{card.svg}</div>
-                <div style={{ padding: "1rem 1.75rem", fontSize: "0.6rem", letterSpacing: "0.25em", color: card.labelColor || "#2d8a6e", borderTop: "1px solid rgba(10,26,20,0.07)", fontFamily: "'DM Sans', sans-serif", textTransform: "uppercase", background: "#f5f0e8" }}>{card.label}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="decomp-read" style={activeNode ? { borderColor: "rgba(63,174,139,0.55)" } : {}}>
+        {activeNode ? (
+          <>
+            <div className="decomp-read-label">{activeNode.label} → {getNode(activeNode.parent).label} → Revenue</div>
+            <div className="decomp-read-line">{activeNode.read}</div>
+          </>
+        ) : (
+          <div className="decomp-read-line idle">Tap a branch. See the read.</div>
+        )}
       </div>
     </div>
   );
 }
 
+/* ============ SERVICE DOORS (preserved) ============ */
 function OneDayVisual() {
   const ref = useRef(null);
   const [progress, setProgress] = useState(0);
@@ -537,7 +490,7 @@ function OneDayVisual() {
             return <div key={i} style={{ width: "clamp(28px,4vw,42px)", height: "clamp(28px,4vw,42px)", borderRadius: "50%", border: `1px solid rgba(45,138,110,${0.08 + c * 0.55})`, background: `rgba(45,138,110,${c * 0.14})`, filter: `blur(${(1 - c) * 5}px)`, transition: "all 0.35s ease", display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ width: "5px", height: "5px", borderRadius: "50%", background: `rgba(45,138,110,${c})`, transition: "all 0.35s ease" }} /></div>;
           })}
         </div>
-        <div className="svc-text"><div className="svc-title">One Day</div><div className="svc-desc">Your team sees deals differently.</div></div>
+        <div className="svc-text"><div className="svc-title">One Day</div><div className="svc-desc">Your team walks out seeing deals differently.</div></div>
         <div className="svc-arrow">→</div>
       </div>
     </a>
@@ -561,7 +514,7 @@ function OneInitiativeVisual() {
             <div key={i} style={{ height: "10px", borderRadius: "5px", background: bar.accent ? `rgba(45,138,110,${0.2 + unblock * 0.35})` : bar.dim ? "rgba(245,240,232,0.04)" : "rgba(245,240,232,0.06)", width: `${bar.w}%`, transition: `all 0.7s cubic-bezier(0.16,1,0.3,1) ${bar.d}s`, opacity: bar.dim ? 0.4 + unblock * 0.5 : 1 }} />
           ))}
         </div>
-        <div className="svc-text"><div className="svc-title">One Initiative</div><div className="svc-desc">What matters gets movement.</div></div>
+        <div className="svc-text"><div className="svc-title">One Initiative</div><div className="svc-desc">The stuck thing gets unstuck.</div></div>
         <div className="svc-arrow">→</div>
       </div>
     </a>
@@ -586,13 +539,14 @@ function OneTeamVisual() {
             return <div key={i} style={{ position: "absolute", left: "50%", top: "50%", width: `${size}%`, height: `${size}%`, borderRadius: "50%", border: `1px solid rgba(45,138,110,${lp * (0.55 - i * 0.1)})`, background: i === 0 ? `rgba(45,138,110,${lp * 0.2})` : "transparent", transform: "translate(-50%,-50%)", transition: `all 0.6s ease ${i * 0.15}s`, opacity: lp }}>{i === 0 && <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "5px", height: "5px", borderRadius: "50%", background: `rgba(45,138,110,${lp})` }} />}</div>;
           })}
         </div>
-        <div className="svc-text"><div className="svc-title">One Team</div><div className="svc-desc">A drvr inside your team.</div></div>
+        <div className="svc-text"><div className="svc-title">One Team</div><div className="svc-desc">A drvr embedded in your team.</div></div>
         <div className="svc-arrow">→</div>
       </div>
     </a>
   );
 }
 
+/* ============ PAGE ============ */
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -605,106 +559,114 @@ export default function Home() {
 
   return (
     <>
-      <style>{navStyles}</style>
+      <style>{styles}</style>
       <div className="drvrs">
 
         {/* NAV — preserved */}
         <nav className="drvrs-nav">
-          <a className="drvrs-logo">
-            <div className="drvrs-logo-pill" />
-            drvrs
-          </a>
+          <a className="drvrs-logo" href="/"><div className="drvrs-logo-pill" /> drvrs</a>
           <div className="drvrs-nav-links">
             <a href="/OneDay">One Day</a>
             <a href="/OneInitiative">One Initiative</a>
             <a href="/OneTeam">One Team</a>
-            {isAdmin && <a href="/admin/rooms" style={{ opacity: 0.35 }}>Rooms</a>}
           </div>
-          {!menuOpen && (
-            <button className="drvrs-hamburger" onClick={() => setMenuOpen(true)}>
-              <span /><span /><span />
-            </button>
-          )}
+          <button className="drvrs-hamburger" onClick={() => setMenuOpen(true)} aria-label="Open menu">
+            <span /><span /><span />
+          </button>
         </nav>
 
         {/* MOBILE MENU */}
-        <div className={`drvrs-mobile-menu ${menuOpen ? "open" : ""}`}>
-          <button className="drvrs-mobile-close" onClick={() => setMenuOpen(false)}>✕</button>
+        <div className={`drvrs-mobile-menu${menuOpen ? " open" : ""}`}>
+          <button className="drvrs-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">×</button>
           <a href="/OneDay" onClick={() => setMenuOpen(false)}>One Day</a>
           <a href="/OneInitiative" onClick={() => setMenuOpen(false)}>One Initiative</a>
           <a href="/OneTeam" onClick={() => setMenuOpen(false)}>One Team</a>
         </div>
 
         {/* 1. HERO */}
-        <section className="sec sec--dark">
-          <div className="glow-r" /><div className="glow-l" />
-          <div className="hero-bg-num">d</div>
-          <div style={{ maxWidth: "820px", position: "relative", zIndex: 1 }}>
-            <div style={{ opacity: 0, animation: "heroIn 1s ease-out 0.2s forwards", fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#2d8a6e", marginBottom: "2rem", fontFamily: "'DM Sans', sans-serif" }}>
-              Everything is selling
-            </div>
-            <h1 className="serif" style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)", lineHeight: 1.05, marginBottom: "2.25rem", letterSpacing: "-0.03em", opacity: 0, animation: "heroIn 1s ease-out 0.35s forwards" }}>
-              Selling is change management.<br />
-              <em style={{ color: "rgba(245,240,232,0.3)", fontStyle: "italic" }}>Nobody treats it that way.</em>
-            </h1>
+        <section className="hero">
+          <div className="hero-glow" />
+          <div className="d-eyebrow" style={{ animation: "heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.05s both" }}>Revenue diagnostics</div>
+          <h1>
+            Something specific is in the way of your revenue.<br />
+            <em>I find it.</em>
+          </h1>
+          <p className="hero-sub">
+            drvrs is a diagnostic practice built on fifteen years of running growth. Every engagement starts with the same two questions. Who cares. What's in the way.
+          </p>
+          <div className="hero-ctas">
+            <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
+              Tag me in
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+            <a className="hero-hint" href="#diagnostic">See the diagnostic ↓</a>
           </div>
         </section>
 
         {/* 2. TICKER */}
-        <section className="sec sec--dark sec--s" style={{ flexDirection: "column", gap: "2.5rem", padding: "0" }}>
-          <div style={{ textAlign: "center", padding: "5vh 0 2vh", fontSize: "0.72rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "#2d8a6e", fontFamily: "'DM Sans', sans-serif" }}>
-            While you were selling, so were they.
-          </div>
+        <section className="ticker-sec">
+          <div className="ticker-lede">Inside the account you're working, <b>everyone is selling something</b></div>
           <Ticker />
         </section>
 
         {/* 3. ORG SYSTEM */}
-        <section className="sec sec--dark" style={{ flexDirection: "column", gap: "4rem" }}>
-          <div className="glow-r" style={{ opacity: 0.5 }} />
-          <F>
-            <h2 className="serif" style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)", lineHeight: 1.1, textAlign: "center", maxWidth: "620px", margin: "0 auto", letterSpacing: "-0.025em" }}>
-              What you hear is never<br /><em style={{ color: "rgba(245,240,232,0.35)", fontStyle: "italic" }}>the full story.</em>
-            </h2>
+        <section className="sec">
+          <F className="sec-head">
+            <div className="d-eyebrow">The gap</div>
+            <h2>You hear one thing.<br />Something else is moving.</h2>
           </F>
-          <F className="d1"><OrgSystem /></F>
+          <F delay="d1"><Decoder /></F>
         </section>
 
-        {/* 4. DECOMP */}
-        <section className="sec sec--green" style={{ flexDirection: "column", gap: "4rem", isolation: "isolate", zIndex: 1, overflow: "visible" }}>
-          <div className="glow-c" />
-          <F>
-            <div className="d-eyebrow" style={{ textAlign: "center" }}>The framework</div>
-            <h2 className="serif" style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)", lineHeight: 1.1, textAlign: "center", maxWidth: "580px", margin: "0 auto", letterSpacing: "-0.025em" }}>
-              Everything is made<br />of components.
-            </h2>
+        {/* 4. INTERACTIVE DECOMP — signature */}
+        <section className="sec" id="diagnostic" style={{ background: "var(--panel)" }}>
+          <F className="sec-head" style={{ textAlign: "center", margin: "0 auto 3.5rem" }}>
+            <div className="d-eyebrow">The diagnostic</div>
+            <h2>Revenue is a system.<br />Tap where it hurts.</h2>
           </F>
-          <Decomp />
-        </section>
-
-        {/* 5. STATEMENT */}
-        <section className="sec sec--cream sec--s" style={{ padding: "10vh 8vw" }}>
-          <F style={{ width: "100%", maxWidth: "900px" }}>
-            <div style={{ marginBottom: "1.5rem", fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#2d8a6e" }}>The diagnostic layer</div>
-            <div className="statement statement-dark" style={{ marginBottom: "3rem" }}>
-              Goal → Constraints<br />→ Drivers → Conditions<br /><em style={{ color: "rgba(10,26,20,0.25)" }}>→ Inputs.</em>
-            </div>
-            <p style={{ fontSize: "clamp(1rem, 1.3vw, 1.1rem)", lineHeight: 1.8, color: "rgba(10,26,20,0.55)", maxWidth: "480px" }}>
-              Most teams skip straight to inputs. More calls. More emails. More pipeline. But effort applied to the wrong constraint doesn't compound. It just costs more.
+          <F delay="d1"><Decomp /></F>
+          <F delay="d2">
+            <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.9rem", color: "var(--muted)", maxWidth: "420px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.7 }}>
+              Every branch has a different dig. The first call finds your branch.
             </p>
           </F>
         </section>
 
-        {/* 6. DIAGNOSTIC CASCADE */}
-        <div style={{ background: "#0a1a14" }}>
-          <DiagnosticCascade />
-        </div>
+        {/* 5. PROOF STRIP */}
+        <section className="sec sec--cream">
+          <F className="sec-head">
+            <div className="d-eyebrow">Why me</div>
+            <h2>I've run this play from inside.</h2>
+          </F>
+          <F delay="d1">
+            <div className="proof-grid">
+              <div className="proof-cell">
+                <div className="proof-big">15 years</div>
+                <div className="proof-small">Running growth. Not advising it.</div>
+              </div>
+              <div className="proof-cell">
+                <div className="proof-big">2x early</div>
+                <div className="proof-small">First GTM seats at venture-backed startups.</div>
+              </div>
+              <div className="proof-cell">
+                <div className="proof-big">Today</div>
+                <div className="proof-small">Still in the seat. Growth at a live startup.</div>
+              </div>
+              <div className="proof-cell">
+                <div className="proof-big">1 lens</div>
+                <div className="proof-small">Who cares. What's in the way.</div>
+              </div>
+            </div>
+          </F>
+        </section>
 
-        {/* 7. SERVICES */}
-        <section className="sec sec--dark" style={{ flexDirection: "column", gap: "0", alignItems: "stretch", padding: "0", borderTop: "1px solid rgba(245,240,232,0.06)" }}>
-          <div style={{ padding: "6vh 8vw 4vh" }}>
+        {/* 6. THREE DOORS */}
+        <section className="doors">
+          <div className="doors-head">
             <F>
+              <div className="d-eyebrow">Three ways in</div>
               <h2 className="serif" style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", lineHeight: 1.1, letterSpacing: "-0.025em", maxWidth: "500px" }}>
-                Three ways in.<br /><em style={{ color: "rgba(245,240,232,0.35)", fontStyle: "italic" }}>One approach.</em>
+                Pick your dose.
               </h2>
             </F>
           </div>
@@ -713,14 +675,14 @@ export default function Home() {
           <OneTeamVisual />
         </section>
 
-        {/* 8. CTA */}
-        <section className="sec sec--dark" style={{ flexDirection: "column", alignItems: "center", textAlign: "center", gap: "2rem", borderTop: "1px solid rgba(245,240,232,0.06)" }}>
-          <div className="glow-r" style={{ opacity: 0.6 }} /><div className="glow-l" style={{ opacity: 0.4 }} />
-          <F><h2 className="serif" style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", lineHeight: 1.05, letterSpacing: "-0.03em", maxWidth: "600px" }}>Welcome to drvrs.</h2></F>
-          <F className="d1"><p className="muted" style={{ fontSize: "clamp(1rem, 1.3vw, 1.1rem)", lineHeight: 1.75, maxWidth: "460px", marginBottom: "0.5rem" }}>A new way of seeing what's actually affecting the organizations you're trying to change.</p></F>
+        {/* 7. FINAL CTA */}
+        <section className="final">
+          <div className="final-glow" />
+          <F><h2>Tag me in.</h2></F>
+          <F className="d1"><p>One call. Bring the stuck thing. You'll leave with a sharper read than you walked in with.</p></F>
           <F className="d2">
-            <a className="d-cta" href="https://tally.so/r/VLPjKa" target="_blank" rel="noopener noreferrer">
-              Let's talk
+            <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
+              Start the conversation
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>
           </F>
@@ -729,6 +691,7 @@ export default function Home() {
         <footer className="d-footer">
           <a className="drvrs-logo"><div className="drvrs-logo-pill" /> drvrs</a>
           <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+            {isAdmin && <a href="/AdminRooms" style={{ color: "#f5f0e8", fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", textDecoration: "none" }}>Rooms</a>}
             <button onClick={() => base44.auth.redirectToLogin()} style={{ background: "none", border: "none", color: "#f5f0e8", fontSize: "0.75rem", letterSpacing: "0.08em", cursor: "pointer", textTransform: "uppercase", transition: "opacity 0.3s ease" }} onMouseEnter={(e) => e.target.style.opacity = "0.6"} onMouseLeave={(e) => e.target.style.opacity = "1"}>Log In</button>
             <span style={{ fontSize: "0.65rem", letterSpacing: "0.08em" }}>&copy; 2026</span>
           </div>

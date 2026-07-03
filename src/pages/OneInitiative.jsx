@@ -1,17 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 
+const CTA_URL = "https://tally.so/r/VLPjKa";
+
 const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap');
 
   .oi * { margin: 0; padding: 0; box-sizing: border-box; }
   .oi {
-    background: #0a1a14; color: #f5f0e8;
+    --ink: #0a1a14; --panel: #10251c; --cream: #f5f0e8; --accent: #2d8a6e; --accent-hi: #3fae8b; --muted: #7a8a82;
+    background: var(--ink); color: var(--cream);
     font-family: 'DM Sans', sans-serif; font-weight: 300;
-    overflow-x: hidden; -webkit-font-smoothing: antialiased; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; overflow-x: clip; min-height: 100vh;
   }
-
-  /* NAV */
-  .oi-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; mix-blend-mode: difference; }
+  .oi-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    mix-blend-mode: difference;
+  }
   .oi-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em; color: #f5f0e8; text-decoration: none; }
   .oi-logo-pill { width: 28px; height: 14px; background: #f5f0e8; border-radius: 7px; }
   .oi-nav-links { display: flex; gap: 2.5rem; align-items: center; }
@@ -20,441 +25,128 @@ const styles = `
   .oi-nav-links a.oi-active { opacity: 0.5; }
   .oi-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
   .oi-hamburger span { display: block; width: 22px; height: 1.5px; background: #f5f0e8; }
-  .oi-mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0a1a14; z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+  .oi-mobile-menu { display: none; position: fixed; inset: 0; background: var(--ink); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
   .oi-mobile-menu.open { display: flex; }
   .oi-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; }
   .oi-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: #f5f0e8; font-size: 2rem; cursor: pointer; }
 
-  /* HERO */
-  .oi-hero {
-    min-height: 100vh;
-    display: grid; grid-template-columns: 1fr 1fr;
-    align-items: center; padding: 0 8vw; gap: 4rem;
-    position: relative; overflow: hidden;
-  }
-  .oi-hero::before {
-    content: ''; position: absolute; top: -20%; left: -10%;
-    width: 60vw; height: 60vw;
-    background: radial-gradient(circle, rgba(45,138,110,0.07) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .oi-hero-label { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #2d8a6e; margin-bottom: 2rem; opacity: 0; animation: oi-fadeUp 1s ease-out 0.2s forwards; }
-  .oi-hero h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(3.5rem, 7vw, 7rem); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 2rem; opacity: 0; animation: oi-fadeUp 1s ease-out 0.4s forwards; }
-  .oi-hero-sub { font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.7; color: #7a8a82; max-width: 440px; opacity: 0; animation: oi-fadeUp 1s ease-out 0.7s forwards; }
-  .oi-hero-visual { opacity: 0; animation: oi-fadeUp 1s ease-out 0.9s forwards; display: flex; align-items: center; justify-content: center; }
+  .serif { font-family: 'DM Serif Display', serif; font-weight: 400; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
 
-  /* PROBLEM SPLIT */
-  .oi-problem {
-    display: grid; grid-template-columns: 1fr 1fr; min-height: 70vh;
-  }
-  .oi-problem-left {
-    background: #f5f0e8; color: #0a1a14;
-    display: flex; align-items: center; padding: 12vh 8vw;
-  }
-  .oi-problem-right {
-    background: #1a3a2a;
-    display: flex; align-items: center; justify-content: center;
-    padding: 6vh 5vw;
-  }
-  .oi-problem-left h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 400; line-height: 1.3; margin-bottom: 1.5rem; }
-  .oi-problem-left p { font-size: 0.95rem; line-height: 1.8; color: #7a8a82; }
+  .fi { opacity: 0; transform: translateY(24px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+  .fi.on { opacity: 1; transform: translateY(0); }
+  .fi.d1 { transition-delay: 0.1s; } .fi.d2 { transition-delay: 0.2s; } .fi.d3 { transition-delay: 0.3s; }
 
-  /* CASCADE — cream */
-  .oi-cascade { background: #f5f0e8; color: #0a1a14; padding: 14vh 8vw; }
-  .oi-section-label { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #2d8a6e; margin-bottom: 5rem; }
-  .oi-cascade-stack { display: flex; flex-direction: column; }
-  .oi-cascade-row {
-    display: grid; grid-template-columns: 120px 1fr 1fr;
-    border-top: 1px solid rgba(10,26,20,0.08);
-    align-items: stretch;
+  .hero {
+    min-height: 78vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 16vh 8vw 8vh; position: relative; overflow: clip;
   }
-  .oi-cascade-row:last-child { border-bottom: 1px solid rgba(10,26,20,0.08); }
-  .oi-cascade-id {
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 2.5rem 2rem 2.5rem 0; gap: 0.2rem;
-  }
-  .oi-cascade-letter { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: #0a1a14; line-height: 1; }
-  .oi-cascade-word { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: #2d8a6e; }
-  .oi-cascade-text {
-    padding: 2.5rem 2rem; border-left: 1px solid rgba(10,26,20,0.08);
-    display: flex; align-items: center;
-  }
-  .oi-cascade-example { font-family: 'DM Serif Display', serif; font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.5; color: #0a1a14; }
-  .oi-cascade-vis {
-    padding: 2rem; border-left: 1px solid rgba(10,26,20,0.08);
-    display: flex; align-items: center; justify-content: center;
-  }
+  .hero-glow { position: absolute; right: -15vw; top: 10%; width: 60vw; height: 70vh; background: radial-gradient(ellipse at center, rgba(45,138,110,0.11) 0%, transparent 65%); pointer-events: none; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(3rem, 8vw, 6.5rem); line-height: 0.98; letter-spacing: -0.035em; animation: oiIn 1s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+  .hero h1 em { font-style: italic; color: var(--accent-hi); }
+  .hero-sub { font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.7; color: var(--muted); max-width: 480px; margin-top: 1.75rem; animation: oiIn 1s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
+  .hero-ctas { margin-top: 2.75rem; animation: oiIn 1s cubic-bezier(0.16,1,0.3,1) 0.65s both; }
 
-  /* connector arrow between cascade rows */
-  .oi-cascade-connector {
-    display: flex; align-items: center; justify-content: center;
-    height: 28px; position: relative;
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    background: var(--accent); color: var(--cream);
+    padding: 1rem 2.4rem; border-radius: 50px;
+    font-size: 0.9rem; text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.3s; letter-spacing: 0.05em;
   }
-  .oi-cascade-connector::before {
-    content: ''; position: absolute; left: 59px; top: 0; bottom: 0;
-    width: 1px; background: rgba(45,138,110,0.3);
+  .cta-btn:hover { background: var(--accent-hi); transform: translateY(-2px); }
+  .cta-btn svg { width: 15px; height: 15px; }
+
+  .sec { padding: 12vh 8vw; }
+
+  /* PLAY STEPS */
+  .play { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; max-width: 1020px; margin: 0 auto; }
+  .play-card {
+    background: var(--panel); border: 1px solid rgba(245,240,232,0.07); border-radius: 18px;
+    padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1rem;
   }
+  .play-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-hi); }
+  .play-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.35rem, 2.1vw, 1.75rem); line-height: 1.15; }
+  .play-line { font-size: 0.92rem; line-height: 1.7; color: var(--muted); }
+  .play-vis { height: 64px; display: flex; align-items: center; }
 
-  /* OUTCOMES */
-  .oi-outcomes { background: #0a1a14; padding: 14vh 8vw; }
-  .oi-outcomes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 4rem; }
-  .oi-outcome-card { padding: 3rem 2.5rem; border-top: 1px solid rgba(245,240,232,0.08); display: flex; flex-direction: column; gap: 1.5rem; }
-  .oi-outcome-vis { height: 120px; display: flex; align-items: center; }
-  .oi-outcome-who { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: #2d8a6e; }
-  .oi-outcome-text { font-family: 'DM Serif Display', serif; font-size: clamp(1.1rem, 1.6vw, 1.4rem); line-height: 1.4; color: #f5f0e8; }
+  .walkaway { text-align: center; max-width: 620px; margin: 0 auto; }
+  .walkaway h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.1; letter-spacing: -0.025em; }
+  .walkaway p { margin-top: 1.5rem; color: var(--muted); font-size: clamp(0.98rem, 1.3vw, 1.1rem); line-height: 1.75; }
 
-  /* CTA */
-  .oi-cta { min-height: 55vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 14vh 8vw; background: #0a1a14; position: relative; overflow: hidden; }
-  .oi-cta::before { content: ''; position: absolute; bottom: -20%; left: 50%; transform: translateX(-50%); width: 70vw; height: 50vw; background: radial-gradient(circle, rgba(45,138,110,0.08) 0%, transparent 70%); pointer-events: none; }
-  .oi-cta h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 400; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.03em; }
-  .oi-cta h2 em { font-style: italic; color: #2d8a6e; }
-  .oi-cta-sub { font-size: 1rem; color: #7a8a82; margin-bottom: 3rem; max-width: 400px; }
-  .oi-cta-btn { display: inline-flex; align-items: center; gap: 0.75rem; background: #2d8a6e; color: #f5f0e8; padding: 1rem 2.5rem; border-radius: 50px; font-size: 0.95rem; font-weight: 400; text-decoration: none; cursor: pointer; border: none; transition: all 0.3s; position: relative; z-index: 1; }
-  .oi-cta-btn:hover { background: #35a080; transform: translateY(-2px); }
-  .oi-cta-btn svg { width: 16px; height: 16px; transition: transform 0.3s; }
-  .oi-cta-btn:hover svg { transform: translateX(3px); }
+  .oi-footer { padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(122,138,130,0.5); border-top: 1px solid rgba(245,240,232,0.06); }
+  .oi-footer .oi-logo { font-size: 0.95rem; opacity: 0.5; }
+  .oi-footer .oi-logo-pill { width: 20px; height: 10px; }
 
-  .oi-footer { padding: 3rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #7a8a82; border-top: 1px solid rgba(245,240,232,0.08); }
-
-  @keyframes oi-fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  .oi-reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
-  .oi-reveal.oi-visible { opacity: 1; transform: translateY(0); }
+  @keyframes oiIn { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes oiPulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.9; } }
 
   @media (max-width: 768px) {
     .oi-nav { padding: 1.5rem 2rem; }
     .oi-nav-links { display: none; }
     .oi-hamburger { display: flex; }
-    .oi-hero { grid-template-columns: 1fr; padding-top: 8rem; padding-bottom: 4rem; gap: 3rem; }
-    .oi-hero-visual { justify-content: flex-start; }
-    .oi-hero-visual svg { max-width: 100%; }
-    .oi-problem { grid-template-columns: 1fr; }
-    .oi-problem-right { padding: 4vh 8vw; min-height: unset; }
-    .oi-problem-right svg { max-width: 100%; width: 100%; }
-    .oi-cascade-row { grid-template-columns: 80px 1fr; grid-template-rows: auto auto; }
-    .oi-cascade-vis { grid-column: 2; }
-    .oi-cascade-vis { border-left: none; border-top: 1px solid rgba(10,26,20,0.08); padding: 1.5rem 0; justify-content: flex-start; }
-    .oi-cascade-vis svg { width: 90px; }
-    .oi-outcomes-grid { grid-template-columns: 1fr; }
+    .hero { padding: 14vh 6vw 8vh; }
+    .sec { padding: 9vh 6vw; }
+    .play { grid-template-columns: 1fr; }
   }
 `;
 
-function Reveal({ children, delay = 0 }) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
+function F({ children, className = "", delay = "", style }) {
+  const r = useRef(null);
+  const [v, setV] = useState(false);
   useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.08 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.12 });
+    if (r.current) o.observe(r.current);
+    return () => o.disconnect();
   }, []);
-  return (
-    <div ref={ref} className={`oi-reveal ${visible ? "oi-visible" : ""}`} style={{ transitionDelay: visible ? `${delay}ms` : "0ms" }}>
-      {children}
-    </div>
-  );
+  return <div ref={r} className={`fi${v ? " on" : ""} ${delay} ${className}`} style={style}>{children}</div>;
 }
 
-/* ── Hero visual: misaligned → aligned org flow ── */
-function HeroVisual() {
-  const [aligned, setAligned] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setAligned(true), 1400);
-    return () => clearTimeout(t);
-  }, []);
-
-  const rows = [
-    { srcY: 70,  misY: 190, col: "rgba(45,138,110,0.8)" },
-    { srcY: 150, misY: 150, col: "rgba(45,138,110,0.5)" },
-    { srcY: 230, misY: 70,  col: "rgba(45,138,110,0.32)" },
-  ];
-
-  const SX = 60, MX = 190, EX = 310;
-
-  // Static tangled paths
-  const tangledPaths = rows.map(r =>
-    `M ${SX} ${r.srcY} C ${125} ${r.srcY} ${125} ${r.misY} ${MX} ${r.misY} C ${255} ${r.misY} ${255} ${r.srcY} ${EX} ${r.srcY}`
-  );
-  // Static aligned paths (straight lines)
-  const alignedPaths = rows.map(r =>
-    `M ${SX} ${r.srcY} L ${MX} ${r.srcY} L ${EX} ${r.srcY}`
-  );
-
+function VisFind() {
   return (
-    <svg viewBox="0 0 380 300" fill="none" style={{ width: "100%", maxWidth: 420 }}>
-      <defs>
-        <filter id="hv-glow"><feGaussianBlur stdDeviation="5" /></filter>
-      </defs>
-
-      {/* Column guides */}
-      {[SX, MX, EX].map((x, i) => (
-        <line key={i} x1={x} y1={18} x2={x} y2={272} stroke="rgba(245,240,232,0.05)" strokeWidth="1" />
+    <svg width="150" height="56" viewBox="0 0 150 56">
+      {[0, 1, 2, 3].map(i => (
+        <rect key={i} x="0" y={i * 14} width={[110, 58, 86, 42][i]} height="8" rx="4"
+          fill={i === 1 ? "#2d8a6e" : "rgba(245,240,232,0.08)"}
+          style={i === 1 ? { animation: "oiPulse 2.2s ease-in-out infinite" } : {}} />
       ))}
-      {["GOAL","TEAM","OUTCOME"].map((lbl, i) => (
-        <text key={i} x={[SX,MX,EX][i]} y={286} textAnchor="middle"
-          fill="rgba(245,240,232,0.18)" fontSize="7.5" fontFamily="DM Sans" letterSpacing="0.14em">{lbl}</text>
-      ))}
-
-      {/* TANGLED layer — fades out */}
-      <g style={{ opacity: aligned ? 0 : 1, transition: "opacity 0.9s ease" }}>
-        {rows.map((row, i) => (
-          <g key={i}>
-            <path d={tangledPaths[i]} stroke={row.col} strokeWidth="1.3" strokeDasharray="5 4" opacity="0.6" />
-            {row.misY !== row.srcY && (
-              <>
-                <line x1={MX-6} y1={row.misY-6} x2={MX+6} y2={row.misY+6} stroke="rgba(200,80,80,0.5)" strokeWidth="1.5" strokeLinecap="round" />
-                <line x1={MX+6} y1={row.misY-6} x2={MX-6} y2={row.misY+6} stroke="rgba(200,80,80,0.5)" strokeWidth="1.5" strokeLinecap="round" />
-              </>
-            )}
-          </g>
-        ))}
-      </g>
-
-      {/* ALIGNED layer — fades in */}
-      <g style={{ opacity: aligned ? 1 : 0, transition: "opacity 0.9s ease" }}>
-        {rows.map((row, i) => (
-          <g key={i}>
-            <path d={alignedPaths[i]} stroke={row.col} strokeWidth="1.8" />
-            <circle cx={MX} cy={row.srcY} r={5} fill={row.col} />
-          </g>
-        ))}
-        <text x={MX} y={258} textAnchor="middle"
-          fill="rgba(45,138,110,0.35)" fontSize="7.5" fontFamily="DM Sans" letterSpacing="0.2em">ALIGNED</text>
-      </g>
-
-      {/* Always-visible source & end nodes */}
-      {rows.map((row, i) => (
+      <circle cx="70" cy="18" r="13" fill="none" stroke="#3fae8b" strokeWidth="1.5" />
+      <line x1="80" y1="28" x2="90" y2="38" stroke="#3fae8b" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function VisName() {
+  return (
+    <svg width="150" height="56" viewBox="0 0 150 56">
+      <line x1="10" y1="44" x2="120" y2="16" stroke="#2d8a6e" strokeWidth="3" strokeLinecap="round" />
+      <polygon points="98,36 112,30 106,44" fill="rgba(45,138,110,0.5)" />
+      <circle cx="88" cy="38" r="5" fill="#3fae8b" />
+      <rect x="118" y="6" width="22" height="18" rx="3" fill="rgba(245,240,232,0.08)" />
+    </svg>
+  );
+}
+function VisRun() {
+  return (
+    <svg width="150" height="56" viewBox="0 0 150 56">
+      {[0, 1, 2].map(i => (
         <g key={i}>
-          <circle cx={SX} cy={row.srcY} r={16} fill={row.col} opacity={0.1} filter="url(#hv-glow)" />
-          <circle cx={SX} cy={row.srcY} r={7} fill={row.col} />
-          <circle cx={EX} cy={row.srcY} r={7} fill={row.col} opacity={aligned ? 1 : 0.2}
-            style={{ transition: "opacity 0.9s ease" }} />
+          <line x1={12 + i * 46} y1="28" x2={44 + i * 46} y2="28" stroke={i < 2 ? "#2d8a6e" : "rgba(45,138,110,0.3)"} strokeWidth="1.5" strokeDasharray={i === 2 ? "4 5" : "none"} />
+          <circle cx={12 + i * 46} cy="28" r="5" fill={i === 0 ? "#3fae8b" : "rgba(45,138,110,0.6)"} />
         </g>
       ))}
+      <circle cx="150" cy="28" r="5" fill="none" stroke="#3fae8b" strokeWidth="1.5" transform="translate(-8,0)" />
     </svg>
   );
 }
-
-/* ── Cascade row illustrations ── */
-function GoalVis() {
-  return (
-    <svg viewBox="0 0 120 90" fill="none" style={{ width: 120 }}>
-      <circle cx="60" cy="45" r="35" stroke="rgba(45,138,110,0.2)" strokeWidth="1" />
-      <circle cx="60" cy="45" r="22" stroke="rgba(45,138,110,0.35)" strokeWidth="1" />
-      <circle cx="60" cy="45" r="10" fill="rgba(45,138,110,0.5)" />
-      <circle cx="60" cy="45" r="4" fill="#0a1a14" />
-      <line x1="60" y1="10" x2="60" y2="80" stroke="rgba(10,26,20,0.08)" strokeWidth="1" />
-      <line x1="25" y1="45" x2="95" y2="45" stroke="rgba(10,26,20,0.08)" strokeWidth="1" />
-    </svg>
-  );
-}
-function ConstraintVis() {
-  return (
-    <svg viewBox="0 0 120 90" fill="none" style={{ width: 120 }}>
-      {/* Wall of blocks */}
-      {[0,1,2,3].map(i => (
-        <rect key={i} x={10 + i * 25} y={30} width={20} height={32} rx="2"
-          fill={i === 2 ? "rgba(200,80,80,0.15)" : "rgba(10,26,20,0.1)"}
-          stroke={i === 2 ? "rgba(200,80,80,0.4)" : "rgba(10,26,20,0.15)"} strokeWidth="1" />
-      ))}
-      {/* Arrow hitting wall */}
-      <path d="M 15 16 L 60 16" stroke="rgba(45,138,110,0.5)" strokeWidth="1.5" markerEnd="url(#arr)" />
-      <line x1="60" y1="10" x2="60" y2="22" stroke="rgba(200,80,80,0.5)" strokeWidth="1.5" />
-      <text x="60" y="80" textAnchor="middle" fill="rgba(10,26,20,0.2)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.1em">BLOCKER</text>
-    </svg>
-  );
-}
-function DriverVis() {
-  return (
-    <svg viewBox="0 0 120 90" fill="none" style={{ width: 120 }}>
-      {/* Lever diagram */}
-      <line x1="20" y1="70" x2="100" y2="70" stroke="rgba(10,26,20,0.12)" strokeWidth="1" />
-      <polygon points="60,70 45,40 75,40" fill="none" stroke="rgba(10,26,20,0.15)" strokeWidth="1" />
-      <line x1="20" y1="55" x2="100" y2="45" stroke="rgba(45,138,110,0.6)" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="20" cy="55" r="4" fill="rgba(45,138,110,0.4)" />
-      <circle cx="60" cy="70" r="4" fill="rgba(45,138,110,0.7)" />
-      <text x="60" y="85" textAnchor="middle" fill="rgba(10,26,20,0.2)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.1em">LEVER</text>
-    </svg>
-  );
-}
-function ConditionsVis() {
-  return (
-    <svg viewBox="0 0 120 90" fill="none" style={{ width: 120 }}>
-      {/* Interconnected conditions */}
-      {[[30,30],[90,30],[60,65]].map(([cx,cy],i) => (
-        <g key={i}>
-          <circle cx={cx} cy={cy} r={12} fill="rgba(45,138,110,0.08)" stroke="rgba(45,138,110,0.3)" strokeWidth="1" />
-          <circle cx={cx} cy={cy} r={4} fill="rgba(45,138,110,0.5)" />
-        </g>
-      ))}
-      <line x1="42" y1="30" x2="78" y2="30" stroke="rgba(45,138,110,0.25)" strokeWidth="1" />
-      <line x1="37" y1="40" x2="53" y2="56" stroke="rgba(45,138,110,0.25)" strokeWidth="1" />
-      <line x1="83" y1="40" x2="67" y2="56" stroke="rgba(45,138,110,0.25)" strokeWidth="1" />
-      <text x="60" y="85" textAnchor="middle" fill="rgba(10,26,20,0.2)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.1em">SYSTEM</text>
-    </svg>
-  );
-}
-function InputsVis() {
-  return (
-    <svg viewBox="0 0 120 90" fill="none" style={{ width: 120 }}>
-      {/* Funnel */}
-      <path d="M 15 20 L 105 20 L 75 55 L 75 78 L 45 78 L 45 55 Z" fill="rgba(45,138,110,0.06)" stroke="rgba(45,138,110,0.3)" strokeWidth="1" />
-      {[0,1,2].map(i => (
-        <line key={i} x1={25 + i*25} y1={15} x2={25 + i*25} y2={25} stroke="rgba(45,138,110,0.4)" strokeWidth="1.5" strokeLinecap="round" />
-      ))}
-      <circle cx="60" cy="68" r="5" fill="rgba(45,138,110,0.7)" />
-      <text x="60" y="88" textAnchor="middle" fill="rgba(10,26,20,0.2)" fontSize="7" fontFamily="DM Sans" letterSpacing="0.1em">INPUTS</text>
-    </svg>
-  );
-}
-
-/* ── Problem right-side visual: pipeline blocked ── */
-function StuckVisual() {
-  const blockers = [
-    "Competing priorities",
-    "Unclear ownership",
-    "Unmet conditions",
-    "Hidden drivers",
-  ];
-
-  return (
-    <div style={{ width: "100%", maxWidth: 340, fontFamily: "'DM Sans', sans-serif" }}>
-      {/* Goal — trying to move right */}
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}>
-        <div style={{
-          border: "1px solid rgba(45,138,110,0.5)",
-          borderRadius: "4px",
-          padding: "0.6rem 1.2rem",
-          fontSize: "0.7rem", letterSpacing: "0.18em",
-          color: "rgba(45,138,110,0.9)",
-          whiteSpace: "nowrap",
-          background: "rgba(45,138,110,0.06)"
-        }}>
-          THE GOAL
-        </div>
-        {/* Arrow line */}
-        <div style={{ flex: 1, height: "1px", background: "rgba(45,138,110,0.25)", position: "relative" }}>
-          <div style={{
-            position: "absolute", right: -1, top: "50%", transform: "translateY(-50%)",
-            width: 0, height: 0,
-            borderTop: "4px solid transparent", borderBottom: "4px solid transparent",
-            borderLeft: "6px solid rgba(45,138,110,0.35)"
-          }} />
-        </div>
-        {/* Wall */}
-        <div style={{
-          width: "3px", height: "48px",
-          background: "linear-gradient(to bottom, rgba(200,80,80,0.15), rgba(200,80,80,0.4), rgba(200,80,80,0.15))",
-          borderRadius: "2px", flexShrink: 0
-        }} />
-      </div>
-
-      {/* Blocker stack */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-        {blockers.map((label, i) => {
-          const opacity = 0.55 - i * 0.08;
-          const width = `${92 - i * 7}%`;
-          return (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", gap: "0.75rem",
-              opacity
-            }}>
-              <div style={{
-                width: "5px", height: "5px", borderRadius: "50%",
-                background: "rgba(200,80,80,0.6)", flexShrink: 0
-              }} />
-              <div style={{
-                height: "1px",
-                width,
-                background: `linear-gradient(to right, rgba(200,80,80,0.35), transparent)`
-              }} />
-              <div style={{
-                fontSize: "0.7rem", letterSpacing: "0.1em",
-                color: "rgba(245,240,232,0.35)", whiteSpace: "nowrap",
-                textTransform: "uppercase"
-              }}>
-                {label}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Stuck label */}
-      <div style={{
-        marginTop: "2.5rem",
-        fontFamily: "'DM Serif Display', serif",
-        fontSize: "clamp(2.5rem, 5vw, 3.5rem)",
-        fontStyle: "italic",
-        letterSpacing: "-0.03em",
-        color: "rgba(245,240,232,0.06)",
-        lineHeight: 1
-      }}>
-        stuck.
-      </div>
-    </div>
-  );
-}
-
-/* ── Outcome visuals ── */
-function ClarityVis() {
-  return (
-    <svg viewBox="0 0 140 100" fill="none" style={{ width: 140 }}>
-      <circle cx="70" cy="50" r="35" fill="none" stroke="rgba(45,138,110,0.15)" strokeWidth="1" strokeDasharray="4 4" />
-      <circle cx="70" cy="50" r="22" fill="none" stroke="rgba(45,138,110,0.3)" strokeWidth="1" />
-      <circle cx="70" cy="50" r="10" fill="rgba(45,138,110,0.4)" />
-      <circle cx="70" cy="50" r="4" fill="#f5f0e8" />
-      <line x1="70" y1="15" x2="70" y2="28" stroke="rgba(45,138,110,0.4)" strokeWidth="1" strokeDasharray="2 2" />
-      <line x1="70" y1="72" x2="70" y2="85" stroke="rgba(45,138,110,0.4)" strokeWidth="1" strokeDasharray="2 2" />
-      <line x1="35" y1="50" x2="48" y2="50" stroke="rgba(45,138,110,0.4)" strokeWidth="1" strokeDasharray="2 2" />
-      <line x1="92" y1="50" x2="105" y2="50" stroke="rgba(45,138,110,0.4)" strokeWidth="1" strokeDasharray="2 2" />
-    </svg>
-  );
-}
-function MapVis() {
-  const nodes = [[70,20],[30,60],[70,60],[110,60],[50,90],[90,90]];
-  const edges = [[0,1],[0,2],[0,3],[1,4],[2,4],[2,5],[3,5]];
-  return (
-    <svg viewBox="0 0 140 110" fill="none" style={{ width: 140 }}>
-      {edges.map(([a,b],i) => (
-        <line key={i} x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} stroke="rgba(245,240,232,0.15)" strokeWidth="1" />
-      ))}
-      {nodes.map(([cx,cy],i) => (
-        <g key={i}>
-          <circle cx={cx} cy={cy} r={i===0?8:6} fill={i===0 ? "rgba(45,138,110,0.7)" : "rgba(45,138,110,0.25)"} />
-          {i===0 && <circle cx={cx} cy={cy} r={14} fill="rgba(45,138,110,0.1)" />}
-        </g>
-      ))}
-    </svg>
-  );
-}
-function PathVis() {
-  return (
-    <svg viewBox="0 0 140 100" fill="none" style={{ width: 140 }}>
-      <path d="M 15 80 C 40 80 40 20 70 20 C 100 20 100 60 125 60" stroke="rgba(45,138,110,0.6)" strokeWidth="2" strokeLinecap="round" fill="none" />
-      {[0,0.25,0.5,0.75,1].map((t,i) => {
-        const x = 15 + t*110;
-        const y = i===0?80:i===1?60:i===2?20:i===3?40:60;
-        return <circle key={i} cx={x} cy={y} r={i===4?6:4} fill={i===4?"rgba(45,138,110,0.9)":"rgba(45,138,110,0.4)"} />;
-      })}
-      <circle cx="125" cy="60" r="10" fill="rgba(45,138,110,0.15)" stroke="rgba(45,138,110,0.4)" strokeWidth="1" />
-    </svg>
-  );
-}
-
-const cascade = [
-  { letter: "G", word: "Goal", example: "Move upmarket by Q4. Current deal size can't sustain the business.", Vis: GoalVis },
-  { letter: "C", word: "Constraint", example: "The sales team is built for SMB. Nobody has closed above $200K.", Vis: ConstraintVis },
-  { letter: "D", word: "Driver", example: "Enterprise seller capacity. But leadership hasn't agreed that's the lever.", Vis: DriverVis },
-  { letter: "C", word: "Conditions", example: "Comp plan doesn't incentivize larger deals. No recruiting pipeline. No enterprise reputation.", Vis: ConditionsVis },
-  { letter: "I", word: "Inputs", example: "Job descriptions test for SMB hustle. Interview process filters out enterprise sellers. No executive sponsor.", Vis: InputsVis },
-];
 
 export default function OneInitiative() {
   const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
       <style>{styles}</style>
       <div className="oi">
-        {/* NAV */}
+
         <nav className="oi-nav">
           <a className="oi-logo" href="/"><div className="oi-logo-pill" /> drvrs</a>
           <div className="oi-nav-links">
@@ -462,105 +154,85 @@ export default function OneInitiative() {
             <a href="/OneInitiative" className="oi-active">One Initiative</a>
             <a href="/OneTeam">One Team</a>
           </div>
-          {!menuOpen && <button className="oi-hamburger" onClick={() => setMenuOpen(true)}><span /><span /><span /></button>}
+          <button className="oi-hamburger" onClick={() => setMenuOpen(true)} aria-label="Open menu"><span /><span /><span /></button>
         </nav>
-        <div className={`oi-mobile-menu ${menuOpen ? "open" : ""}`}>
-          <button className="oi-mobile-close" onClick={() => setMenuOpen(false)}>✕</button>
+        <div className={`oi-mobile-menu${menuOpen ? " open" : ""}`}>
+          <button className="oi-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">×</button>
           <a href="/OneDay" onClick={() => setMenuOpen(false)}>One Day</a>
           <a href="/OneInitiative" onClick={() => setMenuOpen(false)}>One Initiative</a>
           <a href="/OneTeam" onClick={() => setMenuOpen(false)}>One Team</a>
         </div>
 
         {/* HERO */}
-        <section className="oi-hero">
-          <div>
-            <div className="oi-hero-label">Initiative Alignment</div>
-            <h1>One<br />Initiative.</h1>
-            <p className="oi-hero-sub">Leadership set the goal. Everyone nodded. Nothing moved. Sound familiar?</p>
-          </div>
-          <div className="oi-hero-visual">
-            <HeroVisual />
+        <section className="hero">
+          <div className="hero-glow" />
+          <div className="eyebrow" style={{ animation: "oiIn 1s cubic-bezier(0.16,1,0.3,1) 0.05s both" }}>One Initiative</div>
+          <h1>You have a stuck thing.<br /><em>Bring it.</em></h1>
+          <p className="hero-sub">
+            A launch that stalled. A segment that won't convert. A pipeline that looks full and closes empty. I embed on that one thing until it moves.
+          </p>
+          <div className="hero-ctas">
+            <a className="cta-btn" href={CTA_URL} target="_blank" rel="noopener noreferrer">
+              Bring the stuck thing
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
           </div>
         </section>
 
-        {/* PROBLEM */}
-        <Reveal>
-          <div className="oi-problem">
-            <div className="oi-problem-left">
-              <div>
-                <h2>The same forces that kill deals from the outside kill initiatives from the inside.</h2>
-                <p>Competing priorities. Unclear ownership. Conditions nobody is addressing. Drivers that haven't been identified. The goal is clear. The path to it isn't.</p>
+        {/* THE PLAY */}
+        <section className="sec" style={{ paddingTop: "4vh" }}>
+          <F style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+            <div className="eyebrow">The play</div>
+            <h2 className="serif" style={{ fontSize: "clamp(1.9rem, 3.6vw, 3rem)", lineHeight: 1.12 }}>Find it. Name it. Move it.</h2>
+          </F>
+          <div className="play">
+            <F delay="d1">
+              <div className="play-card">
+                <div className="play-vis"><VisFind /></div>
+                <div className="play-tag">01 · Find</div>
+                <div className="play-title serif">The real constraint</div>
+                <div className="play-line">Effort applied to the wrong constraint just costs more. We find the one that's actually binding.</div>
               </div>
-            </div>
-            <div className="oi-problem-right">
-              <StuckVisual />
-            </div>
+            </F>
+            <F delay="d2">
+              <div className="play-card">
+                <div className="play-vis"><VisName /></div>
+                <div className="play-tag">02 · Name</div>
+                <div className="play-title serif">The driver</div>
+                <div className="play-line">The lever that moves it. Named plainly, so the whole team can push in the same direction.</div>
+              </div>
+            </F>
+            <F delay="d3">
+              <div className="play-card">
+                <div className="play-vis"><VisRun /></div>
+                <div className="play-tag">03 · Move</div>
+                <div className="play-title serif">The plan</div>
+                <div className="play-line">A sequence your team runs, with me in the room until it has momentum of its own.</div>
+              </div>
+            </F>
           </div>
-        </Reveal>
+        </section>
 
-        {/* CASCADE */}
-        <Reveal>
-          <section className="oi-cascade">
-            <div className="oi-section-label">drvrs applied internally</div>
-            <div className="oi-cascade-stack">
-              {cascade.map((c, i) => (
-                <Reveal key={i} delay={i * 100}>
-                  <div className="oi-cascade-row">
-                    <div className="oi-cascade-id">
-                      <div className="oi-cascade-letter">{c.letter}</div>
-                      <div className="oi-cascade-word">{c.word}</div>
-                    </div>
-                    <div className="oi-cascade-text">
-                      <div className="oi-cascade-example">{c.example}</div>
-                    </div>
-                    <div className="oi-cascade-vis">
-                      <c.Vis />
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
+        {/* WALKAWAY + CTA */}
+        <section className="sec" style={{ padding: "16vh 8vw", background: "var(--panel)" }}>
+          <F className="walkaway">
+            <div className="eyebrow" style={{ textAlign: "center" }}>What you keep</div>
+            <h2>Movement, and the map that made it.</h2>
+            <p>The initiative moves. Your team keeps the diagnosis, the plan, and the way of finding both next time.</p>
+            <div style={{ marginTop: "2.5rem" }}>
+              <a className="cta-btn" href={CTA_URL} target="_blank" rel="noopener noreferrer">
+                Tag me in
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </a>
             </div>
-          </section>
-        </Reveal>
-
-        {/* OUTCOMES */}
-        <Reveal>
-          <section className="oi-outcomes">
-            <div className="oi-section-label">What you walk away with</div>
-            <div className="oi-outcomes-grid">
-              {[
-                { who: "You get", text: "Clarity on exactly why the org is stuck.", Vis: ClarityVis },
-                { who: "Your team gets", text: "A shared map of what needs to change, and in what order.", Vis: MapVis },
-                { who: "The initiative gets", text: "A real path forward instead of another strategy deck.", Vis: PathVis },
-              ].map((item, i) => (
-                <Reveal key={i} delay={i * 120}>
-                  <div className="oi-outcome-card">
-                    <div className="oi-outcome-vis"><item.Vis /></div>
-                    <div className="oi-outcome-who">{item.who}</div>
-                    <div className="oi-outcome-text">{item.text}</div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </section>
-        </Reveal>
-
-        {/* CTA */}
-        <section className="oi-cta">
-          <Reveal><h2>Pick the initiative.<br /><em>We'll find the blockers.</em></h2></Reveal>
-          <Reveal delay={100}><p className="oi-cta-sub">One conversation is all it takes to start.</p></Reveal>
-          <Reveal delay={200}>
-            <a className="oi-cta-btn" href="/OneInitiativeCTA">
-              Start a conversation
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </a>
-          </Reveal>
+          </F>
         </section>
 
         <footer className="oi-footer">
           <a className="oi-logo" href="/"><div className="oi-logo-pill" /> drvrs</a>
-          <span>&copy; 2026</span>
+          <span style={{ fontSize: "0.65rem", letterSpacing: "0.08em" }}>&copy; 2026</span>
         </footer>
+
       </div>
     </>
   );
