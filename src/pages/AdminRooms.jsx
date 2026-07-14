@@ -71,6 +71,9 @@ export default function AdminRooms() {
           <span style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textMuted, letterSpacing: 2, textTransform: "uppercase" }}>
             Engagement Rooms
           </span>
+          <a href="/admin/staging" style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.textMuted, letterSpacing: 2, textTransform: "uppercase", textDecoration: "none", opacity: 0.7 }}>
+            Staging Sheet ↗
+          </a>
         </div>
         {view === "list" && (
           <button onClick={() => { setEditingRoom(null); setView("create"); }} style={{

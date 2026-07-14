@@ -15,6 +15,7 @@ import RoomAccess from './pages/RoomAccess';
 import ESignPage from './pages/ESignPage';
 import SignSuccess from './pages/SignSuccess';
 import AgreementEditor from './pages/AgreementEditor';
+import StagingSheet from './pages/StagingSheet';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -74,6 +75,7 @@ const AuthenticatedApp = () => {
       <Route path="/room/:slug/sign" element={<ESignPage />} />
       <Route path="/room/:slug/success" element={<SignSuccess />} />
       <Route path="/admin/agreement" element={<AgreementEditor />} />
+      <Route path="/admin/staging" element={<StagingSheet />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
