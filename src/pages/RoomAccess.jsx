@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import DrvrsEngagement from "@/components/engagementRoom/DrvrsEngagement";
+import InsureAmsRoom from "@/components/engagementRoom/InsureAmsRoom";
 import ProjectTrackingView from "@/components/engagementRoom/ProjectTrackingView";
 
 const COLORS = {
@@ -155,6 +156,9 @@ export default function RoomAccess() {
   if (state === "room" && roomData) {
     if (roomData.status === "signed") {
       return <ProjectTrackingView room={roomData} isAdmin={false} />;
+    }
+    if (roomData.slug === "insure-ams") {
+      return <InsureAmsRoom />;
     }
     return <DrvrsEngagement room={roomData} />;
   }
