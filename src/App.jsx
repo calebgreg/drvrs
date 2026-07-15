@@ -71,6 +71,9 @@ const AuthenticatedApp = () => {
       <Route path="/OneInitiativeCTA" element={<OneInitiativeCTA />} />
       <Route path="/OneTeamCTA" element={<OneTeamCTA />} />
       <Route path="/admin/rooms" element={<AdminRooms />} />
+      <Route path="/AdminRooms" element={<AdminRooms />} />
+      <Route path="/StagingSheet" element={<StagingSheet />} />
+      <Route path="/AgreementEditor" element={<AgreementEditor />} />
       <Route path="/room/:slug" element={<RoomAccess />} />
       <Route path="/room/:slug/sign" element={<ESignPage />} />
       <Route path="/room/:slug/success" element={<SignSuccess />} />
