@@ -158,7 +158,7 @@ export default function RoomAccess() {
       return <ProjectTrackingView room={roomData} isAdmin={false} />;
     }
     if (roomData.slug === "insure-ams") {
-      return <InsureAmsRoom />;
+      return <InsureAmsRoom room={roomData} />;
     }
     return <DrvrsEngagement room={roomData} />;
   }

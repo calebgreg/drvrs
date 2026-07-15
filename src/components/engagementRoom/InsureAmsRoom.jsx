@@ -343,7 +343,7 @@ function PlaybookText({ children }) {
 }
 
 
-export default function InsureAmsRoom() {
+export default function InsureAmsRoom({ room }) {
   const [stage, setStage] = useState(0);
   const [treePhase, setTreePhase] = useState(0);
   const containerRef = useRef(null);
@@ -834,17 +834,50 @@ export default function InsureAmsRoom() {
                 07 — ENGAGEMENT
               </div>
             </Fade>
+            {room?.proposalNote && (
+              <Fade show delay={150}>
+                <div style={{ fontFamily: fonts.body, fontSize: 14, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 24, maxWidth: 520 }}>
+                  {room.proposalNote}
+                </div>
+              </Fade>
+            )}
+            {(room?.proposalOptions || []).filter(o => o.name || o.price).map((opt, i) => (
+              <Fade key={`custom-${i}`} show delay={200 + i * 150}>
+                <div style={{
+                  background: COLORS.surface, border: `1px solid ${opt.highlighted ? COLORS.accent + "55" : COLORS.border}`,
+                  borderRadius: 8, padding: 24, marginBottom: 12,
+                }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
+                    <div>
+                      {opt.name && <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2, marginBottom: 12 }}>{opt.name.toUpperCase()}</div>}
+                      {opt.timeline && <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>{opt.timeline}</div>}
+                    </div>
+                    {opt.price && <div style={{ fontFamily: fonts.display, fontSize: 22, color: COLORS.text }}>{opt.price}</div>}
+                  </div>
+                  {(opt.deliverables || []).filter(d => d.trim()).length > 0 && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {opt.deliverables.filter(d => d.trim()).map((d, j) => (
+                        <div key={j} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div style={{ width: 4, height: 4, borderRadius: "50%", background: COLORS.accent, opacity: 0.5, flexShrink: 0 }} />
+                          <div style={{ fontFamily: fonts.body, fontSize: 12.5, color: COLORS.textMuted }}>{d}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Fade>
+            ))}
             <Fade show delay={200}>
               <div style={{
                 background: COLORS.surface, border: `1px solid ${COLORS.accent}33`,
                 borderRadius: 8, padding: 24, marginBottom: 12,
               }}>
-                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2, marginBottom: 12 }}>ONE DAY</div>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.accent, letterSpacing: 2, marginBottom: 12 }}>{room?.engagementOneDayTitle || "ONE DAY"}</div>
                 <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
                   Make the Argument
                 </div>
                 <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
-                  Half-day working session. Flat fee.
+                  {room?.engagementOneDayDescription || "Half-day working session. Flat fee."}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {[
@@ -867,12 +900,12 @@ export default function InsureAmsRoom() {
                 background: COLORS.surface, border: `1px solid ${COLORS.border}`,
                 borderRadius: 8, padding: 24, marginBottom: 12,
               }}>
-                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>ONE INITIATIVE</div>
+                <div style={{ fontFamily: fonts.mono, fontSize: 10, color: COLORS.warning, letterSpacing: 2, marginBottom: 12 }}>{room?.engagementOneInitiativeTitle || "ONE INITIATIVE"}</div>
                 <div style={{ fontFamily: fonts.body, fontSize: 17, color: COLORS.text, fontWeight: 600, marginBottom: 6 }}>
                   Reach Through Believers
                 </div>
                 <div style={{ fontFamily: fonts.body, fontSize: 13, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
-                  60-day engagement. Milestone-based.
+                  {room?.engagementOneInitiativeDescription || "60-day engagement. Milestone-based."}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {[
@@ -924,7 +957,7 @@ export default function InsureAmsRoom() {
             <Fade show delay={700}>
               <div style={{ textAlign: "center", marginTop: 32 }}>
                 <div style={{ fontFamily: fonts.body, fontSize: 15, color: COLORS.textMuted, marginBottom: 24 }}>
-                  Happy to do a 30-minute call to figure out which fits.
+                  {room?.engagementFooter || "Happy to do a 30-minute call to figure out which fits."}
                 </div>
                 <div style={{ fontFamily: fonts.display, fontSize: 20, fontWeight: 400, color: COLORS.textDim, letterSpacing: 2 }}>
                   drvrs.io
