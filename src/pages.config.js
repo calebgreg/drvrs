@@ -51,6 +51,8 @@ import Home from './pages/Home';
 import OneDay from './pages/OneDay';
 import OneInitiative from './pages/OneInitiative';
 import OneTeam from './pages/OneTeam';
+import AdminRooms from './pages/AdminRooms';
+import StagingSheet from './pages/StagingSheet';
 import __Layout from './Layout.jsx';
 
 
@@ -59,6 +61,8 @@ export const PAGES = {
     "OneDay": OneDay,
     "OneInitiative": OneInitiative,
     "OneTeam": OneTeam,
+    "admin/rooms": AdminRooms,
+    "admin/staging": StagingSheet,
 }
 
 export const pagesConfig = {
