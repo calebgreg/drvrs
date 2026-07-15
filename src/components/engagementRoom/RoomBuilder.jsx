@@ -143,6 +143,7 @@ export default function RoomBuilder({ room, onSaved }) {
   });
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [generatingTab, setGeneratingTab] = useState(null); // which tab is generating
   const [generatingOption, setGeneratingOption] = useState(null); // index of option being generated
   const [optionPrompts, setOptionPrompts] = useState({}); // per-option prompt text
   const [activeTab, setActiveTab] = useState("basics");
@@ -170,6 +171,229 @@ export default function RoomBuilder({ room, onSaved }) {
   };
 
   const autoSlug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  const aiBtn = (tab, onClick) => (
+    <button
+      onClick={onClick}
+      disabled={generatingTab === tab}
+      style={{
+        background: generatingTab === tab ? "transparent" : COLORS.accentDim,
+        border: `1px solid ${COLORS.accent}55`,
+        borderRadius: 6, padding: "7px 16px", cursor: generatingTab === tab ? "not-allowed" : "pointer",
+        fontFamily: fonts.mono, fontSize: 9, color: COLORS.accent, letterSpacing: 1,
+        display: "flex", alignItems: "center", gap: 6, opacity: generatingTab === tab ? 0.6 : 1,
+      }}
+    >
+      <span style={{ fontSize: 11 }}>✦</span>
+      {generatingTab === tab ? "GENERATING..." : "GENERATE WITH AI"}
+    </button>
+  );
+
+  const handleGenerateGoal = async () => {
+    setGeneratingTab("goal");
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are writing content for a deal engagement room for a consulting practice called drvrs.
+
+Prospect context:
+- Company: ${data.companyName}
+- Prospect: ${data.prospectName}
+
+Generate the "Goal" section of their engagement room. This section names the single measurable goal the engagement is designed to achieve — something specific and compelling, not vague. Write in a direct, confident, analytical tone. No fluff.
+
+Return:
+- goalTitle: A short, punchy headline (e.g. "50 paying customers." or "3x enterprise close rate.")
+- goalDescription: 2-3 sentences explaining why this number matters as a system signal, not just a revenue target
+- goalCallout: One crisp sentence for the highlighted callout box — a reframe or insight
+- goalFooter: 1-2 sentences that pivot to the real question this goal reveals
+- decompositionDescription: 1-2 sentences introducing the system decomposition (3 components that, if any collapses to zero, the whole collapses)
+- decompositionTree: The goal decomposed into a tree. Root is the goal. Left and right branches are the two main subsystems. Each branch has a leaf (a key lever within that subsystem).
+  - Each node has: label (short, bold) and sublabel (descriptor phrase)
+  - caption: one sentence shown below the diagram`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            goalTitle: { type: "string" },
+            goalDescription: { type: "string" },
+            goalCallout: { type: "string" },
+            goalFooter: { type: "string" },
+            decompositionDescription: { type: "string" },
+            decompositionTree: {
+              type: "object",
+              properties: {
+                root: { type: "object", properties: { label: { type: "string" }, sublabel: { type: "string" } } },
+                leftBranch: { type: "object", properties: { label: { type: "string" }, sublabel: { type: "string" } } },
+                rightBranch: { type: "object", properties: { label: { type: "string" }, sublabel: { type: "string" } } },
+                leftLeaf: { type: "object", properties: { label: { type: "string" }, sublabel: { type: "string" } } },
+                rightLeaf: { type: "object", properties: { label: { type: "string" }, sublabel: { type: "string" } } },
+                caption: { type: "string" },
+              }
+            }
+          }
+        }
+      });
+      setData(d => ({ ...d, ...result }));
+    } finally {
+      setGeneratingTab(null);
+    }
+  };
+
+  const handleGenerateConstraint = async () => {
+    setGeneratingTab("constraint");
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are writing the "Constraint" section for a deal engagement room for drvrs consulting.
+
+Context:
+- Company: ${data.companyName}
+- Goal: ${data.goalTitle}
+- Goal description: ${data.goalDescription}
+- Decomposition: ${JSON.stringify(data.decompositionTree || {})}
+
+Identify the single constraint — the one thing blocking this company from achieving their goal. Be specific and diagnostic, not generic. The constraint should feel like an insight, not a cliche.
+
+Return:
+- constraintTitle: Short all-caps label (e.g. "CONSTRAINT IDENTIFIED")
+- constraintDescription: 2-3 sentences naming the constraint precisely. What is the specific breakdown?
+- constraintFooter: 1-2 sentences that reframe the constraint — why it matters, what it means for the path forward`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            constraintTitle: { type: "string" },
+            constraintDescription: { type: "string" },
+            constraintFooter: { type: "string" },
+          }
+        }
+      });
+      setData(d => ({ ...d, ...result }));
+    } finally {
+      setGeneratingTab(null);
+    }
+  };
+
+  const handleGenerateShifts = async () => {
+    setGeneratingTab("shifts");
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are writing "Shift Cards" for a deal engagement room for drvrs consulting.
+
+Context:
+- Company: ${data.companyName}
+- Goal: ${data.goalTitle}
+- Constraint: ${data.constraintDescription}
+
+Generate 3-4 shift cards. Each shift shows a before/after transformation in a specific area of the business that must change to remove the constraint and reach the goal. Be specific to this company's situation — not generic consulting platitudes.
+
+Each shift:
+- title: The area being shifted (e.g. "The Promise", "How Delivery Gets Validated")
+- before: Current state — what is happening now that is broken (2-3 sentences)
+- after: Future state — what must be true instead (2-3 sentences)`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            shiftsSection: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  title: { type: "string" },
+                  before: { type: "string" },
+                  after: { type: "string" },
+                }
+              }
+            }
+          }
+        }
+      });
+      if (result.shiftsSection) setData(d => ({ ...d, shiftsSection: result.shiftsSection }));
+    } finally {
+      setGeneratingTab(null);
+    }
+  };
+
+  const handleGenerateWork = async () => {
+    setGeneratingTab("work");
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are writing "Work Phases" for a deal engagement room for drvrs consulting.
+
+Context:
+- Company: ${data.companyName}
+- Goal: ${data.goalTitle}
+- Constraint: ${data.constraintDescription}
+- Shifts: ${(data.shiftsSection || []).map(s => s.title + ": " + s.after).join("; ")}
+
+Generate 2-3 work phases — the specific steps of the engagement that remove the constraint and create the shifts. Each phase should feel concrete and sequenced, not vague.
+
+Each phase:
+- number: "1", "2", "3"
+- title: Short name for the phase
+- status: "Ready" for phase 1, "Pending" for the rest
+- description: 2-4 sentences explaining what happens in this phase, specifically for this company`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            workSection: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  number: { type: "string" },
+                  title: { type: "string" },
+                  status: { type: "string" },
+                  description: { type: "string" },
+                }
+              }
+            }
+          }
+        }
+      });
+      if (result.workSection) setData(d => ({ ...d, workSection: result.workSection }));
+    } finally {
+      setGeneratingTab(null);
+    }
+  };
+
+  const handleGeneratePlaybook = async () => {
+    setGeneratingTab("playbook");
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are writing "Playbook" entries for a deal engagement room for drvrs consulting.
+
+Context:
+- Company: ${data.companyName}
+- Goal: ${data.goalTitle}
+- Constraint: ${data.constraintDescription}
+- Shifts: ${(data.shiftsSection || []).map(s => s.title).join(", ")}
+
+Generate 3-4 playbook entries. These are strategic insights — longer-form thinking about why the approach works for this specific company and market. Each entry should feel like proprietary intelligence, not generic advice.
+
+Each entry:
+- tag: Short all-caps category label (e.g. "PROMISE", "DISTRIBUTION", "OUTBOUND")
+- title: A declarative insight headline
+- content: 3-5 sentences of specific, dense strategic thinking for this company`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            playbookSection: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  tag: { type: "string" },
+                  title: { type: "string" },
+                  content: { type: "string" },
+                }
+              }
+            }
+          }
+        }
+      });
+      if (result.playbookSection) setData(d => ({ ...d, playbookSection: result.playbookSection }));
+    } finally {
+      setGeneratingTab(null);
+    }
+  };
 
   const handleGenerateProposal = async () => {
     setGenerating(true);
@@ -323,6 +547,7 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
       {/* Goal */}
       {activeTab === "goal" && (
         <div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>{aiBtn("goal", handleGenerateGoal)}</div>
           <SectionHeader label="Goal Section" />
           <Field label="Goal Headline" value={data.goalTitle} onChange={v => set("goalTitle", v)} />
           <Field label="Body Text" value={data.goalDescription} onChange={v => set("goalDescription", v)} multiline />
@@ -354,6 +579,7 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
       {/* Constraint */}
       {activeTab === "constraint" && (
         <div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>{aiBtn("constraint", handleGenerateConstraint)}</div>
           <SectionHeader label="Constraint Section" />
           <div style={{ marginBottom: 16 }}>
             <label style={{ fontFamily: fonts.mono, fontSize: 9, color: COLORS.textMuted, letterSpacing: 1.5, textTransform: "uppercase", display: "block", marginBottom: 8 }}>Which branch is the constraint?</label>
@@ -379,6 +605,7 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
       {/* Shifts */}
       {activeTab === "shifts" && (
         <div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>{aiBtn("shifts", handleGenerateShifts)}</div>
           <SectionHeader label="Shift Cards" />
           {(data.shiftsSection || []).map((shift, i) => (
             <div key={i} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 20, marginBottom: 12 }}>
@@ -401,6 +628,7 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
       {/* Work */}
       {activeTab === "work" && (
         <div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>{aiBtn("work", handleGenerateWork)}</div>
           <SectionHeader label="Work Phases" />
           {(data.workSection || []).map((phase, i) => (
             <div key={i} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 20, marginBottom: 12 }}>
@@ -423,6 +651,7 @@ Generate ONE proposal option with a compelling name, specific price, timeline, a
       {/* Playbook */}
       {activeTab === "playbook" && (
         <div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>{aiBtn("playbook", handleGeneratePlaybook)}</div>
           <SectionHeader label="Playbook Items" />
           {(data.playbookSection || []).map((item, i) => (
             <div key={i} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: 20, marginBottom: 12 }}>
