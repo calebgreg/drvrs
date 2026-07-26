@@ -292,7 +292,7 @@ function Decomp() {
             <g opacity={fired ? (dim ? 0.35 : 1) : 0} transform={fired ? "translate(0,0)" : "translate(0,12)"} style={{ transition: `opacity 0.5s ease ${fired ? 0 : delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${delay}s` }}>
               {isRoot && <>
                 <rect x={n.x - 60} y={n.y - 20} width={120} height={40} rx="20" fill={hot ? "rgba(37,99,235,0.14)" : "rgba(29,78,216,0.07)"} stroke={hot ? "#2563eb" : "#1d4ed8"} strokeWidth="1.5" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
-                <text x={n.x} y={n.y + 5} textAnchor="middle" fill="#0B1220" fontSize="14" fontFamily="'DM Serif Display', serif">{n.label}</text>
+                <text x={n.x} y={n.y + 5} textAnchor="middle" fill="#0B1220" fontSize="13" fontFamily="'DM Sans', sans-serif" fontWeight="600" letterSpacing="0.01em">{n.label}</text>
               </>}
               {isMid && <>
                 <rect x={n.x - 55} y={n.y - 18} width={110} height={36} rx="18" fill={hot ? "rgba(37,99,235,0.1)" : "#FFFFFF"} stroke={hot ? "#2563eb" : "rgba(29,78,216,0.4)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
