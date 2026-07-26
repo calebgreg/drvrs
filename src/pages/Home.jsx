@@ -326,7 +326,7 @@ function Decomp() {
             <div className="decomp-read-line">{activeNode.read}</div>
           </>
         ) : (
-          <div className="decomp-read-line idle">Tap a branch. See the read.</div>
+          <div className="decomp-read-line idle">Select a branch to see how that problem usually shows up.</div>
         )}
       </div>
     </div>
@@ -482,7 +482,7 @@ export default function Home() {
           <F delay="d1"><Decomp /></F>
           <F delay="d2">
             <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.9rem", color: "var(--muted)", maxWidth: "420px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.7 }}>
-              Tap a branch to see what it looks like. The first call finds yours.
+              Most stalled deals trace back to one of these six. The first call is about figuring out which one applies to you.
             </p>
           </F>
         </section>
