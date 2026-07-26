@@ -110,28 +110,6 @@ const styles = `
   .d-cta:hover { background: var(--accent-hi); transform: translateY(-2px); }
   .d-cta svg { width: 15px; height: 15px; }
 
-  /* TICKER — noise wall */
-  .ticker-sec { padding: 0 0 4vh; }
-  .ticker-lede {
-    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(245,240,232,0.35); padding: 0 8vw 1.5rem;
-  }
-  .ticker-lede b { color: var(--accent); font-weight: 400; }
-  .ticker-wall {
-    width: 100%; border-top: 1px solid rgba(245,240,232,0.06); border-bottom: 1px solid rgba(245,240,232,0.06);
-    padding: 1.6rem 8vw; display: flex; flex-wrap: wrap; align-items: center; row-gap: 0.9rem; column-gap: 1.75rem;
-  }
-  .ticker-item {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(1rem, 1.6vw, 1.35rem); font-style: italic;
-    color: rgba(245,240,232,0.45); transition: color 0.4s; cursor: default;
-  }
-  .ticker-item:hover { color: rgba(245,240,232,0.95); }
-  .ticker-sep { color: rgba(45,138,110,0.4); font-size: 0.8rem; flex-shrink: 0; }
-  @media (max-width: 768px) {
-    .ticker-wall { padding: 1.4rem 6vw; }
-  }
-
   /* DECODER */
   .dec { width: 100%; max-width: 880px; margin: 0 auto; }
   .dec-labels { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; }
@@ -245,7 +223,6 @@ const styles = `
     .drvrs-hamburger { display: flex; }
     .hero { padding: 14vh 6vw 8vh; }
     .sec { padding: 10vh 6vw; }
-    .ticker-lede { padding: 0 6vw 1.25rem; }
     .doors-head { padding: 6vh 6vw 3vh; }
     .svc-door { padding: 2.75rem 6vw; }
     .svc-door-inner { gap: 1.5rem; flex-direction: column; align-items: flex-start; }
@@ -267,28 +244,6 @@ function F({ children, className = "", delay = "", style }) {
     return () => o.disconnect();
   }, []);
   return <div ref={r} className={`fi${v ? " on" : ""} ${delay} ${className}`} style={style}>{children}</div>;
-}
-
-/* ============ NOISE WALL — static ============ */
-function Ticker() {
-  const items = [
-    "A new hire joined the team", "The champion got promoted", "A reorg reshuffled priorities",
-    "IT sold leadership on a competing platform", "Finance pitched a cost-freeze initiative",
-    "A new VP arrived with their own vendors", "Security sold a vendor review",
-    "Legal sold the board on a compliance overhaul", "A director built a business case against you",
-    "The CFO sold patience", "A consultant sold a 90-day transformation",
-    "Procurement sold process", "Marketing sold a rebrand", "An analyst sold wait-and-see",
-  ];
-  return (
-    <div className="ticker-wall">
-      {items.map((t, i) => (
-        <span key={i} style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
-          <span className="ticker-item">{t}</span>
-          {i < items.length - 1 && <span className="ticker-sep">·</span>}
-        </span>
-      ))}
-    </div>
-  );
 }
 
 /* ============ DECODER ============ */
@@ -565,13 +520,12 @@ export default function Home() {
         {/* 1. HERO */}
         <section className="hero">
           <div className="hero-glow" />
-          <div className="d-eyebrow" style={{ animation: "heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.05s both" }}>Revenue diagnostics</div>
           <h1>
-            Something specific is in the way of your revenue.<br />
-            <em>I find it.</em>
+            Your revenue isn't stuck.<br />
+            <em>Something is stopping it.</em>
           </h1>
           <p className="hero-sub">
-            drvrs is a diagnostic practice built on fifteen years of running growth. Every engagement starts with the same two questions. Who cares. What's in the way.
+            I've spent fifteen years running growth inside startups — not advising from the sidelines. When deals stall, there's always one specific reason. I find it, and we fix it.
           </p>
           <div className="hero-ctas">
             <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
@@ -580,12 +534,6 @@ export default function Home() {
             </a>
             <a className="hero-hint" href="#diagnostic">See the diagnostic ↓</a>
           </div>
-        </section>
-
-        {/* 2. TICKER */}
-        <section className="ticker-sec">
-          <div className="ticker-lede">Inside the account you're working, <b>everyone is selling something</b></div>
-          <Ticker />
         </section>
 
         {/* 3. ORG SYSTEM */}
