@@ -295,11 +295,11 @@ function Decomp() {
           const inner = (
             <g opacity={fired ? (dim ? 0.35 : 1) : 0} transform={fired ? "translate(0,0)" : "translate(0,12)"} style={{ transition: `opacity 0.5s ease ${fired ? 0 : delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${delay}s` }}>
               {isRoot && <>
-                <rect x={n.x - 60} y={n.y - 20} width={120} height={40} rx="8" fill={hot ? "rgba(63,174,139,0.28)" : "rgba(45,138,110,0.18)"} stroke={hot ? "#3fae8b" : "#2d8a6e"} strokeWidth="1.5" filter="url(#glow)" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
+                <rect x={n.x - 60} y={n.y - 20} width={120} height={40} rx="20" fill={hot ? "rgba(63,174,139,0.28)" : "rgba(45,138,110,0.18)"} stroke={hot ? "#3fae8b" : "#2d8a6e"} strokeWidth="1.5" filter="url(#glow)" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
                 <text x={n.x} y={n.y + 5} textAnchor="middle" fill="#f5f0e8" fontSize="14" fontFamily="'DM Serif Display', serif">{n.label}</text>
               </>}
               {isMid && <>
-                <rect x={n.x - 55} y={n.y - 18} width={110} height={36} rx="7" fill={hot ? "rgba(63,174,139,0.18)" : "rgba(45,138,110,0.1)"} stroke={hot ? "#3fae8b" : "rgba(45,138,110,0.5)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
+                <rect x={n.x - 55} y={n.y - 18} width={110} height={36} rx="18" fill={hot ? "rgba(63,174,139,0.18)" : "rgba(45,138,110,0.1)"} stroke={hot ? "#3fae8b" : "rgba(45,138,110,0.5)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
                 <text x={n.x} y={n.y + 4} textAnchor="middle" fill="rgba(245,240,232,0.85)" fontSize="11" fontFamily="'DM Sans', sans-serif" fontWeight="300">{n.label}</text>
               </>}
               {isLeaf && <>
