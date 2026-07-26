@@ -519,9 +519,9 @@ export default function Home() {
         <section className="doors">
           <div className="doors-head">
             <F>
-              <div className="d-eyebrow">Ways to work together</div>
+              <div className="d-eyebrow">Three ways in</div>
               <h2 className="serif" style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", lineHeight: 1.1, letterSpacing: "-0.025em", maxWidth: "500px" }}>
-                Three ways to engage.
+                Pick your dose.
               </h2>
             </F>
           </div>
