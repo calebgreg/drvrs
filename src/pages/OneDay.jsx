@@ -7,28 +7,28 @@ const styles = `
 
   .od * { margin: 0; padding: 0; box-sizing: border-box; }
   .od {
-    --ink: #0a1a14; --panel: #10251c; --cream: #f5f0e8; --accent: #2d8a6e; --accent-hi: #3fae8b; --muted: #7a8a82;
-    background: var(--ink); color: var(--cream);
+    --bg: #F8FAFC; --panel: #FFFFFF; --ink: #0B1220; --cream: #FFFFFF; --accent: #1D4ED8; --accent-hi: #2563EB; --muted: #5B6472; --line: #DCE4F0; --line-hi: rgba(29,78,216,0.35);
+    background: var(--bg); color: var(--ink);
     font-family: 'DM Sans', sans-serif; font-weight: 300;
     -webkit-font-smoothing: antialiased; overflow-x: clip; min-height: 100vh;
   }
   .od-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center;
-    mix-blend-mode: difference;
+    padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(248,250,252,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
   }
-  .od-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em; color: #f5f0e8; text-decoration: none; }
-  .od-logo-pill { width: 28px; height: 14px; background: #f5f0e8; border-radius: 7px; }
+  .od-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em; color: var(--ink); text-decoration: none; }
+  .od-logo-pill { width: 28px; height: 14px; background: var(--ink); border-radius: 7px; }
   .od-nav-links { display: flex; gap: 2.5rem; align-items: center; }
-  .od-nav-links a { font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; transition: opacity 0.3s; }
+  .od-nav-links a { font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; text-transform: uppercase; transition: opacity 0.3s; }
   .od-nav-links a:hover { opacity: 0.6; }
   .od-nav-links a.od-active { opacity: 0.5; }
   .od-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-  .od-hamburger span { display: block; width: 22px; height: 1.5px; background: #f5f0e8; }
-  .od-mobile-menu { display: none; position: fixed; inset: 0; background: var(--ink); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+  .od-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--ink); }
+  .od-mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
   .od-mobile-menu.open { display: flex; }
-  .od-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; }
-  .od-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: #f5f0e8; font-size: 2rem; cursor: pointer; }
+  .od-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; text-transform: uppercase; }
+  .od-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: var(--ink); font-size: 2rem; cursor: pointer; }
 
   .serif { font-family: 'DM Serif Display', serif; font-weight: 400; }
   .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
@@ -41,7 +41,7 @@ const styles = `
     min-height: 78vh; display: flex; flex-direction: column; justify-content: center;
     padding: 16vh 8vw 8vh; position: relative; overflow: clip;
   }
-  .hero-glow { position: absolute; left: 50%; bottom: -30%; transform: translateX(-50%); width: 80vw; height: 70vh; background: radial-gradient(ellipse at center, rgba(45,138,110,0.12) 0%, transparent 65%); pointer-events: none; }
+  .hero-glow { position: absolute; left: 50%; bottom: -30%; transform: translateX(-50%); width: 80vw; height: 70vh; background: radial-gradient(ellipse at center, rgba(29,78,216,0.12) 0%, transparent 65%); pointer-events: none; }
   .hero h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(3rem, 8vw, 6.5rem); line-height: 0.98; letter-spacing: -0.035em; animation: odIn 1s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
   .hero h1 em { font-style: italic; color: var(--accent-hi); }
   .hero-sub { font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.7; color: var(--muted); max-width: 480px; margin-top: 1.75rem; animation: odIn 1s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
@@ -62,7 +62,7 @@ const styles = `
   /* AM / PM */
   .ampm { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; max-width: 980px; margin: 0 auto; }
   .ampm-card {
-    background: var(--panel); border: 1px solid rgba(245,240,232,0.07); border-radius: 18px;
+    background: var(--panel); border: 1px solid var(--line-hi); border-radius: 12px;
     padding: 2.5rem 2.25rem; display: flex; flex-direction: column; gap: 1rem;
     position: relative; overflow: hidden;
   }
@@ -72,17 +72,17 @@ const styles = `
   .ampm-arc { position: absolute; right: -30px; top: -30px; opacity: 0.5; pointer-events: none; }
 
   /* BEFORE / AFTER READ */
-  .ba { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgba(10,26,20,0.12); border-radius: 18px; overflow: hidden; background: rgba(10,26,20,0.12); gap: 1px; }
+  .ba { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgba(11,18,32,0.12); border-radius: 18px; overflow: hidden; background: rgba(11,18,32,0.12); gap: 1px; }
   .ba-col { background: var(--cream); padding: 2.5rem 2.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
   .ba-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; }
-  .ba-quote { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(1.15rem, 1.9vw, 1.5rem); line-height: 1.45; color: #0a1a14; }
-  .ba-note { font-size: 0.85rem; line-height: 1.65; color: rgba(10,26,20,0.5); }
+  .ba-quote { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(1.15rem, 1.9vw, 1.5rem); line-height: 1.45; color: #0B1220; }
+  .ba-note { font-size: 0.85rem; line-height: 1.65; color: rgba(11,18,32,0.5); }
 
   .walkaway { text-align: center; max-width: 620px; margin: 0 auto; }
   .walkaway h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.1; letter-spacing: -0.025em; }
   .walkaway p { margin-top: 1.5rem; color: var(--muted); font-size: clamp(0.98rem, 1.3vw, 1.1rem); line-height: 1.75; }
 
-  .od-footer { padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(122,138,130,0.5); border-top: 1px solid rgba(245,240,232,0.06); }
+  .od-footer { padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--line); }
   .od-footer .od-logo { font-size: 0.95rem; opacity: 0.5; }
   .od-footer .od-logo-pill { width: 20px; height: 10px; }
 
@@ -113,9 +113,9 @@ function F({ children, className = "", delay = "", style }) {
 function SunArc({ pm }) {
   return (
     <svg className="ampm-arc" width="140" height="140" viewBox="0 0 140 140">
-      <path d="M10,120 Q70,10 130,120" fill="none" stroke="rgba(45,138,110,0.35)" strokeWidth="1.5" strokeDasharray="4 6" />
-      <circle cx={pm ? 108 : 32} cy={pm ? 78 : 78} r="9" fill="none" stroke="#3fae8b" strokeWidth="1.5" />
-      <circle cx={pm ? 108 : 32} cy={pm ? 78 : 78} r="3" fill="#3fae8b" />
+      <path d="M10,120 Q70,10 130,120" fill="none" stroke="rgba(29,78,216,0.35)" strokeWidth="1.5" strokeDasharray="4 6" />
+      <circle cx={pm ? 108 : 32} cy={pm ? 78 : 78} r="9" fill="none" stroke="#2563eb" strokeWidth="1.5" />
+      <circle cx={pm ? 108 : 32} cy={pm ? 78 : 78} r="3" fill="#2563eb" />
     </svg>
   );
 }
@@ -181,7 +181,7 @@ export default function OneDay() {
         </section>
 
         {/* BEFORE / AFTER */}
-        <section className="sec" style={{ background: "var(--panel)" }}>
+        <section className="sec" style={{ background: "#EEF3FA" }}>
           <F style={{ textAlign: "center", marginBottom: "3.5rem" }}>
             <div className="eyebrow">The shift</div>
             <h2 className="serif" style={{ fontSize: "clamp(1.9rem, 3.6vw, 3rem)", lineHeight: 1.12 }}>Same deal. Different read.</h2>
@@ -189,12 +189,12 @@ export default function OneDay() {
           <F delay="d1">
             <div className="ba">
               <div className="ba-col">
-                <div className="ba-tag" style={{ color: "rgba(10,26,20,0.35)" }}>Before</div>
+                <div className="ba-tag" style={{ color: "rgba(11,18,32,0.35)" }}>Before</div>
                 <div className="ba-quote">"They love the demo. Waiting on legal. Should close this quarter."</div>
                 <div className="ba-note">Hope, dressed up as a forecast.</div>
               </div>
               <div className="ba-col">
-                <div className="ba-tag" style={{ color: "#2d8a6e" }}>After</div>
+                <div className="ba-tag" style={{ color: "#1d4ed8" }}>After</div>
                 <div className="ba-quote">"The VP's credibility is riding on this. Legal has 40 contracts queued. Here's who cares and here's the blocker we work first."</div>
                 <div className="ba-note">A read you can act on.</div>
               </div>

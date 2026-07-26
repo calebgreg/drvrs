@@ -7,28 +7,28 @@ const styles = `
 
   .ot * { margin: 0; padding: 0; box-sizing: border-box; }
   .ot {
-    --ink: #0a1a14; --panel: #10251c; --cream: #f5f0e8; --accent: #2d8a6e; --accent-hi: #3fae8b; --muted: #7a8a82;
-    background: var(--ink); color: var(--cream);
+    --bg: #F8FAFC; --panel: #FFFFFF; --ink: #0B1220; --cream: #FFFFFF; --accent: #1D4ED8; --accent-hi: #2563EB; --muted: #5B6472; --line: #DCE4F0; --line-hi: rgba(29,78,216,0.35);
+    background: var(--bg); color: var(--ink);
     font-family: 'DM Sans', sans-serif; font-weight: 300;
     -webkit-font-smoothing: antialiased; overflow-x: clip; min-height: 100vh;
   }
   .ot-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center;
-    mix-blend-mode: difference;
+    padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(248,250,252,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
   }
-  .ot-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em; color: #f5f0e8; text-decoration: none; }
-  .ot-logo-pill { width: 28px; height: 14px; background: #f5f0e8; border-radius: 7px; }
+  .ot-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em; color: var(--ink); text-decoration: none; }
+  .ot-logo-pill { width: 28px; height: 14px; background: var(--ink); border-radius: 7px; }
   .ot-nav-links { display: flex; gap: 2.5rem; align-items: center; }
-  .ot-nav-links a { font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; transition: opacity 0.3s; }
+  .ot-nav-links a { font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; text-transform: uppercase; transition: opacity 0.3s; }
   .ot-nav-links a:hover { opacity: 0.6; }
   .ot-nav-links a.ot-active { opacity: 0.5; }
   .ot-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-  .ot-hamburger span { display: block; width: 22px; height: 1.5px; background: #f5f0e8; }
-  .ot-mobile-menu { display: none; position: fixed; inset: 0; background: var(--ink); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+  .ot-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--ink); }
+  .ot-mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
   .ot-mobile-menu.open { display: flex; }
-  .ot-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; }
-  .ot-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: #f5f0e8; font-size: 2rem; cursor: pointer; }
+  .ot-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; text-transform: uppercase; }
+  .ot-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: var(--ink); font-size: 2rem; cursor: pointer; }
 
   .serif { font-family: 'DM Serif Display', serif; font-weight: 400; }
   .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
@@ -41,7 +41,7 @@ const styles = `
     min-height: 78vh; display: flex; flex-direction: column; justify-content: center;
     padding: 16vh 8vw 8vh; position: relative; overflow: clip;
   }
-  .hero-glow { position: absolute; left: 50%; top: 40%; transform: translate(-50%,-50%); width: 70vw; height: 70vh; background: radial-gradient(ellipse at center, rgba(45,138,110,0.1) 0%, transparent 65%); pointer-events: none; }
+  .hero-glow { position: absolute; left: 50%; top: 40%; transform: translate(-50%,-50%); width: 70vw; height: 70vh; background: radial-gradient(ellipse at center, rgba(29,78,216,0.1) 0%, transparent 65%); pointer-events: none; }
   .hero h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(3rem, 8vw, 6.5rem); line-height: 0.98; letter-spacing: -0.035em; animation: otIn 1s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
   .hero h1 em { font-style: italic; color: var(--accent-hi); }
   .hero-sub { font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.7; color: var(--muted); max-width: 480px; margin-top: 1.75rem; animation: otIn 1s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
@@ -62,7 +62,7 @@ const styles = `
   /* CADENCE */
   .cad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; max-width: 1020px; margin: 0 auto; }
   .cad-card {
-    background: var(--panel); border: 1px solid rgba(245,240,232,0.07); border-radius: 18px;
+    background: var(--panel); border: 1px solid var(--line-hi); border-radius: 12px;
     padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1rem;
     position: relative; overflow: hidden;
   }
@@ -71,8 +71,8 @@ const styles = `
   .cad-line { font-size: 0.92rem; line-height: 1.7; color: var(--muted); }
 
   .pulse-wrap { position: relative; width: 88px; height: 88px; margin-bottom: 0.25rem; }
-  .pulse-ring { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); border-radius: 50%; border: 1px solid rgba(45,138,110,0.4); }
-  .pulse-core { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; border-radius: 50%; background: #3fae8b; }
+  .pulse-ring { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); border-radius: 50%; border: 1px solid rgba(29,78,216,0.4); }
+  .pulse-core { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; border-radius: 50%; background: #2563eb; }
   .pr1 { width: 32px; height: 32px; animation: otRing 3s ease-out infinite; }
   .pr2 { width: 32px; height: 32px; animation: otRing 3s ease-out 1s infinite; }
   .pr3 { width: 32px; height: 32px; animation: otRing 3s ease-out 2s infinite; }
@@ -81,7 +81,7 @@ const styles = `
   .walkaway h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.1; letter-spacing: -0.025em; }
   .walkaway p { margin-top: 1.5rem; color: var(--muted); font-size: clamp(0.98rem, 1.3vw, 1.1rem); line-height: 1.75; }
 
-  .ot-footer { padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(122,138,130,0.5); border-top: 1px solid rgba(245,240,232,0.06); }
+  .ot-footer { padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--line); }
   .ot-footer .ot-logo { font-size: 0.95rem; opacity: 0.5; }
   .ot-footer .ot-logo-pill { width: 20px; height: 10px; }
 
@@ -195,7 +195,7 @@ export default function OneTeam() {
         </section>
 
         {/* WALKAWAY + CTA */}
-        <section className="sec" style={{ padding: "16vh 8vw", background: "var(--panel)" }}>
+        <section className="sec" style={{ padding: "16vh 8vw", background: "#EEF3FA" }}>
           <F className="walkaway">
             <div className="eyebrow" style={{ textAlign: "center" }}>The goal</div>
             <h2>Eventually you won't need me.</h2>

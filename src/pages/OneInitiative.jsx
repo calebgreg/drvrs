@@ -7,28 +7,28 @@ const styles = `
 
   .oi * { margin: 0; padding: 0; box-sizing: border-box; }
   .oi {
-    --ink: #0a1a14; --panel: #10251c; --cream: #f5f0e8; --accent: #2d8a6e; --accent-hi: #3fae8b; --muted: #7a8a82;
-    background: var(--ink); color: var(--cream);
+    --bg: #F8FAFC; --panel: #FFFFFF; --ink: #0B1220; --cream: #FFFFFF; --accent: #1D4ED8; --accent-hi: #2563EB; --muted: #5B6472; --line: #DCE4F0; --line-hi: rgba(29,78,216,0.35);
+    background: var(--bg); color: var(--ink);
     font-family: 'DM Sans', sans-serif; font-weight: 300;
     -webkit-font-smoothing: antialiased; overflow-x: clip; min-height: 100vh;
   }
   .oi-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center;
-    mix-blend-mode: difference;
+    padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(248,250,252,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
   }
-  .oi-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em; color: #f5f0e8; text-decoration: none; }
-  .oi-logo-pill { width: 28px; height: 14px; background: #f5f0e8; border-radius: 7px; }
+  .oi-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 0.05em; color: var(--ink); text-decoration: none; }
+  .oi-logo-pill { width: 28px; height: 14px; background: var(--ink); border-radius: 7px; }
   .oi-nav-links { display: flex; gap: 2.5rem; align-items: center; }
-  .oi-nav-links a { font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; transition: opacity 0.3s; }
+  .oi-nav-links a { font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; text-transform: uppercase; transition: opacity 0.3s; }
   .oi-nav-links a:hover { opacity: 0.6; }
   .oi-nav-links a.oi-active { opacity: 0.5; }
   .oi-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-  .oi-hamburger span { display: block; width: 22px; height: 1.5px; background: #f5f0e8; }
-  .oi-mobile-menu { display: none; position: fixed; inset: 0; background: var(--ink); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+  .oi-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--ink); }
+  .oi-mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
   .oi-mobile-menu.open { display: flex; }
-  .oi-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: #f5f0e8; text-decoration: none; text-transform: uppercase; }
-  .oi-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: #f5f0e8; font-size: 2rem; cursor: pointer; }
+  .oi-mobile-menu a { font-size: 1.5rem; font-weight: 400; letter-spacing: 0.08em; color: var(--ink); text-decoration: none; text-transform: uppercase; }
+  .oi-mobile-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: var(--ink); font-size: 2rem; cursor: pointer; }
 
   .serif { font-family: 'DM Serif Display', serif; font-weight: 400; }
   .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
@@ -41,7 +41,7 @@ const styles = `
     min-height: 78vh; display: flex; flex-direction: column; justify-content: center;
     padding: 16vh 8vw 8vh; position: relative; overflow: clip;
   }
-  .hero-glow { position: absolute; right: -15vw; top: 10%; width: 60vw; height: 70vh; background: radial-gradient(ellipse at center, rgba(45,138,110,0.11) 0%, transparent 65%); pointer-events: none; }
+  .hero-glow { position: absolute; right: -15vw; top: 10%; width: 60vw; height: 70vh; background: radial-gradient(ellipse at center, rgba(29,78,216,0.11) 0%, transparent 65%); pointer-events: none; }
   .hero h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(3rem, 8vw, 6.5rem); line-height: 0.98; letter-spacing: -0.035em; animation: oiIn 1s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
   .hero h1 em { font-style: italic; color: var(--accent-hi); }
   .hero-sub { font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.7; color: var(--muted); max-width: 480px; margin-top: 1.75rem; animation: oiIn 1s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
@@ -62,7 +62,7 @@ const styles = `
   /* PLAY STEPS */
   .play { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; max-width: 1020px; margin: 0 auto; }
   .play-card {
-    background: var(--panel); border: 1px solid rgba(245,240,232,0.07); border-radius: 18px;
+    background: var(--panel); border: 1px solid var(--line-hi); border-radius: 12px;
     padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1rem;
   }
   .play-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-hi); }
@@ -74,7 +74,7 @@ const styles = `
   .walkaway h2 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.1; letter-spacing: -0.025em; }
   .walkaway p { margin-top: 1.5rem; color: var(--muted); font-size: clamp(0.98rem, 1.3vw, 1.1rem); line-height: 1.75; }
 
-  .oi-footer { padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(122,138,130,0.5); border-top: 1px solid rgba(245,240,232,0.06); }
+  .oi-footer { padding: 2.5rem 8vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--line); }
   .oi-footer .oi-logo { font-size: 0.95rem; opacity: 0.5; }
   .oi-footer .oi-logo-pill { width: 20px; height: 10px; }
 
@@ -107,21 +107,21 @@ function VisFind() {
     <svg width="150" height="56" viewBox="0 0 150 56">
       {[0, 1, 2, 3].map(i => (
         <rect key={i} x="0" y={i * 14} width={[110, 58, 86, 42][i]} height="8" rx="4"
-          fill={i === 1 ? "#2d8a6e" : "rgba(245,240,232,0.08)"}
+          fill={i === 1 ? "#1d4ed8" : "rgba(11,18,32,0.08)"}
           style={i === 1 ? { animation: "oiPulse 2.2s ease-in-out infinite" } : {}} />
       ))}
-      <circle cx="70" cy="18" r="13" fill="none" stroke="#3fae8b" strokeWidth="1.5" />
-      <line x1="80" y1="28" x2="90" y2="38" stroke="#3fae8b" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="70" cy="18" r="13" fill="none" stroke="#2563eb" strokeWidth="1.5" />
+      <line x1="80" y1="28" x2="90" y2="38" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
 function VisName() {
   return (
     <svg width="150" height="56" viewBox="0 0 150 56">
-      <line x1="10" y1="44" x2="120" y2="16" stroke="#2d8a6e" strokeWidth="3" strokeLinecap="round" />
-      <polygon points="98,36 112,30 106,44" fill="rgba(45,138,110,0.5)" />
-      <circle cx="88" cy="38" r="5" fill="#3fae8b" />
-      <rect x="118" y="6" width="22" height="18" rx="3" fill="rgba(245,240,232,0.08)" />
+      <line x1="10" y1="44" x2="120" y2="16" stroke="#1d4ed8" strokeWidth="3" strokeLinecap="round" />
+      <polygon points="98,36 112,30 106,44" fill="rgba(29,78,216,0.5)" />
+      <circle cx="88" cy="38" r="5" fill="#2563eb" />
+      <rect x="118" y="6" width="22" height="18" rx="3" fill="rgba(11,18,32,0.08)" />
     </svg>
   );
 }
@@ -130,11 +130,11 @@ function VisRun() {
     <svg width="150" height="56" viewBox="0 0 150 56">
       {[0, 1, 2].map(i => (
         <g key={i}>
-          <line x1={12 + i * 46} y1="28" x2={44 + i * 46} y2="28" stroke={i < 2 ? "#2d8a6e" : "rgba(45,138,110,0.3)"} strokeWidth="1.5" strokeDasharray={i === 2 ? "4 5" : "none"} />
-          <circle cx={12 + i * 46} cy="28" r="5" fill={i === 0 ? "#3fae8b" : "rgba(45,138,110,0.6)"} />
+          <line x1={12 + i * 46} y1="28" x2={44 + i * 46} y2="28" stroke={i < 2 ? "#1d4ed8" : "rgba(29,78,216,0.3)"} strokeWidth="1.5" strokeDasharray={i === 2 ? "4 5" : "none"} />
+          <circle cx={12 + i * 46} cy="28" r="5" fill={i === 0 ? "#2563eb" : "rgba(29,78,216,0.6)"} />
         </g>
       ))}
-      <circle cx="150" cy="28" r="5" fill="none" stroke="#3fae8b" strokeWidth="1.5" transform="translate(-8,0)" />
+      <circle cx="150" cy="28" r="5" fill="none" stroke="#2563eb" strokeWidth="1.5" transform="translate(-8,0)" />
     </svg>
   );
 }
@@ -214,7 +214,7 @@ export default function OneInitiative() {
         </section>
 
         {/* WALKAWAY + CTA */}
-        <section className="sec" style={{ padding: "16vh 8vw", background: "var(--panel)" }}>
+        <section className="sec" style={{ padding: "16vh 8vw", background: "#EEF3FA" }}>
           <F className="walkaway">
             <div className="eyebrow" style={{ textAlign: "center" }}>What you keep</div>
             <h2>Movement, and the map that made it.</h2>
