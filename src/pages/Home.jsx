@@ -117,21 +117,20 @@ const styles = `
     color: rgba(245,240,232,0.35); padding: 0 8vw 1.5rem;
   }
   .ticker-lede b { color: var(--accent); font-weight: 400; }
-  .ticker-wall { overflow: hidden; width: 100%; border-top: 1px solid rgba(245,240,232,0.06); border-bottom: 1px solid rgba(245,240,232,0.06); padding: 1.4rem 0; display: flex; flex-direction: column; gap: 1.1rem; }
-  .ticker-row { overflow: hidden; width: 100%; }
-  .ticker-track { display: flex; gap: 3rem; animation: tickScroll linear infinite; width: max-content; }
-  .ticker-row:nth-child(1) .ticker-track { animation-duration: 42s; }
-  .ticker-row:nth-child(2) .ticker-track { animation-duration: 30s; animation-direction: reverse; }
-  .ticker-row:nth-child(3) .ticker-track { animation-duration: 52s; }
+  .ticker-wall {
+    width: 100%; border-top: 1px solid rgba(245,240,232,0.06); border-bottom: 1px solid rgba(245,240,232,0.06);
+    padding: 1.6rem 8vw; display: flex; flex-wrap: wrap; align-items: center; row-gap: 0.9rem; column-gap: 1.75rem;
+  }
   .ticker-item {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(1rem, 1.6vw, 1.35rem); font-style: italic;
-    white-space: nowrap; color: rgba(245,240,232,0.4); transition: color 0.4s; cursor: default;
+    color: rgba(245,240,232,0.45); transition: color 0.4s; cursor: default;
   }
-  .ticker-row:nth-child(2) .ticker-item { font-size: clamp(1.15rem, 2vw, 1.6rem); color: rgba(245,240,232,0.65); }
   .ticker-item:hover { color: rgba(245,240,232,0.95); }
-  .ticker-sep { color: rgba(45,138,110,0.4); font-size: 0.8rem; align-self: center; flex-shrink: 0; }
-  @keyframes tickScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .ticker-sep { color: rgba(45,138,110,0.4); font-size: 0.8rem; flex-shrink: 0; }
+  @media (max-width: 768px) {
+    .ticker-wall { padding: 1.4rem 6vw; }
+  }
 
   /* DECODER */
   .dec { width: 100%; max-width: 880px; margin: 0 auto; }
@@ -270,44 +269,24 @@ function F({ children, className = "", delay = "", style }) {
   return <div ref={r} className={`fi${v ? " on" : ""} ${delay} ${className}`} style={style}>{children}</div>;
 }
 
-/* ============ TICKER — noise wall ============ */
-function TickerRow({ items }) {
-  const doubled = [...items, ...items];
-  return (
-    <div className="ticker-row">
-      <div className="ticker-track">
-        {doubled.map((t, i) => (
-          <span key={i} style={{ display: "flex", alignItems: "center", gap: "3rem" }}>
-            <span className="ticker-item">{t}</span>
-            {i < doubled.length - 1 && <span className="ticker-sep">·</span>}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
+/* ============ NOISE WALL — static ============ */
 function Ticker() {
-  const row1 = [
+  const items = [
     "A new hire joined the team", "The champion got promoted", "A reorg reshuffled priorities",
     "IT sold leadership on a competing platform", "Finance pitched a cost-freeze initiative",
     "A new VP arrived with their own vendors", "Security sold a vendor review",
-  ];
-  const row2 = [
     "Legal sold the board on a compliance overhaul", "A director built a business case against you",
-    "The budget committee sold a 20% reduction", "The CFO sold patience",
-    "A consultant sold a 90-day transformation", "The board sold a hiring freeze",
-  ];
-  const row3 = [
-    "HR launched a culture initiative", "Operations sold a consolidation plan",
-    "Procurement sold process", "A peer sold urgency on something else entirely",
-    "Marketing sold a rebrand", "An analyst sold wait-and-see", "RevOps sold a new process",
+    "The CFO sold patience", "A consultant sold a 90-day transformation",
+    "Procurement sold process", "Marketing sold a rebrand", "An analyst sold wait-and-see",
   ];
   return (
     <div className="ticker-wall">
-      <TickerRow items={row1} />
-      <TickerRow items={row2} />
-      <TickerRow items={row3} />
+      {items.map((t, i) => (
+        <span key={i} style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
+          <span className="ticker-item">{t}</span>
+          {i < items.length - 1 && <span className="ticker-sep">·</span>}
+        </span>
+      ))}
     </div>
   );
 }
