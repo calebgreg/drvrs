@@ -275,7 +275,13 @@ function Decomp() {
 
   return (
     <div ref={ref} className="decomp-stage">
-      <svg viewBox={`0 0 ${W} 380`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
+      <svg viewBox={`-118 0 ${W + 118} 380`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
+        {[{ y: 48, t: "OUTCOME" }, { y: 175, t: "LEVERS" }, { y: 310, t: "FAILURE POINTS" }].map((lv, i) => (
+          <g key={i} opacity={fired ? 1 : 0} style={{ transition: `opacity 0.6s ease ${0.3 + i * 0.15}s` }}>
+            <text x="-118" y={lv.y + 2} fontFamily={mono} fontSize="7.5" letterSpacing="0.16em" fill="rgba(11,18,32,0.4)">{lv.t}</text>
+            <line x1="-118" y1={lv.y + 9} x2="-28" y2={lv.y + 9} stroke="rgba(11,18,32,0.12)" strokeWidth="1" strokeDasharray="1 4" />
+          </g>
+        ))}
         {edges.map((e, i) => {
           const from = getNode(e.from), to = getNode(e.to), d = orthoPath(from, to), len = 600, delay = edgeDelay[e.to];
           const hot = edgeHot(e);
