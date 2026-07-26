@@ -2,17 +2,17 @@ const steps = [
   {
     n: "01",
     title: "Book a call",
-    body: "30 minutes, free. Tell me where revenue is stuck — a deal that won't close, a pipeline that dried up, a launch that flopped.",
+    body: "30 minutes, free. Bring the deal that won't close, the pipeline that dried up, the launch that flopped.",
   },
   {
     n: "02",
     title: "Get the diagnosis",
-    body: "I dig into it and tell you the specific thing in the way. Not a framework. Not a deck. A finding you can act on.",
+    body: "A focused dig into what's actually in the way. Not a framework. Not a deck. A finding you can act on.",
   },
   {
     n: "03",
     title: "Fix it",
-    body: "You pick how much help you want: one working day, a 60-day sprint on one initiative, or me embedded with your team.",
+    body: "Pick the level of help: one working day, a 60-day sprint on one initiative, or a seat inside your team.",
   },
 ];
 

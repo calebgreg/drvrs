@@ -450,17 +450,17 @@ export default function Home() {
           <div className="hero-glow" />
           <h1>
             Deals stall for a reason.<br />
-            <em>I find it.</em>
+            <em>Find it. Fix it.</em>
           </h1>
           <p className="hero-sub">
-            Bring me the deal that won't close, or the pipeline that's gone quiet. I'll tell you what's actually in the way — and what to do about it.
+            Every stalled deal has one specific blocker. drvrs finds it — the deal that won't close, the pipeline that's gone quiet — and puts a fix in motion.
           </p>
           <div className="hero-ctas">
             <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
               Book a 30-minute call
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>
-            <a className="hero-hint" href="#diagnostic">See how I diagnose ↓</a>
+            <a className="hero-hint" href="#diagnostic">See the diagnostic ↓</a>
           </div>
         </section>
 
@@ -482,7 +482,7 @@ export default function Home() {
           <F delay="d1"><Decomp /></F>
           <F delay="d2">
             <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.9rem", color: "var(--muted)", maxWidth: "420px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.7 }}>
-              Tap a branch to see what it looks like. On our first call, we find yours.
+              Tap a branch to see what it looks like. The first call finds yours.
             </p>
           </F>
         </section>
@@ -521,7 +521,7 @@ export default function Home() {
             <F>
               <div className="d-eyebrow">Ways to work together</div>
               <h2 className="serif" style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", lineHeight: 1.1, letterSpacing: "-0.025em", maxWidth: "500px" }}>
-                Three ways to work with me.
+                Three ways to engage.
               </h2>
             </F>
           </div>
