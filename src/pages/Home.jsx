@@ -262,24 +262,30 @@ function Decomp() {
   const isHot = id => activePath.includes(id);
   const edgeHot = e => activePath.includes(e.from) && activePath.includes(e.to);
 
-  const curvePath = (from, to) => {
-    const x1 = from.x, y1 = from.y + 22, x2 = to.x, y2 = to.y - 22, my = (y1 + y2) / 2;
-    return `M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`;
+  const orthoPath = (from, to) => {
+    const x1 = from.x, y1 = from.y + (from.level === 0 ? 16 : 12);
+    const x2 = to.x, y2 = to.y - (to.level === 1 ? 24 : 16);
+    if (Math.abs(x2 - x1) < 1) return `M${x1},${y1} L${x2},${y2}`;
+    const my = (y1 + y2) / 2, d = x2 > x1 ? 1 : -1, r = Math.min(9, Math.abs(x2 - x1) / 2);
+    return `M${x1},${y1} L${x1},${my - 9} Q${x1},${my} ${x1 + d * r},${my} L${x2 - d * r},${my} Q${x2},${my} ${x2},${my + 9} L${x2},${y2}`;
   };
+  const mono = "'JetBrains Mono', monospace";
   const edgeDelay = { vol: 0.1, con: 0.15, pri: 0.2, reach: 0.4, act: 0.42, qual: 0.44, off: 0.48, diff: 0.52, nec: 0.56 };
   const nodeDelay = { 0: 0, 1: 0.25, 2: 0.5 };
 
   return (
     <div ref={ref} className="decomp-stage">
       <svg viewBox={`0 0 ${W} 380`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
+        {[{ y: 14, t: "L0 · OUTCOME" }, { y: 141, t: "L1 · LEVERS" }, { y: 272, t: "L2 · FAILURE POINTS" }].map((lv, i) => (
+          <text key={i} x="0" y={lv.y} fontFamily={mono} fontSize="7.5" letterSpacing="0.18em" fill="rgba(11,18,32,0.35)" opacity={fired ? 1 : 0} style={{ transition: `opacity 0.6s ease ${0.2 + i * 0.15}s` }}>{lv.t}</text>
+        ))}
         {edges.map((e, i) => {
-          const from = getNode(e.from), to = getNode(e.to), d = curvePath(from, to), len = 600, delay = edgeDelay[e.to];
+          const from = getNode(e.from), to = getNode(e.to), d = orthoPath(from, to), len = 600, delay = edgeDelay[e.to];
           const hot = edgeHot(e);
           const dim = active && !hot;
           return (
-            <g key={i} style={{ opacity: dim ? 0.25 : 1, transition: "opacity 0.4s ease" }}>
-              <path d={d} fill="none" stroke={hot ? "rgba(37,99,235,0.3)" : "rgba(29,78,216,0.12)"} strokeWidth="6" strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s, stroke 0.4s ease` }} />
-              <path d={d} fill="none" stroke={hot ? "#2563eb" : "rgba(29,78,216,0.45)"} strokeWidth={hot ? 2 : 1.5} strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s, stroke 0.4s ease` }} />
+            <g key={i} style={{ opacity: dim ? 0.2 : 1, transition: "opacity 0.4s ease" }}>
+              <path d={d} fill="none" stroke={hot ? "#2563eb" : "rgba(11,18,32,0.22)"} strokeWidth={hot ? 1.5 : 1} strokeDasharray={len} strokeDashoffset={fired ? 0 : len} style={{ transition: `stroke-dashoffset 0.6s ease ${delay}s, stroke 0.4s ease` }} />
             </g>
           );
         })}
@@ -291,18 +297,18 @@ function Decomp() {
           const inner = (
             <g opacity={fired ? (dim ? 0.35 : 1) : 0} transform={fired ? "translate(0,0)" : "translate(0,12)"} style={{ transition: `opacity 0.5s ease ${fired ? 0 : delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${delay}s` }}>
               {isRoot && <>
-                <rect x={n.x - 60} y={n.y - 20} width={120} height={40} rx="20" fill={hot ? "rgba(37,99,235,0.14)" : "rgba(29,78,216,0.07)"} stroke={hot ? "#2563eb" : "#1d4ed8"} strokeWidth="1.5" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
-                <text x={n.x} y={n.y + 5} textAnchor="middle" fill="#0B1220" fontSize="13" fontFamily="'DM Sans', sans-serif" fontWeight="600" letterSpacing="0.01em">{n.label}</text>
+                <text x={n.x} y={n.y + 2} textAnchor="middle" fill="#0B1220" fontSize="13" fontFamily={mono} fontWeight="600" letterSpacing="0.16em">{n.label.toUpperCase()}</text>
+                <line x1={n.x - 44} y1={n.y + 9} x2={n.x + 44} y2={n.y + 9} stroke={hot ? "#2563eb" : "#0B1220"} strokeWidth="1.5" style={{ transition: "stroke 0.4s" }} />
+                <rect x={n.x - 3} y={n.y + 13} width="6" height="6" fill={hot ? "#2563eb" : "#0B1220"} style={{ transition: "fill 0.4s" }} />
               </>}
               {isMid && <>
-                <rect x={n.x - 55} y={n.y - 18} width={110} height={36} rx="18" fill={hot ? "rgba(37,99,235,0.1)" : "#FFFFFF"} stroke={hot ? "#2563eb" : "rgba(29,78,216,0.4)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
-                <text x={n.x} y={n.y + 4} textAnchor="middle" fill="rgba(11,18,32,0.85)" fontSize="11" fontFamily="'DM Sans', sans-serif" fontWeight="400">{n.label}</text>
+                <rect x={n.x - 2.5} y={n.y - 24} width="5" height="5" fill={hot ? "#2563eb" : "#FFFFFF"} stroke={hot ? "#2563eb" : "rgba(11,18,32,0.5)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
+                <text x={n.x} y={n.y + 2} textAnchor="middle" fill={hot ? "#2563eb" : "rgba(11,18,32,0.8)"} fontSize="10" fontFamily={mono} fontWeight="500" letterSpacing="0.14em" style={{ transition: "fill 0.4s" }}>{n.label.toUpperCase()}</text>
               </>}
               {isLeaf && <>
-                <rect x={n.x - 42} y={n.y - 24} width={84} height={48} rx="8" fill="transparent" />
-                <circle cx={n.x} cy={n.y - 8} r={hot ? 6 : 4} fill={hot ? "#2563eb" : "#1d4ed8"} style={{ transition: "all 0.3s" }} />
-                <circle cx={n.x} cy={n.y - 8} r="2" fill="#F8FAFC" opacity="0.9" />
-                <text x={n.x} y={n.y + 10} textAnchor="middle" fill={hot ? "#2563eb" : "rgba(29,78,216,0.85)"} fontSize="11" fontFamily="'DM Sans', sans-serif" letterSpacing="0.04em" style={{ transition: "fill 0.3s" }}>{n.label}</text>
+                <rect x={n.x - 42} y={n.y - 24} width={84} height={48} rx="4" fill="transparent" />
+                <rect x={n.x - 3.5} y={n.y - 11.5} width="7" height="7" fill={hot ? "#2563eb" : "#FFFFFF"} stroke="#2563eb" strokeWidth="1.2" transform={`rotate(45 ${n.x} ${n.y - 8})`} style={{ transition: "fill 0.3s" }} />
+                <text x={n.x} y={n.y + 10} textAnchor="middle" fill={hot ? "#2563eb" : "rgba(11,18,32,0.6)"} fontSize="8.5" fontFamily={mono} letterSpacing="0.1em" style={{ transition: "fill 0.3s" }}>{n.label.toUpperCase()}</text>
               </>}
             </g>
           );
