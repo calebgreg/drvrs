@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
+import HowItWorks from "@/components/drvrs/HowItWorks";
 
 const CTA_URL = "https://tally.so/r/VLPjKa";
 
@@ -110,33 +111,6 @@ const styles = `
   .d-cta:hover { background: var(--accent-hi); transform: translateY(-2px); }
   .d-cta svg { width: 15px; height: 15px; }
 
-  /* DECODER */
-  .dec { width: 100%; max-width: 880px; margin: 0 auto; }
-  .dec-labels { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; }
-  .dec-labels span { color: rgba(245,240,232,0.25); transition: color 0.5s; }
-  .dec-labels span.live { color: var(--accent-hi); }
-  .dec-labels .dec-arrow { color: rgba(245,240,232,0.2); font-size: 0.8rem; letter-spacing: 0; }
-  .dec-stage { min-height: 240px; display: flex; flex-direction: column; justify-content: flex-start; gap: 1.5rem; }
-  .dec-quote {
-    font-family: 'DM Serif Display', serif; font-style: italic;
-    font-size: clamp(1.7rem, 3.4vw, 2.8rem); line-height: 1.25; letter-spacing: -0.01em;
-    color: rgba(245,240,232,0.85);
-    transition: all 0.7s cubic-bezier(0.16,1,0.3,1);
-    animation: decIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .dec-quote.dim { color: rgba(245,240,232,0.28); font-size: clamp(1.15rem, 2.2vw, 1.7rem); }
-  .dec-real { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16,1,0.3,1) 0.15s; display: flex; flex-direction: column; gap: 1.1rem; }
-  .dec-real.on { opacity: 1; transform: translateY(0); }
-  .dec-real-txt { font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 400; color: var(--cream); line-height: 1.25; letter-spacing: -0.015em; }
-  .dec-meter { display: flex; align-items: center; gap: 1rem; }
-  .dec-bar-track { width: min(260px, 40vw); height: 5px; background: rgba(45,138,110,0.12); border-radius: 3px; overflow: hidden; }
-  .dec-bar { height: 100%; width: 0; background: var(--accent-hi); border-radius: 3px; box-shadow: 0 0 12px rgba(63,174,139,0.5); transition: width 1s cubic-bezier(0.16,1,0.3,1) 0.3s; }
-  .dec-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-hi); }
-  .dec-ticks { display: flex; gap: 0.6rem; margin-top: 2.75rem; }
-  .dec-tick { width: 26px; height: 3px; border-radius: 2px; background: rgba(245,240,232,0.12); border: none; cursor: pointer; padding: 0; transition: background 0.4s, width 0.4s; }
-  .dec-tick.live { width: 44px; background: var(--accent-hi); }
-  @keyframes decIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-
   /* SECTION SHELL */
   .sec { padding: 14vh 8vw; position: relative; }
   .sec--cream { background: var(--cream); color: var(--ink); }
@@ -244,52 +218,6 @@ function F({ children, className = "", delay = "", style }) {
     return () => o.disconnect();
   }, []);
   return <div ref={r} className={`fi${v ? " on" : ""} ${delay} ${className}`} style={style}>{children}</div>;
-}
-
-/* ============ DECODER ============ */
-function Decoder() {
-  const rows = [
-    { heard: '"We love the product"', reality: "The VP's career is on the line.", label: "Political pressure", heat: 0.92 },
-    { heard: '"Budget is approved"', reality: "It's split across 3 competing projects.", label: "Resource conflict", heat: 0.74 },
-    { heard: '"Just need legal sign-off"', reality: "40 contracts are ahead of yours.", label: "Queue depth", heat: 0.88 },
-    { heard: '"Decision by end of month"', reality: "3 stakeholders haven't been consulted.", label: "Alignment gap", heat: 0.61 },
-  ];
-  const [idx, setIdx] = useState(0);
-  const [decoded, setDecoded] = useState(false);
-
-  useEffect(() => {
-    setDecoded(false);
-    const t1 = setTimeout(() => setDecoded(true), 1700);
-    const t2 = setTimeout(() => setIdx(i => (i + 1) % rows.length), 6200);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [idx]);
-
-  const row = rows[idx];
-
-  return (
-    <div className="dec">
-      <div className="dec-labels">
-        <span className={!decoded ? "live" : ""}>What you hear</span>
-        <span className="dec-arrow">→</span>
-        <span className={decoded ? "live" : ""}>What's moving</span>
-      </div>
-      <div className="dec-stage" key={idx}>
-        <div className={`dec-quote${decoded ? " dim" : ""}`}>{row.heard}</div>
-        <div className={`dec-real${decoded ? " on" : ""}`}>
-          <div className="dec-real-txt">{row.reality}</div>
-          <div className="dec-meter">
-            <div className="dec-bar-track"><div className="dec-bar" style={{ width: decoded ? `${row.heat * 100}%` : 0 }} /></div>
-            <div className="dec-label">{row.label}</div>
-          </div>
-        </div>
-      </div>
-      <div className="dec-ticks">
-        {rows.map((_, i) => (
-          <button key={i} className={`dec-tick${i === idx ? " live" : ""}`} aria-label={`Show read ${i + 1}`} onClick={() => setIdx(i)} />
-        ))}
-      </div>
-    </div>
-  );
 }
 
 /* ============ INTERACTIVE DECOMP (signature) ============ */
@@ -529,32 +457,32 @@ export default function Home() {
           </p>
           <div className="hero-ctas">
             <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
-              Tag me in
+              Book a 30-minute call
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>
-            <a className="hero-hint" href="#diagnostic">See the diagnostic ↓</a>
+            <a className="hero-hint" href="#diagnostic">See how I diagnose ↓</a>
           </div>
         </section>
 
-        {/* 3. ORG SYSTEM */}
+        {/* 3. HOW IT WORKS */}
         <section className="sec">
           <F className="sec-head">
-            <div className="d-eyebrow">The gap</div>
-            <h2>You hear one thing.<br />Something else is moving.</h2>
+            <div className="d-eyebrow">How it works</div>
+            <h2>Three steps. No mystery.</h2>
           </F>
-          <F delay="d1"><Decoder /></F>
+          <F delay="d1"><HowItWorks /></F>
         </section>
 
         {/* 4. INTERACTIVE DECOMP — signature */}
         <section className="sec" id="diagnostic" style={{ background: "var(--panel)" }}>
           <F className="sec-head" style={{ textAlign: "center", margin: "0 auto 3.5rem" }}>
             <div className="d-eyebrow">The diagnostic</div>
-            <h2>Revenue is a system.<br />Tap where it hurts.</h2>
+            <h2>Where is your revenue<br />breaking down?</h2>
           </F>
           <F delay="d1"><Decomp /></F>
           <F delay="d2">
             <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.9rem", color: "var(--muted)", maxWidth: "420px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.7 }}>
-              Every branch has a different dig. The first call finds your branch.
+              Tap a branch to see what it looks like. On our first call, we find yours.
             </p>
           </F>
         </section>
@@ -591,9 +519,9 @@ export default function Home() {
         <section className="doors">
           <div className="doors-head">
             <F>
-              <div className="d-eyebrow">Three ways in</div>
+              <div className="d-eyebrow">Ways to work together</div>
               <h2 className="serif" style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", lineHeight: 1.1, letterSpacing: "-0.025em", maxWidth: "500px" }}>
-                Pick your dose.
+                Three ways to work with me.
               </h2>
             </F>
           </div>
@@ -605,11 +533,11 @@ export default function Home() {
         {/* 7. FINAL CTA */}
         <section className="final">
           <div className="final-glow" />
-          <F><h2>Tag me in.</h2></F>
-          <F className="d1"><p>One call. Bring the stuck thing. You'll leave with a sharper read than you walked in with.</p></F>
+          <F><h2>Start with a call.</h2></F>
+          <F className="d1"><p>30 minutes, free. Bring the thing that's stuck. Worst case, you leave with a clearer read on it than you walked in with.</p></F>
           <F className="d2">
             <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
-              Start the conversation
+              Book a 30-minute call
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>
           </F>
