@@ -2,7 +2,7 @@ const steps = [
   {
     marker: "The call · 30 min",
     line: "One stuck thing on the table.",
-    note: "The deal that won't close. The pipeline that went quiet. The launch that flopped. Whatever isn't moving — that's the agenda.",
+    note: "You bring the thing that isn't moving. That's the whole agenda.",
   },
   {
     marker: "The dig",

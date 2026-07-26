@@ -169,7 +169,7 @@ export default function OneInitiative() {
           <div className="eyebrow" style={{ animation: "oiIn 1s cubic-bezier(0.16,1,0.3,1) 0.05s both" }}>One Initiative</div>
           <h1>You have a stuck thing.<br /><em>Bring it.</em></h1>
           <p className="hero-sub">
-            A launch that stalled. A segment that won't convert. A pipeline that looks full and closes empty. I embed on that one thing until it moves.
+            Something in your revenue engine has stopped moving. I embed on that one thing until it moves.
           </p>
           <div className="hero-ctas">
             <a className="cta-btn" href={CTA_URL} target="_blank" rel="noopener noreferrer">
