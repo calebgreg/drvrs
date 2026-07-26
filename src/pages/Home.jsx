@@ -449,7 +449,7 @@ export default function Home() {
               <em>Find it. Fix it.</em>
             </h1>
             <p className="hero-sub">
-              Every stalled deal has one specific blocker. drvrs finds it and puts a fix in motion.
+              Somewhere in your stalled deal there's one specific reason it stopped. You can't see it from inside. Finding it is the work.
             </p>
             <div className="hero-ctas">
               <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
