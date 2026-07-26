@@ -449,11 +449,11 @@ export default function Home() {
         <section className="hero">
           <div className="hero-glow" />
           <h1>
-            Your revenue isn't stuck.<br />
-            <em>Something is stopping it.</em>
+            Deals stall for a reason.<br />
+            <em>I find it.</em>
           </h1>
           <p className="hero-sub">
-            I've spent fifteen years running growth inside startups — not advising from the sidelines. When deals stall, there's always one specific reason. I find it, and we fix it.
+            Bring me the deal that won't close, or the pipeline that's gone quiet. I'll tell you what's actually in the way — and what to do about it.
           </p>
           <div className="hero-ctas">
             <a className="d-cta" href={CTA_URL} target="_blank" rel="noopener noreferrer">
