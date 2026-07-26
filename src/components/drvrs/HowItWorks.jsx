@@ -7,7 +7,7 @@ const steps = [
   {
     marker: "The dig",
     line: "Name the one thing in the way.",
-    note: "Not a framework. Not a deck. A finding — specific, written down, and yours to keep either way.",
+    note: "You get a written finding: the specific blocker, where it sits, and why the deal stopped there. It's yours to keep either way.",
   },
   {
     marker: "The fix",
