@@ -299,15 +299,15 @@ function Decomp() {
               {isRoot && <>
                 <text x={n.x} y={n.y + 2} textAnchor="middle" fill="#0B1220" fontSize="13" fontFamily={mono} fontWeight="600" letterSpacing="0.16em">{n.label.toUpperCase()}</text>
                 <line x1={n.x - 44} y1={n.y + 9} x2={n.x + 44} y2={n.y + 9} stroke={hot ? "#2563eb" : "#0B1220"} strokeWidth="1.5" style={{ transition: "stroke 0.4s" }} />
-                <rect x={n.x - 3} y={n.y + 13} width="6" height="6" fill={hot ? "#2563eb" : "#0B1220"} style={{ transition: "fill 0.4s" }} />
+                <rect x={n.x - 8} y={n.y + 13} width="16" height="8" rx="4" fill={hot ? "#2563eb" : "#0B1220"} style={{ transition: "fill 0.4s" }} />
               </>}
               {isMid && <>
-                <rect x={n.x - 2.5} y={n.y - 24} width="5" height="5" fill={hot ? "#2563eb" : "#FFFFFF"} stroke={hot ? "#2563eb" : "rgba(11,18,32,0.5)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
+                <rect x={n.x - 6} y={n.y - 26} width="12" height="6" rx="3" fill={hot ? "#2563eb" : "#FFFFFF"} stroke={hot ? "#2563eb" : "rgba(11,18,32,0.5)"} strokeWidth="1" style={{ transition: "fill 0.4s, stroke 0.4s" }} />
                 <text x={n.x} y={n.y + 2} textAnchor="middle" fill={hot ? "#2563eb" : "rgba(11,18,32,0.8)"} fontSize="10" fontFamily={mono} fontWeight="500" letterSpacing="0.14em" style={{ transition: "fill 0.4s" }}>{n.label.toUpperCase()}</text>
               </>}
               {isLeaf && <>
                 <rect x={n.x - 42} y={n.y - 24} width={84} height={48} rx="4" fill="transparent" />
-                <rect x={n.x - 3.5} y={n.y - 11.5} width="7" height="7" fill={hot ? "#2563eb" : "#FFFFFF"} stroke="#2563eb" strokeWidth="1.2" transform={`rotate(45 ${n.x} ${n.y - 8})`} style={{ transition: "fill 0.3s" }} />
+                <rect x={n.x - 6} y={n.y - 11} width="12" height="6" rx="3" fill={hot ? "#2563eb" : "#FFFFFF"} stroke="#2563eb" strokeWidth="1.2" style={{ transition: "fill 0.3s" }} />
                 <text x={n.x} y={n.y + 10} textAnchor="middle" fill={hot ? "#2563eb" : "rgba(11,18,32,0.6)"} fontSize="8.5" fontFamily={mono} letterSpacing="0.1em" style={{ transition: "fill 0.3s" }}>{n.label.toUpperCase()}</text>
               </>}
             </g>
