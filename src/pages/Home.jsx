@@ -276,9 +276,6 @@ function Decomp() {
   return (
     <div ref={ref} className="decomp-stage">
       <svg viewBox={`0 0 ${W} 380`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
-        {[{ y: 14, t: "L0 · OUTCOME" }, { y: 141, t: "L1 · LEVERS" }, { y: 272, t: "L2 · FAILURE POINTS" }].map((lv, i) => (
-          <text key={i} x="0" y={lv.y} fontFamily={mono} fontSize="7.5" letterSpacing="0.18em" fill="rgba(11,18,32,0.35)" opacity={fired ? 1 : 0} style={{ transition: `opacity 0.6s ease ${0.2 + i * 0.15}s` }}>{lv.t}</text>
-        ))}
         {edges.map((e, i) => {
           const from = getNode(e.from), to = getNode(e.to), d = orthoPath(from, to), len = 600, delay = edgeDelay[e.to];
           const hot = edgeHot(e);
